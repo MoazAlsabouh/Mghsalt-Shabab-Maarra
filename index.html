@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مغسلة شباب المعرة - V4.4</title>
+    <title>مغسلة شباب المعرة - V4.5</title>
     
     <!-- Bootstrap 5 & Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
@@ -16,29 +16,28 @@
 
     <style>
         :root {
-            /* General Palette */
-            --bg-body: #0b1120;       /* Darker Background */
-            --bg-sidebar: #111827;    
-            --bg-card: #1f2937;       
-            --border-color: #374151;  
-            --text-primary: #f9fafb;  
-            --text-secondary: #9ca3af;
+            /* Main Backgrounds */
+            --bg-body: #020c1b;       /* Very Dark Navy */
+            --bg-sidebar: #0a192f;    /* Dark Navy */
+            --bg-card: #112240;       /* Navy Light */
+            --border-color: #233554;  
             
-            --accent-blue: #38bdf8;   
-            --accent-green: #34d399;  
-            --accent-orange: #fbbf24; 
-            --accent-red: #f87171;    
+            --text-primary: #e6f1ff;  
+            --text-secondary: #8892b0;
             
-            /* UPDATED TABLE COLORS */
-            --table-head-bg: #1e293b; /* Lighter Header */
-            --table-head-text: #38bdf8; /* Blue Text for Header */
+            /* Currency & Accents */
+            --accent-blue: #64ffda;   /* Teal/Cyan */
+            --accent-green: #4ade80;  /* Bright Green */
+            --accent-orange: #fbbf24; /* Amber */
+            --accent-red: #ef4444;    
             
-            --table-row-odd: #273548; /* Blue-Greyish - Lighter than bg */
-            --table-row-even: #1f2a3a;/* Slightly Darker */
-            --table-hover: #374151;   /* Hover Highlight */
-            
-            --table-text-color: #ffffff; /* Pure White Text */
-            --input-bg: #1f2937;         /* Search Input BG */
+            /* --- TABLE COLORS (Kohl/Navy Theme) --- */
+            --table-head-bg: #0a192f;     /* Header Dark Navy */
+            --table-head-text: #64ffda;   /* Teal Text */
+            --table-bg-odd: #112240;      /* Row Odd (Navy) */
+            --table-bg-even: #0f1f3a;     /* Row Even (Slightly Darker) */
+            --table-hover: #1d3356;       /* Row Hover */
+            --table-border: #233554;
         }
 
         body {
@@ -48,37 +47,26 @@
             overflow-x: hidden;
         }
 
-        /* Card & Layout */
-        .card { 
-            background-color: var(--bg-card); 
-            border: 1px solid var(--border-color); 
-            color: var(--text-primary); 
-            border-radius: 16px; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Inputs (Search & Forms) - UPDATED */
+        /* Inputs */
         .form-control, .form-select { 
-            background-color: var(--input-bg); 
-            border: 1px solid #4b5563; 
-            color: #ffffff; /* White Text Input */
+            background-color: #112240; 
+            border: 1px solid #233554; 
+            color: #ffffff; 
             border-radius: 8px;
             padding: 12px;
-            font-weight: 500;
         }
-        .form-control::placeholder { color: #9ca3af; }
         .form-control:focus, .form-select:focus { 
-            background-color: #374151; 
+            background-color: #1a2f55; 
             border-color: var(--accent-blue); 
-            color: #ffffff; 
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); 
+            color: white; 
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.1); 
         }
 
-        /* --- TABLE STYLING --- */
+        /* --- TABLE STYLING (NAVY THEME) --- */
         .table-responsive {
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--table-border);
             background-color: var(--bg-card);
         }
 
@@ -94,54 +82,57 @@
             color: var(--table-head-text);
             font-weight: 800;
             text-transform: uppercase;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             padding: 18px 15px;
-            border-bottom: 3px solid #334155;
+            border-bottom: 2px solid var(--accent-blue);
             white-space: nowrap;
-            letter-spacing: 0.5px;
         }
 
         .table tbody td {
             padding: 16px 15px;
             vertical-align: middle;
-            border-bottom: 1px solid #374151;
-            font-weight: 500;
-            color: var(--table-text-color); /* WHITE TEXT */
+            border-bottom: 1px solid var(--table-border);
+            color: #ccd6f6; /* Light Blue-White */
+            font-size: 0.95rem;
         }
 
         /* Zebra Striping */
-        .table tbody tr:nth-of-type(odd) {
-            background-color: var(--table-row-odd);
-        }
-        .table tbody tr:nth-of-type(even) {
-            background-color: var(--table-row-even);
-        }
+        .table tbody tr:nth-of-type(odd) { background-color: var(--table-bg-odd); }
+        .table tbody tr:nth-of-type(even) { background-color: var(--table-bg-even); }
 
         /* Hover Effect */
         .table-hover tbody tr:hover td {
             background-color: var(--table-hover);
-            color: #fff;
-            transition: background-color 0.15s ease-in-out;
+            color: #ffffff;
+            transition: 0.2s;
         }
         
+        /* Specific Columns */
+        .customer-name-cell {
+            color: #ffffff !important;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+        
+        .val-usd { color: var(--accent-green) !important; font-weight: bold; font-family: monospace; font-size: 1.1em; }
+        .val-try { color: #38bdf8 !important; font-weight: bold; font-family: monospace; font-size: 1.1em; } /* Light Blue */
+        .val-syp { color: var(--accent-orange) !important; font-weight: bold; font-family: monospace; font-size: 1.1em; }
+
         /* Remove last border */
         .table tbody tr:last-child td { border-bottom: none; }
         /* --- END TABLE STYLING --- */
 
-        .modal-content { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); }
+        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 12px; }
+        .modal-content { background-color: #112240; border: 1px solid var(--border-color); color: var(--text-primary); }
         .btn-close { filter: invert(1); }
 
         .sidebar { background-color: var(--bg-sidebar); min-height: 100vh; border-left: 1px solid var(--border-color); }
         .nav-link { color: var(--text-secondary); padding: 12px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { background-color: rgba(56, 189, 248, 0.1); color: var(--accent-blue); font-weight: bold; transform: translateX(-5px); }
+        .nav-link:hover, .nav-link.active { background-color: rgba(100, 255, 218, 0.1); color: var(--accent-blue); font-weight: bold; transform: translateX(-5px); }
         .nav-link i { width: 25px; text-align: center; }
 
-        .stat-card { padding: 25px; border-radius: 16px; background: linear-gradient(145deg, #1f2937, #111827); border: 1px solid var(--border-color); }
-        .text-usd { color: var(--accent-green) !important; font-weight: bold; font-size: 1.5rem; }
-        .text-try { color: var(--accent-blue) !important; font-weight: bold; font-size: 1.5rem; }
-        .text-syp { color: var(--accent-orange) !important; font-weight: bold; font-size: 1.5rem; }
-        
-        .bg-dark-overlay { background: rgba(0, 0, 0, 0.85); }
+        .stat-card { padding: 25px; border-radius: 16px; background: linear-gradient(145deg, #112240, #0a192f); border: 1px solid var(--border-color); }
+        .bg-dark-overlay { background: rgba(2, 12, 27, 0.9); }
 
         .app-section { display: none; animation: fadeIn 0.4s; }
         .app-section.active-section { display: block; }
@@ -149,20 +140,13 @@
 
         /* Invoice Template */
         #invoice-template-container {
-            position: fixed;
-            top: -9999px;
-            left: -9999px;
-            width: 210mm;
-            background: white;
-            color: black;
-            padding: 40px;
-            font-family: 'Almarai', sans-serif;
-            direction: rtl;
+            position: fixed; top: -9999px; left: -9999px; width: 210mm;
+            background: white; color: black; padding: 40px; font-family: 'Almarai', sans-serif; direction: rtl;
         }
         .inv-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
         .inv-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .inv-table th, .inv-table td { border: 1px solid #ddd; padding: 12px; text-align: right; }
-        .inv-table th { background-color: #f3f4f6; font-weight: bold; color: #111827; }
+        .inv-table th { background-color: #f3f4f6; font-weight: bold; }
         .inv-total { margin-top: 30px; text-align: left; font-size: 1.2rem; font-weight: bold; }
         .receipt-box { border: 2px dashed #333; padding: 20px; margin: 20px 0; background: #f9fafb; text-align: center; }
         .receipt-balance { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 1.2rem; font-weight: bold; text-align: center; color: #dc2626; }
@@ -232,9 +216,9 @@
                         <div id="dashboard-section" class="app-section active-section">
                             <h3 class="mb-4 fw-bold">نظرة عامة</h3>
                             <div class="row g-4">
-                                <div class="col-md-4"><div class="stat-card"><h6>ديون (USD)</h6><h2 class="text-usd" id="dash-usd">0 $</h2></div></div>
-                                <div class="col-md-4"><div class="stat-card"><h6>ديون (TRY)</h6><h2 class="text-try" id="dash-try">0 ₺</h2></div></div>
-                                <div class="col-md-4"><div class="stat-card"><h6>ديون (SYP)</h6><h2 class="text-syp" id="dash-syp">0</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6 class="text-muted">ديون (USD)</h6><h2 class="val-usd" id="dash-usd">0 $</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6 class="text-muted">ديون (TRY)</h6><h2 class="val-try" id="dash-try">0 ₺</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6 class="text-muted">ديون (SYP)</h6><h2 class="val-syp" id="dash-syp">0</h2></div></div>
                             </div>
                         </div>
 
@@ -262,7 +246,7 @@
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table table-hover">
-                                            <thead><tr><th>العميل</th><th>المجموع (USD)</th><th>المجموع (TRY)</th><th>المجموع (SYP)</th><th>الحالة</th><th>إجراء</th></tr></thead>
+                                            <thead><tr><th>العميل</th><th>المجموع USD</th><th>المجموع TRY</th><th>المجموع SYP</th><th>الحالة</th><th>إجراء</th></tr></thead>
                                             <tbody id="laundry-customers-list"></tbody>
                                         </table>
                                     </div>
@@ -469,7 +453,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'maarra-v4';
-
         let allDebts = [];
         let allTrans = [];
         let currentProfileName = '';
@@ -623,10 +606,10 @@
 
                     tbody.innerHTML += `
                         <tr class="customer-row" onclick="ui.openCustomerProfile('${name}')">
-                            <td class="fw-bold" style="color:#e2e8f0">${name}</td>
-                            <td class="text-usd">${usd}</td>
-                            <td class="text-try">${tryVal}</td>
-                            <td class="text-syp">${syp}</td>
+                            <td class="customer-name-cell">${name}</td>
+                            <td class="val-usd">${usd}</td>
+                            <td class="val-try">${tryVal}</td>
+                            <td class="val-syp">${syp}</td>
                             <td>${custDebts.length > 0 ? '<span class="badge bg-danger">عليه دين</span>' : '<span class="badge bg-success">بريء الذمة</span>'}</td>
                             <td><button class="btn btn-sm btn-outline-info">ملف العميل</button></td>
                         </tr>
@@ -911,4 +894,4 @@
         const showLoading = s => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
     </script>
 </body>
-            </html>
+</html>
