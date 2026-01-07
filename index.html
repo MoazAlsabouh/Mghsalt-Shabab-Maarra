@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مغسلة شباب المعرة - V4.1</title>
+    <title>مغسلة شباب المعرة - V4.2</title>
     
     <!-- Bootstrap 5 & Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
@@ -83,6 +83,8 @@
         .inv-table th, .inv-table td { border: 1px solid #ddd; padding: 12px; text-align: right; }
         .inv-table th { background-color: #f8f9fa; font-weight: bold; }
         .inv-total { margin-top: 30px; text-align: left; font-size: 1.2rem; font-weight: bold; }
+        .receipt-box { border: 2px dashed #333; padding: 20px; margin: 20px 0; background: #f9f9f9; text-align: center; }
+        .receipt-balance { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 1.2rem; font-weight: bold; text-align: center; color: #d32f2f; }
     </style>
 </head>
 <body>
@@ -475,7 +477,12 @@
                     d.status === 'active'
                 ).sort((a,b) => (a.created_at?.seconds || 0) - (b.created_at?.seconds || 0));
 
+                // If no debts, user might just want a receipt, but usually we need debts to pay
+                // We'll proceed if there are debts to pay.
                 if(debts.length === 0) return toast("لا يوجد ديون نشطة بهذه العملة", 'err');
+
+                // CALCULATE TOTAL DEBT BEFORE PAYMENT
+                const totalDebtBefore = debts.reduce((sum, d) => sum + Number(d.remaining_amount), 0);
 
                 showLoading(true);
                 let remainingPayment = Number(amount);
@@ -508,7 +515,11 @@
                     toast("تم تسجيل الدفعة");
                     bootstrap.Modal.getInstance(document.getElementById('lumpSumModal')).hide();
                     
-                    reportManager.prepareReceipt(currentProfileName, amount, currency);
+                    // CALCULATE REMAINING
+                    // Logic: Remainder = Max(0, Total_Before - Payment_Amount)
+                    const finalRemaining = Math.max(0, totalDebtBefore - Number(amount));
+
+                    reportManager.prepareReceipt(currentProfileName, amount, currency, finalRemaining);
 
                 } catch(e) { console.log(e); toast("خطأ", 'err'); }
                 finally { showLoading(false); }
@@ -639,7 +650,7 @@
             }
         };
 
-        // --- Report Manager (Fixed Arabic & Preview) ---
+        // --- Report Manager ---
         let currentPdfBlob = null;
 
         window.reportManager = {
@@ -667,8 +678,8 @@
                 await reportManager.generateAndShowPreview('Invoice');
             },
 
-            // B. Receipt (Lump Sum)
-            prepareReceipt: async (name, amount, currency) => {
+            // B. Receipt (Lump Sum) - UPDATED TO SHOW REMAINING
+            prepareReceipt: async (name, amount, currency, remaining) => {
                 const container = document.getElementById('invoice-content');
                 container.innerHTML = `
                     <div class="inv-header">
@@ -676,11 +687,14 @@
                         <h3>وصل قبض (دفعة حساب)</h3>
                         <p>تاريخ: ${new Date().toLocaleString('ar-EG')}</p>
                     </div>
-                    <div style="font-size: 1.5rem; margin-top: 40px; text-align: center;">
+                    <div class="receipt-box">
                         <p>استلمنا من السيد: <strong>${name}</strong></p>
                         <p>مبلغ وقدره:</p>
-                        <h1 style="border: 2px dashed #333; padding: 10px; display: inline-block;">${amount} ${currency}</h1>
+                        <h1 style="border-bottom: 2px solid #333; display: inline-block;">${amount} ${currency}</h1>
                         <p style="margin-top: 20px;">وذلك عن سداد دفعة من الحساب</p>
+                    </div>
+                    <div class="receipt-balance">
+                        المبلغ المتبقي في الذمة: ${remaining} ${currency}
                     </div>
                 `;
                 await reportManager.generateAndShowPreview('Receipt');
@@ -723,63 +737,36 @@
                 showLoading(true);
                 try {
                     const element = document.getElementById('invoice-template-container');
-                    
-                    // 1. Convert HTML to Canvas (High Scale for clarity)
                     const canvas = await html2canvas(element, { scale: 2 });
                     const imgData = canvas.toDataURL('image/png');
-
-                    // 2. Add to PDF
                     const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
                     const imgProps = pdf.getImageProperties(imgData);
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                    
                     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-                    // 3. Generate Blob for Preview
                     currentPdfBlob = pdf.output('blob');
                     const blobUrl = URL.createObjectURL(currentPdfBlob);
-                    
-                    // 4. Show Modal
                     document.getElementById('pdf-preview-frame').src = blobUrl;
                     reportManager.currentFilename = `${filenamePrefix}_${new Date().getTime()}.pdf`;
-                    
                     new bootstrap.Modal(document.getElementById('pdfPreviewModal')).show();
-                } catch(e) {
-                    console.error(e);
-                    toast("فشل إنشاء PDF", 'err');
-                } finally {
-                    showLoading(false);
-                }
+                } catch(e) { console.error(e); toast("فشل إنشاء PDF", 'err'); } 
+                finally { showLoading(false); }
             },
 
             downloadCurrentPDF: () => {
                 if(currentPdfBlob) {
                     const url = window.URL.createObjectURL(currentPdfBlob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = reportManager.currentFilename;
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
+                    const a = document.createElement('a'); a.href = url; a.download = reportManager.currentFilename;
+                    document.body.appendChild(a); a.click(); a.remove();
                 }
             },
 
             shareCurrentPDF: async () => {
                 if(currentPdfBlob && navigator.share) {
                     const file = new File([currentPdfBlob], reportManager.currentFilename, { type: 'application/pdf' });
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: 'فاتورة / تقرير',
-                            text: 'مرفق ملف PDF من مغسلة شباب المعرة'
-                        });
-                    } catch (error) {
-                        console.log('Share failed', error);
-                    }
-                } else {
-                    toast("المشاركة غير مدعومة في هذا المتصفح", 'err');
-                }
+                    try { await navigator.share({ files: [file], title: 'فاتورة / تقرير' }); } 
+                    catch (error) { console.log('Share failed', error); }
+                } else { toast("المشاركة غير مدعومة", 'err'); }
             }
         };
 
@@ -852,4 +839,4 @@
         const showLoading = s => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
     </script>
 </body>
-                                                          </html>
+</html>
