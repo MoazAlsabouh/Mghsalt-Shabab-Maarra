@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مغسلة شباب المعرة - V4.2</title>
+    <title>مغسلة شباب المعرة - V4.4</title>
     
     <!-- Bootstrap 5 & Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
@@ -16,17 +16,29 @@
 
     <style>
         :root {
-            --bg-body: #0f172a;
-            --bg-sidebar: #1e293b;
-            --bg-card: #334155;
-            --border-color: #475569;
-            --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0;
+            /* General Palette */
+            --bg-body: #0b1120;       /* Darker Background */
+            --bg-sidebar: #111827;    
+            --bg-card: #1f2937;       
+            --border-color: #374151;  
+            --text-primary: #f9fafb;  
+            --text-secondary: #9ca3af;
             
-            --accent-blue: #38bdf8;
-            --accent-green: #4ade80;
-            --accent-orange: #fbbf24;
-            --accent-red: #f87171;
+            --accent-blue: #38bdf8;   
+            --accent-green: #34d399;  
+            --accent-orange: #fbbf24; 
+            --accent-red: #f87171;    
+            
+            /* UPDATED TABLE COLORS */
+            --table-head-bg: #1e293b; /* Lighter Header */
+            --table-head-text: #38bdf8; /* Blue Text for Header */
+            
+            --table-row-odd: #273548; /* Blue-Greyish - Lighter than bg */
+            --table-row-even: #1f2a3a;/* Slightly Darker */
+            --table-hover: #374151;   /* Hover Highlight */
+            
+            --table-text-color: #ffffff; /* Pure White Text */
+            --input-bg: #1f2937;         /* Search Input BG */
         }
 
         body {
@@ -36,12 +48,86 @@
             overflow-x: hidden;
         }
 
-        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 12px; }
-        .form-control, .form-select { background-color: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-primary); }
-        .form-control:focus, .form-select:focus { background-color: var(--bg-sidebar); border-color: var(--accent-blue); color: white; box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25); }
-        .table { color: var(--text-secondary); --bs-table-hover-color: white; --bs-table-hover-bg: #475569; }
-        .table thead th { background-color: var(--bg-sidebar); color: var(--accent-blue); border-bottom: 2px solid var(--border-color); }
-        .table td { border-bottom: 1px solid var(--border-color); vertical-align: middle; color: var(--text-primary); }
+        /* Card & Layout */
+        .card { 
+            background-color: var(--bg-card); 
+            border: 1px solid var(--border-color); 
+            color: var(--text-primary); 
+            border-radius: 16px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Inputs (Search & Forms) - UPDATED */
+        .form-control, .form-select { 
+            background-color: var(--input-bg); 
+            border: 1px solid #4b5563; 
+            color: #ffffff; /* White Text Input */
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 500;
+        }
+        .form-control::placeholder { color: #9ca3af; }
+        .form-control:focus, .form-select:focus { 
+            background-color: #374151; 
+            border-color: var(--accent-blue); 
+            color: #ffffff; 
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); 
+        }
+
+        /* --- TABLE STYLING --- */
+        .table-responsive {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+        }
+
+        .table {
+            margin-bottom: 0;
+            width: 100%;
+            border-collapse: separate; 
+            border-spacing: 0;
+        }
+
+        .table thead th {
+            background-color: var(--table-head-bg);
+            color: var(--table-head-text);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            padding: 18px 15px;
+            border-bottom: 3px solid #334155;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody td {
+            padding: 16px 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #374151;
+            font-weight: 500;
+            color: var(--table-text-color); /* WHITE TEXT */
+        }
+
+        /* Zebra Striping */
+        .table tbody tr:nth-of-type(odd) {
+            background-color: var(--table-row-odd);
+        }
+        .table tbody tr:nth-of-type(even) {
+            background-color: var(--table-row-even);
+        }
+
+        /* Hover Effect */
+        .table-hover tbody tr:hover td {
+            background-color: var(--table-hover);
+            color: #fff;
+            transition: background-color 0.15s ease-in-out;
+        }
+        
+        /* Remove last border */
+        .table tbody tr:last-child td { border-bottom: none; }
+        /* --- END TABLE STYLING --- */
+
         .modal-content { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); }
         .btn-close { filter: invert(1); }
 
@@ -50,28 +136,23 @@
         .nav-link:hover, .nav-link.active { background-color: rgba(56, 189, 248, 0.1); color: var(--accent-blue); font-weight: bold; transform: translateX(-5px); }
         .nav-link i { width: 25px; text-align: center; }
 
-        .stat-card { padding: 20px; border-radius: 12px; background: linear-gradient(145deg, var(--bg-card), var(--bg-sidebar)); border-top: 4px solid transparent; }
-        .stat-usd { border-color: var(--accent-green); }
-        .stat-try { border-color: var(--accent-blue); }
-        .stat-syp { border-color: var(--accent-orange); }
-
-        .customer-row { cursor: pointer; transition: 0.2s; }
-        .customer-row:hover { background-color: var(--border-color); }
-        .text-usd { color: var(--accent-green) !important; }
-        .text-try { color: var(--accent-blue) !important; }
-        .text-syp { color: var(--accent-orange) !important; }
-        .bg-dark-overlay { background: rgba(15, 23, 42, 0.9); }
+        .stat-card { padding: 25px; border-radius: 16px; background: linear-gradient(145deg, #1f2937, #111827); border: 1px solid var(--border-color); }
+        .text-usd { color: var(--accent-green) !important; font-weight: bold; font-size: 1.5rem; }
+        .text-try { color: var(--accent-blue) !important; font-weight: bold; font-size: 1.5rem; }
+        .text-syp { color: var(--accent-orange) !important; font-weight: bold; font-size: 1.5rem; }
+        
+        .bg-dark-overlay { background: rgba(0, 0, 0, 0.85); }
 
         .app-section { display: none; animation: fadeIn 0.4s; }
         .app-section.active-section { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Invoice Template Styling (Hidden from view, used for PDF generation) */
+        /* Invoice Template */
         #invoice-template-container {
             position: fixed;
             top: -9999px;
             left: -9999px;
-            width: 210mm; /* A4 Width */
+            width: 210mm;
             background: white;
             color: black;
             padding: 40px;
@@ -81,10 +162,10 @@
         .inv-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
         .inv-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .inv-table th, .inv-table td { border: 1px solid #ddd; padding: 12px; text-align: right; }
-        .inv-table th { background-color: #f8f9fa; font-weight: bold; }
+        .inv-table th { background-color: #f3f4f6; font-weight: bold; color: #111827; }
         .inv-total { margin-top: 30px; text-align: left; font-size: 1.2rem; font-weight: bold; }
-        .receipt-box { border: 2px dashed #333; padding: 20px; margin: 20px 0; background: #f9f9f9; text-align: center; }
-        .receipt-balance { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 1.2rem; font-weight: bold; text-align: center; color: #d32f2f; }
+        .receipt-box { border: 2px dashed #333; padding: 20px; margin: 20px 0; background: #f9fafb; text-align: center; }
+        .receipt-balance { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 1.2rem; font-weight: bold; text-align: center; color: #dc2626; }
     </style>
 </head>
 <body>
@@ -95,16 +176,14 @@
         <h6>جاري التحميل...</h6>
     </div>
 
-    <!-- Hidden Invoice Template for PDF Generation -->
+    <!-- Hidden Invoice Template -->
     <div id="invoice-template-container">
-        <div id="invoice-content">
-            <!-- Dynamic Content Injected Here -->
-        </div>
+        <div id="invoice-content"></div>
     </div>
 
     <!-- Login -->
     <div id="login-screen" class="vh-100 d-flex justify-content-center align-items-center d-none">
-        <div class="card p-5 shadow-lg" style="width: 400px;">
+        <div class="card p-5 shadow-lg" style="width: 400px; border-top: 4px solid var(--accent-blue);">
             <div class="text-center mb-4">
                 <i class="fas fa-soap fa-3x text-info mb-3"></i>
                 <h3 class="fw-bold">مغسلة شباب المعرة</h3>
@@ -112,7 +191,7 @@
             <form id="loginForm">
                 <input type="email" id="email" class="form-control mb-3" placeholder="Email" required>
                 <input type="password" id="password" class="form-control mb-3" placeholder="Password" required>
-                <button class="btn btn-info w-100 fw-bold">دخول</button>
+                <button class="btn btn-info w-100 fw-bold py-2">دخول</button>
             </form>
         </div>
     </div>
@@ -136,7 +215,7 @@
                 <!-- Content -->
                 <div class="col-md-10 vh-100 overflow-auto">
                     <!-- Mobile Header -->
-                    <div class="d-md-none bg-secondary p-3 d-flex justify-content-between">
+                    <div class="d-md-none bg-dark p-3 d-flex justify-content-between border-bottom border-secondary">
                         <span class="fw-bold">مغسلة شباب المعرة</span>
                         <button class="btn btn-sm btn-dark" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
                     </div>
@@ -151,21 +230,21 @@
                         
                         <!-- 1. Dashboard -->
                         <div id="dashboard-section" class="app-section active-section">
-                            <h3 class="mb-4">نظرة عامة</h3>
+                            <h3 class="mb-4 fw-bold">نظرة عامة</h3>
                             <div class="row g-4">
-                                <div class="col-md-4"><div class="stat-card stat-usd"><h6>ديون (USD)</h6><h2 class="text-usd" id="dash-usd">0 $</h2></div></div>
-                                <div class="col-md-4"><div class="stat-card stat-try"><h6>ديون (TRY)</h6><h2 class="text-try" id="dash-try">0 ₺</h2></div></div>
-                                <div class="col-md-4"><div class="stat-card stat-syp"><h6>ديون (SYP)</h6><h2 class="text-syp" id="dash-syp">0</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6>ديون (USD)</h6><h2 class="text-usd" id="dash-usd">0 $</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6>ديون (TRY)</h6><h2 class="text-try" id="dash-try">0 ₺</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6>ديون (SYP)</h6><h2 class="text-syp" id="dash-syp">0</h2></div></div>
                             </div>
                         </div>
 
                         <!-- 2. Laundry Section -->
                         <div id="laundry-section" class="app-section">
                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h3 class="text-info"><i class="fas fa-tshirt"></i> إدارة المغسلة</h3>
+                                <h3 class="text-info fw-bold"><i class="fas fa-tshirt"></i> إدارة المغسلة</h3>
                             </div>
                             
-                            <ul class="nav nav-tabs border-secondary mb-3">
+                            <ul class="nav nav-tabs border-secondary mb-4">
                                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#lau-customers">العملاء والديون</a></li>
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#lau-products">المنتجات (Inventory)</a></li>
                             </ul>
@@ -173,16 +252,16 @@
                             <div class="tab-content">
                                 <!-- Customers Tab -->
                                 <div class="tab-pane fade show active" id="lau-customers">
-                                    <div class="row mb-3">
+                                    <div class="row mb-4">
                                         <div class="col-md-3">
-                                            <button class="btn btn-info w-100 fw-bold" onclick="ui.openSimpleDebtModal('laundry')"><i class="fas fa-plus"></i> فاتورة غسيل (دين)</button>
+                                            <button class="btn btn-info w-100 fw-bold py-2" onclick="ui.openSimpleDebtModal('laundry')"><i class="fas fa-plus"></i> فاتورة غسيل (دين)</button>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="laundry-search" placeholder="بحث عن عميل...">
+                                            <input type="text" class="form-control py-2" id="laundry-search" placeholder="بحث عن عميل...">
                                         </div>
                                     </div>
-                                    <div class="card p-0 overflow-hidden">
-                                        <table class="table mb-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
                                             <thead><tr><th>العميل</th><th>المجموع (USD)</th><th>المجموع (TRY)</th><th>المجموع (SYP)</th><th>الحالة</th><th>إجراء</th></tr></thead>
                                             <tbody id="laundry-customers-list"></tbody>
                                         </table>
@@ -202,12 +281,12 @@
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
                                 <div>
                                     <button class="btn btn-outline-secondary btn-sm me-2" onclick="router.navigate('laundry')"><i class="fas fa-arrow-right"></i> عودة</button>
-                                    <span class="h3 text-warning" id="prof-name">اسم العميل</span>
+                                    <span class="h3 text-warning fw-bold" id="prof-name">اسم العميل</span>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <span class="badge bg-dark border border-success d-flex align-items-center">USD: <span id="prof-total-usd" class="ms-1">0</span></span>
-                                    <span class="badge bg-dark border border-info d-flex align-items-center">TRY: <span id="prof-total-try" class="ms-1">0</span></span>
-                                    <span class="badge bg-dark border border-warning d-flex align-items-center">SYP: <span id="prof-total-syp" class="ms-1">0</span></span>
+                                    <span class="badge bg-dark border border-success d-flex align-items-center p-2">USD: <span id="prof-total-usd" class="ms-1 fw-bold">0</span></span>
+                                    <span class="badge bg-dark border border-info d-flex align-items-center p-2">TRY: <span id="prof-total-try" class="ms-1 fw-bold">0</span></span>
+                                    <span class="badge bg-dark border border-warning d-flex align-items-center p-2">SYP: <span id="prof-total-syp" class="ms-1 fw-bold">0</span></span>
                                 </div>
                             </div>
 
@@ -215,21 +294,21 @@
                             <div class="row g-3 mb-4">
                                 <div class="col-md-4">
                                     <div class="card p-3 h-100 border-success">
-                                        <h6 class="text-success"><i class="fas fa-check-double"></i> خيار 1: تسديد فواتير محددة</h6>
-                                        <p class="small text-muted">اختر منتجات/خدمات ثم اضغط هنا.</p>
-                                        <button class="btn btn-success w-100" onclick="dataManager.paySelectedItems()">دفع المحدد (PDF)</button>
+                                        <h6 class="text-success fw-bold"><i class="fas fa-check-double"></i> خيار 1: تسديد فواتير محددة</h6>
+                                        <p class="small text-secondary">حدد الفواتير من الجدول بالأسفل ثم اضغط هنا.</p>
+                                        <button class="btn btn-success w-100 fw-bold" onclick="dataManager.paySelectedItems()">دفع المحدد (PDF)</button>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="card p-3 h-100 border-info">
-                                        <h6 class="text-info"><i class="fas fa-hand-holding-usd"></i> خيار 2: تسديد دفعة (Lump Sum)</h6>
-                                        <p class="small text-muted">أدخل مبلغاً وسيتم خصمه من الأقدم (FIFO).</p>
-                                        <button class="btn btn-info w-100" onclick="ui.openLumpSumModal()">إجراء دفعة (PDF)</button>
+                                        <h6 class="text-info fw-bold"><i class="fas fa-hand-holding-usd"></i> خيار 2: تسديد دفعة (Lump Sum)</h6>
+                                        <p class="small text-secondary">أدخل مبلغاً وسيتم خصمه من الأقدم (FIFO).</p>
+                                        <button class="btn btn-info w-100 fw-bold" onclick="ui.openLumpSumModal()">إجراء دفعة (PDF)</button>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="card p-3 h-100 border-secondary">
-                                        <h6 class="text-white"><i class="fas fa-filter"></i> الفلترة والأرشيف</h6>
+                                        <h6 class="text-white fw-bold"><i class="fas fa-filter"></i> الفلترة والأرشيف</h6>
                                         <div class="d-flex gap-2 mb-2">
                                             <button class="btn btn-sm btn-outline-light flex-fill" onclick="ui.toggleArchive(false)" id="btn-show-active">النشط</button>
                                             <button class="btn btn-sm btn-outline-secondary flex-fill" onclick="ui.toggleArchive(true)" id="btn-show-all">الأرشيف (الكل)</button>
@@ -256,7 +335,7 @@
 
                         <!-- 3. Espresso Section -->
                         <div id="espresso-section" class="app-section">
-                            <h3 class="text-warning mb-4"><i class="fas fa-coffee"></i> الأسبريسو</h3>
+                            <h3 class="text-warning mb-4 fw-bold"><i class="fas fa-coffee"></i> الأسبريسو</h3>
                             <ul class="nav nav-tabs border-secondary mb-3">
                                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#esp-debts">الديون</a></li>
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#esp-prods">المنتجات</a></li>
@@ -264,7 +343,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="esp-debts">
                                     <button class="btn btn-warning text-dark fw-bold mb-3" onclick="ui.openSimpleDebtModal('espresso')">دين جديد</button>
-                                    <div class="table-responsive"><table class="table"><tbody id="espresso-list"></tbody></table></div>
+                                    <div class="table-responsive"><table class="table table-hover"><tbody id="espresso-list"></tbody></table></div>
                                 </div>
                                 <div class="tab-pane fade" id="esp-prods">
                                     <button class="btn btn-success mb-3" onclick="ui.openAddProductModal('espresso')">إضافة منتج</button>
@@ -275,13 +354,13 @@
 
                         <!-- 4. Finance Section -->
                         <div id="finance-section" class="app-section">
-                            <h3 class="mb-4">المالية والتقارير</h3>
+                            <h3 class="mb-4 fw-bold">المالية والتقارير</h3>
                             <div class="row mb-4">
                                 <div class="col-md-3">
-                                    <button class="btn btn-danger w-100" onclick="ui.openTransactionModal('expense')">تسجيل مصروف</button>
+                                    <button class="btn btn-danger w-100 fw-bold py-2" onclick="ui.openTransactionModal('expense')">تسجيل مصروف</button>
                                 </div>
                                 <div class="col-md-3">
-                                    <button class="btn btn-success w-100" onclick="ui.openTransactionModal('income_manual')">تسجيل دخل خارجي</button>
+                                    <button class="btn btn-success w-100 fw-bold py-2" onclick="ui.openTransactionModal('income_manual')">تسجيل دخل خارجي</button>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-group">
@@ -292,11 +371,16 @@
                                             <option value="custom">مخصص</option>
                                         </select>
                                         <input type="text" class="form-control d-none" id="report-date-range" placeholder="التاريخ">
-                                        <button class="btn btn-primary" onclick="reportManager.generateFinanceReport()"><i class="fas fa-file-pdf"></i> تصدير تقرير (PDF)</button>
+                                        <button class="btn btn-primary fw-bold" onclick="reportManager.generateFinanceReport()"><i class="fas fa-file-pdf"></i> تصدير تقرير (PDF)</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card p-0"><table class="table mb-0"><thead><tr><th>التاريخ</th><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>العملة</th></tr></thead><tbody id="finance-list"></tbody></table></div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead><tr><th>التاريخ</th><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>العملة</th></tr></thead>
+                                    <tbody id="finance-list"></tbody>
+                                </table>
+                            </div>
                         </div>
 
                     </div>
@@ -311,7 +395,7 @@
         <div class="mb-2"><label>العميل</label><input class="form-control" id="sim-cust" required list="cust-datalist"><datalist id="cust-datalist"></datalist></div>
         <div class="mb-2"><label>الوصف</label><input class="form-control" id="sim-desc" required></div>
         <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="sim-amount" placeholder="المبلغ" step="0.5" required></div><div class="col"><select class="form-select" id="sim-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div></div>
-        <button class="btn btn-primary w-100">حفظ</button>
+        <button class="btn btn-primary w-100 fw-bold">حفظ</button>
     </form></div></div></div></div>
 
     <div class="modal fade" id="lumpSumModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">تسديد دفعة</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">
@@ -319,7 +403,7 @@
         <form id="lumpSumForm">
             <div class="mb-3"><label>العملة</label><select class="form-select" id="lump-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div>
             <div class="mb-3"><label>المبلغ المدفوع</label><input type="number" class="form-control" id="lump-amount" required step="0.5"></div>
-            <button class="btn btn-info w-100">تأكيد وتوليد الوصل</button>
+            <button class="btn btn-info w-100 fw-bold">تأكيد وتوليد الوصل</button>
         </form>
     </div></div></div></div>
 
@@ -328,14 +412,14 @@
         <input class="form-control mb-2" id="prod-name" placeholder="اسم المنتج" required>
         <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="prod-price" placeholder="السعر" required></div><div class="col"><select class="form-select" id="prod-curr"><option value="TRY">TRY</option><option value="USD">USD</option></select></div></div>
         <input type="file" class="form-control mb-2" id="prod-img">
-        <button class="btn btn-success w-100">إضافة</button>
+        <button class="btn btn-success w-100 fw-bold">إضافة</button>
     </form></div></div></div></div>
 
     <div class="modal fade" id="financeModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="financeForm">
         <input type="hidden" id="fin-type">
         <input class="form-control mb-2" id="fin-desc" placeholder="الوصف" required>
         <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="fin-amount" placeholder="المبلغ" required></div><div class="col"><select class="form-select" id="fin-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div></div>
-        <button class="btn btn-primary w-100">حفظ</button>
+        <button class="btn btn-primary w-100 fw-bold">حفظ</button>
     </form></div></div></div></div>
 
     <!-- PDF Preview Modal -->
@@ -351,8 +435,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
-                    <button type="button" class="btn btn-primary" onclick="reportManager.downloadCurrentPDF()"><i class="fas fa-download"></i> تحميل</button>
-                    <button type="button" class="btn btn-success" onclick="reportManager.shareCurrentPDF()"><i class="fas fa-share-alt"></i> مشاركة</button>
+                    <button type="button" class="btn btn-primary fw-bold" onclick="reportManager.downloadCurrentPDF()"><i class="fas fa-download"></i> تحميل</button>
+                    <button type="button" class="btn btn-success fw-bold" onclick="reportManager.shareCurrentPDF()"><i class="fas fa-share-alt"></i> مشاركة</button>
                 </div>
             </div>
         </div>
@@ -477,13 +561,9 @@
                     d.status === 'active'
                 ).sort((a,b) => (a.created_at?.seconds || 0) - (b.created_at?.seconds || 0));
 
-                // If no debts, user might just want a receipt, but usually we need debts to pay
-                // We'll proceed if there are debts to pay.
                 if(debts.length === 0) return toast("لا يوجد ديون نشطة بهذه العملة", 'err');
 
-                // CALCULATE TOTAL DEBT BEFORE PAYMENT
                 const totalDebtBefore = debts.reduce((sum, d) => sum + Number(d.remaining_amount), 0);
-
                 showLoading(true);
                 let remainingPayment = Number(amount);
                 
@@ -515,10 +595,7 @@
                     toast("تم تسجيل الدفعة");
                     bootstrap.Modal.getInstance(document.getElementById('lumpSumModal')).hide();
                     
-                    // CALCULATE REMAINING
-                    // Logic: Remainder = Max(0, Total_Before - Payment_Amount)
                     const finalRemaining = Math.max(0, totalDebtBefore - Number(amount));
-
                     reportManager.prepareReceipt(currentProfileName, amount, currency, finalRemaining);
 
                 } catch(e) { console.log(e); toast("خطأ", 'err'); }
@@ -546,7 +623,7 @@
 
                     tbody.innerHTML += `
                         <tr class="customer-row" onclick="ui.openCustomerProfile('${name}')">
-                            <td class="fw-bold text-white">${name}</td>
+                            <td class="fw-bold" style="color:#e2e8f0">${name}</td>
                             <td class="text-usd">${usd}</td>
                             <td class="text-try">${tryVal}</td>
                             <td class="text-syp">${syp}</td>
@@ -654,7 +731,6 @@
         let currentPdfBlob = null;
 
         window.reportManager = {
-            // A. Invoice (Selected Items)
             prepareInvoice: async (name, items, total, currency) => {
                 const container = document.getElementById('invoice-content');
                 let rowsHtml = '';
@@ -678,7 +754,6 @@
                 await reportManager.generateAndShowPreview('Invoice');
             },
 
-            // B. Receipt (Lump Sum) - UPDATED TO SHOW REMAINING
             prepareReceipt: async (name, amount, currency, remaining) => {
                 const container = document.getElementById('invoice-content');
                 container.innerHTML = `
@@ -700,11 +775,9 @@
                 await reportManager.generateAndShowPreview('Receipt');
             },
 
-            // C. Finance Report
             generateFinanceReport: async () => {
                 const type = document.getElementById('report-type').value;
                 const container = document.getElementById('invoice-content');
-                
                 let filtered = allTrans;
                 const now = new Date();
                 
@@ -732,7 +805,6 @@
                 await reportManager.generateAndShowPreview('Report');
             },
 
-            // CORE: HTML -> Canvas -> PDF -> Preview
             generateAndShowPreview: async (filenamePrefix) => {
                 showLoading(true);
                 try {
@@ -839,4 +911,4 @@
         const showLoading = s => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
     </script>
 </body>
-</html>
+            </html>
