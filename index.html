@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مغسلة شباب المعرة - V4</title>
+    <title>مغسلة شباب المعرة - V4.1</title>
     
     <!-- Bootstrap 5 & Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
@@ -16,18 +16,17 @@
 
     <style>
         :root {
-            /* V4 Slate Palette - Comfortable Dark Mode */
-            --bg-body: #0f172a;       /* Slate 900 */
-            --bg-sidebar: #1e293b;    /* Slate 800 */
-            --bg-card: #334155;       /* Slate 700 */
-            --border-color: #475569;  /* Slate 600 */
-            --text-primary: #f8fafc;  /* Slate 50 */
-            --text-secondary: #cbd5e1;/* Slate 300 */
+            --bg-body: #0f172a;
+            --bg-sidebar: #1e293b;
+            --bg-card: #334155;
+            --border-color: #475569;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
             
-            --accent-blue: #38bdf8;   /* Sky 400 */
-            --accent-green: #4ade80;  /* Green 400 */
-            --accent-orange: #fbbf24; /* Amber 400 */
-            --accent-red: #f87171;    /* Red 400 */
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-orange: #fbbf24;
+            --accent-red: #f87171;
         }
 
         body {
@@ -37,27 +36,20 @@
             overflow-x: hidden;
         }
 
-        /* Overrides */
         .card { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 12px; }
-        .form-control, .form-select {
-            background-color: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-primary);
-        }
-        .form-control:focus, .form-select:focus {
-            background-color: var(--bg-sidebar); border-color: var(--accent-blue); color: white; box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25);
-        }
+        .form-control, .form-select { background-color: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-primary); }
+        .form-control:focus, .form-select:focus { background-color: var(--bg-sidebar); border-color: var(--accent-blue); color: white; box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25); }
         .table { color: var(--text-secondary); --bs-table-hover-color: white; --bs-table-hover-bg: #475569; }
         .table thead th { background-color: var(--bg-sidebar); color: var(--accent-blue); border-bottom: 2px solid var(--border-color); }
         .table td { border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         .modal-content { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); }
         .btn-close { filter: invert(1); }
 
-        /* Sidebar */
         .sidebar { background-color: var(--bg-sidebar); min-height: 100vh; border-left: 1px solid var(--border-color); }
         .nav-link { color: var(--text-secondary); padding: 12px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; }
         .nav-link:hover, .nav-link.active { background-color: rgba(56, 189, 248, 0.1); color: var(--accent-blue); font-weight: bold; transform: translateX(-5px); }
         .nav-link i { width: 25px; text-align: center; }
 
-        /* Custom Components */
         .stat-card { padding: 20px; border-radius: 12px; background: linear-gradient(145deg, var(--bg-card), var(--bg-sidebar)); border-top: 4px solid transparent; }
         .stat-usd { border-color: var(--accent-green); }
         .stat-try { border-color: var(--accent-blue); }
@@ -65,8 +57,6 @@
 
         .customer-row { cursor: pointer; transition: 0.2s; }
         .customer-row:hover { background-color: var(--border-color); }
-
-        /* Utils */
         .text-usd { color: var(--accent-green) !important; }
         .text-try { color: var(--accent-blue) !important; }
         .text-syp { color: var(--accent-orange) !important; }
@@ -76,8 +66,23 @@
         .app-section.active-section { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Invoice Print Style */
-        #invoice-print-container { background: white; color: black; padding: 20px; width: 80mm; display: none; }
+        /* Invoice Template Styling (Hidden from view, used for PDF generation) */
+        #invoice-template-container {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 210mm; /* A4 Width */
+            background: white;
+            color: black;
+            padding: 40px;
+            font-family: 'Almarai', sans-serif;
+            direction: rtl;
+        }
+        .inv-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .inv-table th, .inv-table td { border: 1px solid #ddd; padding: 12px; text-align: right; }
+        .inv-table th { background-color: #f8f9fa; font-weight: bold; }
+        .inv-total { margin-top: 30px; text-align: left; font-size: 1.2rem; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -86,6 +91,13 @@
     <div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 bg-dark-overlay d-flex flex-column justify-content-center align-items-center" style="z-index: 9999;">
         <div class="spinner-border text-info mb-3"></div>
         <h6>جاري التحميل...</h6>
+    </div>
+
+    <!-- Hidden Invoice Template for PDF Generation -->
+    <div id="invoice-template-container">
+        <div id="invoice-content">
+            <!-- Dynamic Content Injected Here -->
+        </div>
     </div>
 
     <!-- Login -->
@@ -175,7 +187,7 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Products Tab (Re-added) -->
+                                <!-- Products Tab -->
                                 <div class="tab-pane fade" id="lau-products">
                                     <button class="btn btn-success mb-3" onclick="ui.openAddProductModal('laundry')">إضافة منتج</button>
                                     <div class="row g-3" id="laundry-products-grid"></div>
@@ -183,7 +195,7 @@
                             </div>
                         </div>
 
-                        <!-- 2.1 Customer Profile (Smart View) -->
+                        <!-- 2.1 Customer Profile -->
                         <div id="customer-profile-section" class="app-section">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
                                 <div>
@@ -197,20 +209,20 @@
                                 </div>
                             </div>
 
-                            <!-- Smart Actions -->
+                            <!-- Actions -->
                             <div class="row g-3 mb-4">
                                 <div class="col-md-4">
                                     <div class="card p-3 h-100 border-success">
                                         <h6 class="text-success"><i class="fas fa-check-double"></i> خيار 1: تسديد فواتير محددة</h6>
-                                        <p class="small text-muted">اختر منتجات/خدمات من القائمة بالأسفل ثم اضغط هنا.</p>
-                                        <button class="btn btn-success w-100" onclick="dataManager.paySelectedItems()">دفع المحدد (توليد فاتورة)</button>
+                                        <p class="small text-muted">اختر منتجات/خدمات ثم اضغط هنا.</p>
+                                        <button class="btn btn-success w-100" onclick="dataManager.paySelectedItems()">دفع المحدد (PDF)</button>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="card p-3 h-100 border-info">
                                         <h6 class="text-info"><i class="fas fa-hand-holding-usd"></i> خيار 2: تسديد دفعة (Lump Sum)</h6>
-                                        <p class="small text-muted">أدخل مبلغاً وسيتم خصمه من أقدم الديون (FIFO).</p>
-                                        <button class="btn btn-info w-100" onclick="ui.openLumpSumModal()">إجراء دفعة</button>
+                                        <p class="small text-muted">أدخل مبلغاً وسيتم خصمه من الأقدم (FIFO).</p>
+                                        <button class="btn btn-info w-100" onclick="ui.openLumpSumModal()">إجراء دفعة (PDF)</button>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -275,10 +287,10 @@
                                             <option value="today">يومي</option>
                                             <option value="week">أسبوعي</option>
                                             <option value="year">سنوي</option>
-                                            <option value="custom">مخصص (اختر التاريخ)</option>
+                                            <option value="custom">مخصص</option>
                                         </select>
                                         <input type="text" class="form-control d-none" id="report-date-range" placeholder="التاريخ">
-                                        <button class="btn btn-primary" onclick="reportManager.generatePDF()"><i class="fas fa-file-pdf"></i> تصدير تقرير</button>
+                                        <button class="btn btn-primary" onclick="reportManager.generateFinanceReport()"><i class="fas fa-file-pdf"></i> تصدير تقرير (PDF)</button>
                                     </div>
                                 </div>
                             </div>
@@ -292,26 +304,23 @@
     </div>
 
     <!-- Modals -->
-    <!-- 1. Simple Debt Modal (Used for Laundry & Espresso) -->
     <div class="modal fade" id="simpleDebtModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">إضافة</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="simpleDebtForm">
         <input type="hidden" id="sim-source">
         <div class="mb-2"><label>العميل</label><input class="form-control" id="sim-cust" required list="cust-datalist"><datalist id="cust-datalist"></datalist></div>
-        <div class="mb-2"><label>الوصف (المنتج/الخدمة)</label><input class="form-control" id="sim-desc" required></div>
+        <div class="mb-2"><label>الوصف</label><input class="form-control" id="sim-desc" required></div>
         <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="sim-amount" placeholder="المبلغ" step="0.5" required></div><div class="col"><select class="form-select" id="sim-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div></div>
         <button class="btn btn-primary w-100">حفظ</button>
     </form></div></div></div></div>
 
-    <!-- 2. Lump Sum Modal -->
-    <div class="modal fade" id="lumpSumModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">تسديد دفعة (Lump Sum)</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">
-        <div class="alert alert-info small">سيتم خصم المبلغ من أقدم الفواتير النشطة تلقائياً (FIFO).</div>
+    <div class="modal fade" id="lumpSumModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">تسديد دفعة</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">
+        <div class="alert alert-info small">سيتم خصم المبلغ من أقدم الفواتير (FIFO).</div>
         <form id="lumpSumForm">
             <div class="mb-3"><label>العملة</label><select class="form-select" id="lump-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div>
             <div class="mb-3"><label>المبلغ المدفوع</label><input type="number" class="form-control" id="lump-amount" required step="0.5"></div>
-            <button class="btn btn-info w-100">تأكيد الدفع وتوليد الوصل</button>
+            <button class="btn btn-info w-100">تأكيد وتوليد الوصل</button>
         </form>
     </div></div></div></div>
 
-    <!-- 3. Add Product Modal -->
     <div class="modal fade" id="addProductModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="addProductForm">
         <input type="hidden" id="prod-cat">
         <input class="form-control mb-2" id="prod-name" placeholder="اسم المنتج" required>
@@ -320,7 +329,6 @@
         <button class="btn btn-success w-100">إضافة</button>
     </form></div></div></div></div>
 
-    <!-- 4. Finance Modal -->
     <div class="modal fade" id="financeModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="financeForm">
         <input type="hidden" id="fin-type">
         <input class="form-control mb-2" id="fin-desc" placeholder="الوصف" required>
@@ -328,15 +336,31 @@
         <button class="btn btn-primary w-100">حفظ</button>
     </form></div></div></div></div>
 
-    <!-- PDF Logic: Invisible Container for rendering -->
-    <div id="pdf-container" style="position:fixed; top:-9999px; left:-9999px;"></div>
+    <!-- PDF Preview Modal -->
+    <div class="modal fade" id="pdfPreviewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">معاينة الفاتورة / التقرير</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center bg-light">
+                     <iframe id="pdf-preview-frame" style="width: 100%; height: 500px; border: none;"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                    <button type="button" class="btn btn-primary" onclick="reportManager.downloadCurrentPDF()"><i class="fas fa-download"></i> تحميل</button>
+                    <button type="button" class="btn btn-success" onclick="reportManager.shareCurrentPDF()"><i class="fas fa-share-alt"></i> مشاركة</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <script type="module">
@@ -368,7 +392,6 @@
         // --- Data Layer ---
         const dataManager = {
             init: () => {
-                // Debts
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'debts'), snap => {
                     allDebts = [];
                     const custSet = new Set();
@@ -384,14 +407,12 @@
                     if(currentProfileName) ui.openCustomerProfile(currentProfileName);
                 });
 
-                // Transactions
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), snap => {
                     allTrans = [];
                     snap.forEach(d => allTrans.push({id: d.id, ...d.data()}));
                     ui.renderFinance();
                 });
 
-                // Products
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), snap => {
                     const prods = [];
                     snap.forEach(d => prods.push(d.data()));
@@ -410,7 +431,6 @@
                 } catch(e) { toast("خطأ", 'err'); } finally { showLoading(false); }
             },
 
-            // Option 1: Pay Selected
             paySelectedItems: async () => {
                 const checked = document.querySelectorAll('.debt-check:checked');
                 if(checked.length === 0) return toast("اختر عنصر واحد على الأقل", 'err');
@@ -424,33 +444,30 @@
                     for(const box of checked) {
                         const debtId = box.value;
                         const debt = allDebts.find(d => d.id === debtId);
-                        currency = debt.currency; // Assume same currency for simplicity/validation
+                        currency = debt.currency; 
                         
                         await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', debtId), {
                             status: 'paid', remaining_amount: 0, paid_amount: debt.total_amount, paid_at: serverTimestamp()
                         });
                         
                         totalPaid += Number(debt.remaining_amount);
-                        itemsDesc.push(`${debt.description} (${debt.total_amount})`);
+                        itemsDesc.push({desc: debt.description, amount: debt.total_amount});
                     }
 
-                    // Transaction
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
                         type: 'income', source: 'laundry_payment', 
                         description: `تسديد محدد للعميل ${currentProfileName}`, 
                         amount: totalPaid, currency: currency, created_at: serverTimestamp()
                     });
 
-                    toast("تم السداد والأرشفة");
-                    reportManager.generateInvoicePDF(currentProfileName, itemsDesc, totalPaid, currency);
+                    toast("تم السداد");
+                    reportManager.prepareInvoice(currentProfileName, itemsDesc, totalPaid, currency);
 
                 } catch(e) { toast("حدث خطأ", 'err'); console.log(e); } 
                 finally { showLoading(false); }
             },
 
-            // Option 2: Lump Sum (FIFO)
             payLumpSum: async (amount, currency) => {
-                // Get active debts for this customer & currency, sorted by oldest
                 let debts = allDebts.filter(d => 
                     d.customer_name === currentProfileName && 
                     d.source === 'laundry' && 
@@ -462,32 +479,24 @@
 
                 showLoading(true);
                 let remainingPayment = Number(amount);
-                let paidItems = [];
-
+                
                 try {
                     for(const debt of debts) {
                         if(remainingPayment <= 0) break;
-
                         const debtRem = Number(debt.remaining_amount);
-                        let payVal = 0;
-
+                        
                         if(remainingPayment >= debtRem) {
-                            // Pay Full
-                            payVal = debtRem;
                             remainingPayment -= debtRem;
                             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', debt.id), {
                                 status: 'paid', remaining_amount: 0, paid_amount: Number(debt.total_amount), paid_at: serverTimestamp()
                             });
                         } else {
-                            // Partial
-                            payVal = remainingPayment;
                             await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', debt.id), {
                                 remaining_amount: debtRem - remainingPayment,
                                 paid_amount: Number(debt.paid_amount) + remainingPayment
                             });
                             remainingPayment = 0;
                         }
-                        paidItems.push(debt);
                     }
 
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
@@ -499,12 +508,7 @@
                     toast("تم تسجيل الدفعة");
                     bootstrap.Modal.getInstance(document.getElementById('lumpSumModal')).hide();
                     
-                    // Calc total remaining debt for receipt
-                    const newTotal = allDebts
-                        .filter(d => d.customer_name === currentProfileName && d.currency === currency && d.status === 'active')
-                        .reduce((sum, d) => sum + (d.remaining_amount - (paidItems.find(x=>x.id==d.id)?.remaining_amount || 0)), 0); // Simplified approx for PDF
-                    
-                    reportManager.generateReceiptPDF(currentProfileName, amount, currency);
+                    reportManager.prepareReceipt(currentProfileName, amount, currency);
 
                 } catch(e) { console.log(e); toast("خطأ", 'err'); }
                 finally { showLoading(false); }
@@ -547,8 +551,6 @@
                 document.getElementById('prof-name').innerText = name;
                 
                 const debts = allDebts.filter(d => d.customer_name === name && d.source === 'laundry');
-                
-                // Calc Totals
                 let tUsd=0, tTry=0, tSyp=0;
                 debts.filter(d => d.status === 'active').forEach(d => {
                     if(d.currency === 'USD') tUsd += Number(d.remaining_amount);
@@ -559,16 +561,12 @@
                 document.getElementById('prof-total-try').innerText = tTry;
                 document.getElementById('prof-total-syp').innerText = tSyp;
 
-                // Render List
                 const tbody = document.getElementById('profile-debts-list');
                 tbody.innerHTML = '';
                 
-                // Filter Logic
                 const dateFilter = document.getElementById('date-filter').value;
                 let filtered = debts;
                 if(!showArchive) filtered = filtered.filter(d => d.status === 'active');
-                
-                // Sort
                 filtered.sort((a,b) => (b.created_at?.seconds||0) - (a.created_at?.seconds||0));
 
                 filtered.forEach(d => {
@@ -584,29 +582,14 @@
                         </tr>
                     `;
                 });
-
                 router.navigate('customer-profile');
             },
 
-            // --- Modals ---
-            openSimpleDebtModal: (src) => {
-                document.getElementById('simpleDebtForm').reset();
-                document.getElementById('sim-source').value = src;
-                new bootstrap.Modal(document.getElementById('simpleDebtModal')).show();
-            },
+            openSimpleDebtModal: (src) => { document.getElementById('simpleDebtForm').reset(); document.getElementById('sim-source').value = src; new bootstrap.Modal(document.getElementById('simpleDebtModal')).show(); },
             openLumpSumModal: () => new bootstrap.Modal(document.getElementById('lumpSumModal')).show(),
-            openAddProductModal: (cat) => {
-                document.getElementById('addProductForm').reset();
-                document.getElementById('prod-cat').value = cat;
-                new bootstrap.Modal(document.getElementById('addProductModal')).show();
-            },
-            openTransactionModal: (type) => {
-                document.getElementById('financeForm').reset();
-                document.getElementById('fin-type').value = type;
-                new bootstrap.Modal(document.getElementById('financeModal')).show();
-            },
+            openAddProductModal: (cat) => { document.getElementById('addProductForm').reset(); document.getElementById('prod-cat').value = cat; new bootstrap.Modal(document.getElementById('addProductModal')).show(); },
+            openTransactionModal: (type) => { document.getElementById('financeForm').reset(); document.getElementById('fin-type').value = type; new bootstrap.Modal(document.getElementById('financeModal')).show(); },
 
-            // --- Helpers ---
             updateDash: () => {
                 let u=0, t=0, s=0;
                 allDebts.filter(d => d.status === 'active').forEach(d => {
@@ -634,8 +617,6 @@
                 const master = document.getElementById('check-all').checked;
                 document.querySelectorAll('.debt-check').forEach(c => c.checked = master);
             },
-
-            // --- Render Other Sections ---
             renderEspresso: () => {
                 const t = document.getElementById('espresso-list'); t.innerHTML='';
                 allDebts.filter(d=>d.source==='espresso' && d.status==='active').forEach(d=>{
@@ -645,7 +626,6 @@
             renderProducts: (list) => {
                 const lg = document.getElementById('laundry-products-grid'); lg.innerHTML='';
                 const eg = document.getElementById('espresso-products-grid'); eg.innerHTML='';
-                
                 list.forEach(p => {
                     const html = `<div class="col-6 col-md-3"><div class="card p-2 text-center h-100"><img src="${p.image_url}" class="img-fluid rounded mb-2" style="height:100px;object-fit:cover;"><h6>${p.name}</h6><span class="text-info">${p.selling_price} ${p.currency}</span></div></div>`;
                     if(p.category==='laundry') lg.innerHTML += html; else eg.innerHTML += html;
@@ -659,39 +639,58 @@
             }
         };
 
-        // --- Report Manager (PDF) ---
+        // --- Report Manager (Fixed Arabic & Preview) ---
+        let currentPdfBlob = null;
+
         window.reportManager = {
-            generateInvoicePDF: (name, items, total, curr) => {
-                const doc = new jspdf.jsPDF({ align: 'right' });
-                // Use html2canvas or simple text for now since Arabic fonts are tricky in pure JS
-                // Simplified Receipt
-                doc.setFontSize(22); doc.text("Laundry Receipt", 105, 20, "center");
-                doc.setFontSize(16); doc.text(`Customer: ${name}`, 180, 40, "right");
-                doc.text(`Date: ${new Date().toLocaleDateString()}`, 180, 50, "right");
+            // A. Invoice (Selected Items)
+            prepareInvoice: async (name, items, total, currency) => {
+                const container = document.getElementById('invoice-content');
+                let rowsHtml = '';
+                items.forEach(item => {
+                    rowsHtml += `<tr><td>${item.desc}</td><td>${item.amount} ${currency}</td></tr>`;
+                });
+
+                container.innerHTML = `
+                    <div class="inv-header">
+                        <h2>مغسلة شباب المعرة</h2>
+                        <p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
+                        <h3>فاتورة السيد: ${name}</h3>
+                    </div>
+                    <table class="inv-table">
+                        <thead><tr><th>الوصف</th><th>المبلغ</th></tr></thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                    <div class="inv-total">الإجمالي المدفوع: ${total} ${currency}</div>
+                `;
                 
-                let y = 70;
-                items.forEach(i => { doc.text(`- ${i}`, 180, y, "right"); y+=10; });
-                
-                doc.setLineWidth(0.5); doc.line(20, y+5, 190, y+5);
-                doc.setFontSize(20); doc.text(`Total Paid: ${total} ${curr}`, 180, y+20, "right");
-                doc.save(`Invoice_${name}.pdf`);
+                await reportManager.generateAndShowPreview('Invoice');
             },
 
-            generateReceiptPDF: (name, amount, curr) => {
-                const doc = new jspdf.jsPDF();
-                doc.text("Payment Receipt", 105, 20, "center");
-                doc.text(`Customer: ${name}`, 20, 40);
-                doc.text(`Amount Paid: ${amount} ${curr}`, 20, 50);
-                doc.text(`Type: Account Payment (Lump Sum)`, 20, 60);
-                doc.text(`Date: ${new Date().toLocaleString()}`, 20, 70);
-                doc.save(`Receipt_${name}.pdf`);
+            // B. Receipt (Lump Sum)
+            prepareReceipt: async (name, amount, currency) => {
+                const container = document.getElementById('invoice-content');
+                container.innerHTML = `
+                    <div class="inv-header">
+                        <h2>مغسلة شباب المعرة</h2>
+                        <h3>وصل قبض (دفعة حساب)</h3>
+                        <p>تاريخ: ${new Date().toLocaleString('ar-EG')}</p>
+                    </div>
+                    <div style="font-size: 1.5rem; margin-top: 40px; text-align: center;">
+                        <p>استلمنا من السيد: <strong>${name}</strong></p>
+                        <p>مبلغ وقدره:</p>
+                        <h1 style="border: 2px dashed #333; padding: 10px; display: inline-block;">${amount} ${currency}</h1>
+                        <p style="margin-top: 20px;">وذلك عن سداد دفعة من الحساب</p>
+                    </div>
+                `;
+                await reportManager.generateAndShowPreview('Receipt');
             },
 
-            generatePDF: () => {
+            // C. Finance Report
+            generateFinanceReport: async () => {
                 const type = document.getElementById('report-type').value;
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-
+                const container = document.getElementById('invoice-content');
+                
                 let filtered = allTrans;
                 const now = new Date();
                 
@@ -700,30 +699,94 @@
                     const lastWeek = new Date(now.setDate(now.getDate() - 7));
                     filtered = allTrans.filter(t => new Date(t.created_at.seconds*1000) > lastWeek);
                 }
-                
-                const tableData = filtered.map(t => [
-                    t.currency,
-                    t.amount,
-                    t.description, // Arabic text might show reversed in standard jspdf without custom font
-                    t.type,
-                    new Date(t.created_at.seconds*1000).toLocaleDateString()
-                ]);
 
-                doc.autoTable({
-                    head: [['Currency', 'Amount', 'Desc', 'Type', 'Date']],
-                    body: tableData,
+                let rows = '';
+                filtered.forEach(t => {
+                    rows += `<tr><td>${new Date(t.created_at.seconds*1000).toLocaleDateString()}</td><td>${t.type === 'income' ? 'دخل' : 'صرف'}</td><td>${t.description}</td><td>${t.amount} ${t.currency}</td></tr>`;
                 });
-                doc.save('Finance_Report.pdf');
+
+                container.innerHTML = `
+                    <div class="inv-header">
+                        <h2>مغسلة شباب المعرة</h2>
+                        <h3>تقرير مالي (${type === 'today' ? 'يومي' : 'عام'})</h3>
+                    </div>
+                    <table class="inv-table">
+                        <thead><tr><th>التاريخ</th><th>النوع</th><th>البيان</th><th>المبلغ</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                `;
+                await reportManager.generateAndShowPreview('Report');
+            },
+
+            // CORE: HTML -> Canvas -> PDF -> Preview
+            generateAndShowPreview: async (filenamePrefix) => {
+                showLoading(true);
+                try {
+                    const element = document.getElementById('invoice-template-container');
+                    
+                    // 1. Convert HTML to Canvas (High Scale for clarity)
+                    const canvas = await html2canvas(element, { scale: 2 });
+                    const imgData = canvas.toDataURL('image/png');
+
+                    // 2. Add to PDF
+                    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+                    // 3. Generate Blob for Preview
+                    currentPdfBlob = pdf.output('blob');
+                    const blobUrl = URL.createObjectURL(currentPdfBlob);
+                    
+                    // 4. Show Modal
+                    document.getElementById('pdf-preview-frame').src = blobUrl;
+                    reportManager.currentFilename = `${filenamePrefix}_${new Date().getTime()}.pdf`;
+                    
+                    new bootstrap.Modal(document.getElementById('pdfPreviewModal')).show();
+                } catch(e) {
+                    console.error(e);
+                    toast("فشل إنشاء PDF", 'err');
+                } finally {
+                    showLoading(false);
+                }
+            },
+
+            downloadCurrentPDF: () => {
+                if(currentPdfBlob) {
+                    const url = window.URL.createObjectURL(currentPdfBlob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = reportManager.currentFilename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                }
+            },
+
+            shareCurrentPDF: async () => {
+                if(currentPdfBlob && navigator.share) {
+                    const file = new File([currentPdfBlob], reportManager.currentFilename, { type: 'application/pdf' });
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'فاتورة / تقرير',
+                            text: 'مرفق ملف PDF من مغسلة شباب المعرة'
+                        });
+                    } catch (error) {
+                        console.log('Share failed', error);
+                    }
+                } else {
+                    toast("المشاركة غير مدعومة في هذا المتصفح", 'err');
+                }
             }
         };
 
         // --- Event Listeners ---
         document.getElementById('laundry-search').addEventListener('keyup', () => ui.renderLaundryCustomers(Array.from(new Set(allDebts.filter(d=>d.source==='laundry').map(d=>d.customer_name)))));
-        document.getElementById('report-type').addEventListener('change', (e) => {
-            document.getElementById('report-date-range').classList.toggle('d-none', e.target.value !== 'custom');
-        });
+        document.getElementById('report-type').addEventListener('change', (e) => { document.getElementById('report-date-range').classList.toggle('d-none', e.target.value !== 'custom'); });
         
-        // Forms
         document.getElementById('simpleDebtForm').addEventListener('submit', e => {
             e.preventDefault(); dataManager.addDebt({
                 customer_name: document.getElementById('sim-cust').value,
@@ -734,9 +797,7 @@
             });
         });
 
-        document.getElementById('lumpSumForm').addEventListener('submit', e => {
-            e.preventDefault(); dataManager.payLumpSum(document.getElementById('lump-amount').value, document.getElementById('lump-curr').value);
-        });
+        document.getElementById('lumpSumForm').addEventListener('submit', e => { e.preventDefault(); dataManager.payLumpSum(document.getElementById('lump-amount').value, document.getElementById('lump-curr').value); });
 
         document.getElementById('financeForm').addEventListener('submit', async e => {
             e.preventDefault();
@@ -771,7 +832,6 @@
             showLoading(false); toast("تم"); bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
         });
 
-        // Auth
         onAuthStateChanged(auth, u => {
             showLoading(false);
             if(u) {
@@ -786,14 +846,10 @@
             }
         });
 
-        // Globals
-        window.router = { navigate: id => {
-            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active-section'));
-            document.getElementById(id+'-section').classList.add('active-section');
-        }};
+        window.router = { navigate: id => { document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active-section')); document.getElementById(id+'-section').classList.add('active-section'); }};
         window.ui = ui; window.dataManager = dataManager; window.reportManager = reportManager; window.auth = auth;
         const toast = (m,t) => Toastify({text:m, style:{background:t=='err'?'#f87171':'#4ade80'}, duration:2000}).showToast();
         const showLoading = s => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
     </script>
 </body>
-    </html>
+                                                          </html>
