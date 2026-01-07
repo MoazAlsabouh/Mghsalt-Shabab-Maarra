@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>مغسلة شباب المعرة | ERP</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, updateDoc, getDoc, collection, addDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDkJMYhBvNCbjBPlidUW4y1YEkJIkUXvck",
+      authDomain: "mghsalt-shabab-maarra.firebaseapp.com",
+      projectId: "mghsalt-shabab-maarra",
+      storageBucket: "mghsalt-shabab-maarra.firebasestorage.app",
+      messagingSenderId: "89159652894",
+      appId: "1:89159652894:web:c2a88017020777617e000f"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+  </script>
+
+  <!-- PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+<!-- ================= CONFIG ================= -->
+<script>
+const CLOUDINARY_CLOUD_NAME = "drielwabh"; // Cloudinary Cloud Name
+const CLOUDINARY_PRESET = "mghsala_upload"; // Cloudinary Upload Preset
+</script>
+
+<!-- ================= INIT ================= -->
+<script>
+  // Firebase Auth and Firestore initialization
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      console.log("User signed in: ", user);
+    } else {
+      console.log("No user signed in.");
+    }
+  });
+</script>
+
+<!-- ================= HELPERS ================= -->
+<script>
+  // ---- Currency Object ----
+  function money(amount, currency) {
+    return { amount: Number(amount), currency };
+  }
+
+  // ---- Cloudinary Upload ----
+  async function uploadToCloudinary(file) {
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("upload_preset", CLOUDINARY_PRESET);
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      { method: "POST", body: fd }
+    );
+    const data = await res.json();
+    return data.secure_url;
+  }
+
+  // ---- Arabic PDF ----
+  function generatePDF(content, title) {
+    const doc = {
+      content: [
+        { text: "مغسلة شباب المعرة", style: "header" },
+        { text: title, style: "sub" },
+        { text: new Date().toLocaleDateString("ar"), margin: [0, 0, 0, 10] },
+        content
+      ],
+      styles: {
+        header: { fontSize: 18, bold: true },
+        sub: { fontSize: 14, margin: [0, 5, 0, 10] }
+      },
+      defaultStyle: { font: "Helvetica" }
+    };
+    pdfMake.createPdf(doc).open();
+  }
+</script>
+
+<!-- ================= UI ================= -->
+<div class="max-w-7xl mx-auto p-4">
+
+  <h1 class="text-2xl font-bold mb-4">ERP – مغسلة شباب المعرة</h1>
+
+  <!-- Tabs -->
+  <div class="flex gap-2 mb-4 flex-wrap">
+    <button onclick="showTab('inventory')" class="tab">المخزون</button>
+    <button onclick="showTab('sales')" class="tab">المبيعات</button>
+    <button onclick="showTab('clients')" class="tab">العملاء والديون</button>
+    <button onclick="showTab('archive')" class="tab">الأرشيف</button>
+    <button onclick="showTab('employees')" class="tab">الموظفين</button>
+    <button onclick="showTab('reports')" class="tab">الخزنة</button>
+  </div>
+
+  <!-- ================= INVENTORY ================= -->
+  <section id="inventory" class="tab-content hidden">
+    <h2 class="font-bold mb-2">إضافة منتج</h2>
+
+    <input id="invName" placeholder="اسم المنتج" class="input" />
+    <input type="number" id="invTotalCost" placeholder="التكلفة الإجمالية" class="input" />
+    <input type="number" id="invQty" placeholder="الكمية" class="input" />
+
+    <select id="invCurrency" class="input">
+      <option>USD</option><option>TRY</option><option>SYP</option>
+    </select>
+
+    <input type="number" id="invSell" placeholder="سعر البيع" class="input" />
+    <input type="file" id="invImg" />
+
+    <button onclick="addInventory()" class="btn">حفظ</button>
+  </section>
+
+  <!-- ================= SALES ================= -->
+  <section id="sales" class="tab-content hidden">
+    <h2 class="font-bold mb-2">نقطة البيع</h2>
+    <p class="text-sm text-gray-500">الاسبريسو / المغسلة</p>
+    <!-- (مبسطة – قابلة للتوسعة) -->
+  </section>
+
+  <!-- ================= CLIENTS ================= -->
+  <section id="clients" class="tab-content hidden">
+    <h2 class="font-bold mb-2">العملاء والديون</h2>
+    <button onclick="exportClientsPDF()" class="btn">كشف حساب PDF</button>
+  </section>
+
+  <!-- ================= ARCHIVE ================= -->
+  <section id="archive" class="tab-content hidden">
+    <h2 class="font-bold mb-2">الأرشيف والمصاريف</h2>
+  </section>
+
+  <!-- ================= EMPLOYEES ================= -->
+  <section id="employees" class="tab-content hidden">
+    <h2 class="font-bold mb-2">الموظفين</h2>
+  </section>
+
+  <!-- ================= REPORTS ================= -->
+  <section id="reports" class="tab-content hidden">
+    <h2 class="font-bold mb-2">الخزنة والتقارير</h2>
+    <button onclick="exportReportPDF()" class="btn">تقرير PDF</button>
+  </section>
+
+</div>
+
+<!-- ================= STYLES ================= -->
+<style>
+.tab { background:#e5e7eb; padding:6px 12px; border-radius:6px }
+.tab-content { background:#fff; padding:16px; border-radius:8px }
+.input { display:block; margin:4px 0; padding:6px; border:1px solid #ccc; border-radius:6px }
+.btn { background:#2563eb; color:white; padding:6px 12px; border-radius:6px; margin-top:6px }
+</style>
+
+<!-- ================= LOGIC ================= -->
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+// Inventory
+async function addInventory(){
+  if(!auth.currentUser){ alert("سجّل دخول"); return; }
+
+  const imgFile = invImg.files[0];
+  const imgUrl = imgFile ? await uploadToCloudinary(imgFile) : "";
+
+  const total = Number(invTotalCost.value);
+  const qty = Number(invQty.value);
+
+  await setDoc(doc(db, "inventory", invName.value), {
+    name: invName.value,
+    image: imgUrl,
+    quantity: qty,
+    costTotal: money(total, invCurrency.value),
+    costUnit: money(total/qty, invCurrency.value),
+    sellPrice: money(invSell.value, invCurrency.value),
+    createdAt: new Date()
+  });
+
+  alert("تم الحفظ");
+}
+
+// PDFs
+function exportClientsPDF(){
+  generatePDF({ text:"كشف حساب العملاء" }, "العملاء");
+}
+function exportReportPDF(){
+  generatePDF({ text:"تقرير الخزنة" }, "التقرير المالي");
+}
+</script>
+
+</body>
+    </html>
