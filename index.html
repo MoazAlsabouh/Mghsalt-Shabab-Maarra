@@ -131,20 +131,38 @@
         <h5 id="loading-text" class="text-muted">جاري التحميل...</h5>
     </div>
 
-    <!-- Login Screen -->
+    <!-- Login Screen (UPDATED FOR EMAIL/PASSWORD) -->
     <div id="login-screen">
         <div class="card p-5 shadow-lg border-0" style="width: 400px; max-width: 90%; border-radius: 15px;">
-            <div class="text-center mb-5">
+            <div class="text-center mb-4">
                 <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                     <i class="fas fa-soap fa-3x"></i>
                 </div>
                 <h3 class="fw-bold text-dark">مغسلة شباب المعرة</h3>
-                <p class="text-muted">تسجيل الدخول للنظام الإداري</p>
+                <p class="text-muted">تسجيل الدخول (للأدمن)</p>
             </div>
-            <button id="btn-login" class="btn btn-primary btn-lg w-100 shadow-sm">
-                <i class="fab fa-google ms-2"></i> دخول للنظام
-            </button>
-            <div id="login-error" class="text-danger mt-3 text-center small" style="display:none;"></div>
+            
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">البريد الإلكتروني</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fas fa-envelope"></i></span>
+                        <input type="email" id="email" class="form-control" placeholder="admin@example.com" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">كلمة المرور</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fas fa-lock"></i></span>
+                        <input type="password" id="password" class="form-control" placeholder="******" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm fw-bold">
+                    دخول للنظام
+                </button>
+            </form>
+
+            <div id="login-error" class="alert alert-danger mt-3 text-center small" style="display:none;"></div>
         </div>
     </div>
 
@@ -470,9 +488,9 @@
 
     <!-- Firebase & Cloudinary Logic -->
     <script type="module">
-        // 1. Imports
+        // 1. Imports - ADDED signInWithEmailAndPassword
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, updateDoc, getDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // 2. Constants & Config
@@ -489,7 +507,6 @@
         const CLOUDINARY_PRESET = "mghsala_upload";
         const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
-        // Used for Preview environment compliance
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'maarra-app';
 
         // 3. Initialization
@@ -512,9 +529,11 @@
 
         const toggleLoading = (show, text = "جاري التحميل...") => {
             const el = document.getElementById('loading-overlay');
-            document.getElementById('loading-text').innerText = text;
-            if(show) el.classList.remove('d-none');
-            else el.classList.add('d-none');
+            if(el) {
+                document.getElementById('loading-text').innerText = text;
+                if(show) el.classList.remove('d-none');
+                else el.classList.add('d-none');
+            }
         };
 
         // --- CLOUDINARY UPLOAD FUNCTION ---
@@ -537,20 +556,13 @@
             }
         };
 
-        // 5. Authentication Logic
-        const initAuth = async () => {
-            toggleLoading(true, "جاري الاتصال بقاعدة البيانات...");
-            try {
-                // Priority to custom token if provided by environment, else anonymous
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+        // 5. Authentication Logic - UPDATED
+        const checkAutoLogin = async () => {
+            // Only use custom token if explicitly provided by environment (unlikely in pure browser mode but good for safety)
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                try {
                     await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Auth Fail:", error);
-                showToast("فشل الاتصال: " + error.message, "error");
-                toggleLoading(false);
+                } catch(e) { console.error("Auto login failed", e); }
             }
         };
 
@@ -567,8 +579,25 @@
             }
         });
 
-        document.getElementById('btn-login').addEventListener('click', () => {
-             if(!currentUser) initAuth();
+        // HANDLE LOGIN FORM SUBMIT
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('login-error');
+            
+            errorDiv.style.display = 'none';
+            toggleLoading(true, "جاري التحقق من البيانات...");
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // onAuthStateChanged will handle the rest
+            } catch (error) {
+                console.error("Login Failed:", error);
+                toggleLoading(false);
+                errorDiv.innerText = "فشل الدخول: تأكد من الإيميل وكلمة المرور";
+                errorDiv.style.display = 'block';
+            }
         });
 
         // 6. Navigation
@@ -851,8 +880,8 @@
         // Expose UI Manager globally for HTML onclicks
         window.uiManager = uiManager;
 
-        // Auto Start
-        initAuth();
+        // Check for existing token but don't force auto login if not present
+        checkAutoLogin();
     </script>
 </body>
-  </html>
+</html>
