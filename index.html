@@ -3,69 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة مغسلة شباب المعرة</title>
+    <title>مغسلة شباب المعرة - النظام الإداري</title>
     
-    <!-- Bootstrap 5 RTL -->
+    <!-- Bootstrap 5 RTL & Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Cairo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Toastify CSS -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Toastify -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <!-- Flatpickr (Date Picker) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #f4f6f9; }
-        
-        /* Sidebar & Layout */
-        .sidebar { min-height: 100vh; background-color: #1e272e; color: #d2dae2; }
-        .nav-link { color: rgba(255,255,255,0.7); margin-bottom: 8px; border-radius: 8px; padding: 12px 15px; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { background-color: #3c40c6; color: white; font-weight: bold; transform: translateX(-5px); }
-        .nav-link i { margin-left: 10px; width: 25px; text-align: center; }
+        :root {
+           --bg-dark: #121212; /* الخلفية الداكنة */
+           --bg-card: #1c1c1c; /* لون الخلفية للبطاقات */
+           --bg-sidebar: #212121; /* خلفية الشريط الجانبي */
+           --text-main: #e0e0e0; /* النص الرئيسي */
+           --text-muted: #b0b0b0; /* النص الخافت */
+           --primary: #607d8b; /* اللون الأساسي (أزرق رمادي) */
+           --accent: #26c6da; /* اللون المميز (أزرق مائل للأخضر) */
+           --success: #4caf50; /* اللون للدلالة على النجاح */
+           --danger: #f44336; /* اللون للدلالة على الخطأ */
+        }
 
-        /* General UI */
-        .app-section { display: none; animation: slideIn 0.3s ease-out; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Dark Mode Overrides */
+        .card { background-color: var(--bg-card); border: 1px solid #333; color: var(--text-main); }
+        .form-control, .form-select { background-color: #2d2d2d; border: 1px solid #444; color: white; }
+        .form-control:focus, .form-select:focus { background-color: #333; color: white; border-color: var(--primary); box-shadow: none; }
+        .table { color: var(--text-main); }
+        .table thead th { background-color: #252525; border-bottom: 2px solid #444; color: var(--accent); }
+        .table-hover tbody tr:hover { color: white; background-color: #2c2c2c; }
+        .modal-content { background-color: var(--bg-card); border: 1px solid #444; }
+        .btn-close { filter: invert(1); }
+        .border-bottom { border-color: #333 !important; }
+
+        /* Sidebar */
+        .sidebar { min-height: 100vh; background-color: var(--bg-sidebar); border-left: 1px solid #333; }
+        .nav-link { color: var(--text-muted); padding: 12px 15px; border-radius: 8px; margin-bottom: 5px; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { background-color: rgba(63, 81, 181, 0.2); color: var(--accent); font-weight: bold; }
+        .nav-link i { width: 25px; text-align: center; }
+
+        /* Custom UI */
+        .app-section { display: none; animation: fadeIn 0.3s; }
         .app-section.active-section { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .stat-card { border-radius: 15px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; color: white; }
-        .stat-card:hover { transform: translateY(-5px); }
-        .bg-gradient-blue { background: linear-gradient(45deg, #0fb9b1, #20bf6b); } /* TRY */
-        .bg-gradient-green { background: linear-gradient(45deg, #2bcbba, #0fb9b1); } /* USD */
-        .bg-gradient-orange { background: linear-gradient(45deg, #fa8231, #f7b731); } /* SYP */
-        .bg-gradient-red { background: linear-gradient(45deg, #eb3b5a, #fc5c65); } /* Expense */
+        .stat-card { background: #252525; border-radius: 12px; padding: 20px; position: relative; overflow: hidden; }
+        .stat-card::after { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; }
+        .stat-usd::after { background-color: var(--success); }
+        .stat-try::after { background-color: var(--accent); }
+        
+        .customer-row { cursor: pointer; transition: 0.2s; }
+        .customer-row:hover { background-color: #2a2a2a; }
 
-        /* Login */
-        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: #1e272e; }
-        
-        /* Table Styles */
-        .table thead th { background-color: #d1d8e0; border: none; }
-        .product-card img { height: 140px; object-fit: cover; border-top-left-radius: 10px; border-top-right-radius: 10px; }
-        
-        .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        /* Invoice Items in Modal */
+        .invoice-item-row { background: #2a2a2a; padding: 10px; border-radius: 5px; margin-bottom: 5px; border: 1px solid #444; }
+
+        /* Print Area (Hidden by default) */
+        #print-area { display: none; }
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; padding: 20px; }
+            .no-print { display: none !important; }
+        }
+
+        .loading-overlay { position: fixed; inset: 0; background: rgba(18,18,18,0.9); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
 <body>
 
     <!-- Loading -->
-    <div id="loading-overlay" class="loading-overlay d-none">
-        <div class="spinner-grow text-primary mb-3" role="status"></div>
-        <h5 id="loading-text" class="text-secondary fw-bold">جاري المعالجة...</h5>
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner-border text-info mb-3" role="status"></div>
+        <h6 class="text-white">جاري الاتصال بالنظام...</h6>
     </div>
 
     <!-- Login -->
-    <div id="login-screen">
-        <div class="card p-5 border-0 shadow-lg text-center" style="width: 400px; border-radius: 20px;">
-            <i class="fas fa-soap fa-4x text-primary mb-3"></i>
-            <h3 class="fw-bold mb-4">مغسلة شباب المعرة</h3>
-            <form id="loginForm">
-                <input type="email" id="email" class="form-control mb-3" placeholder="البريد الإلكتروني" required>
-                <input type="password" id="password" class="form-control mb-4" placeholder="كلمة المرور" required>
-                <button type="submit" class="btn btn-primary w-100 fw-bold py-2">تسجيل الدخول</button>
-            </form>
-            <div id="login-error" class="text-danger mt-3 small fw-bold" style="display:none;"></div>
+    <div id="login-screen" class="d-none">
+        <div class="container h-100 d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+            <div class="card p-5 shadow-lg border-0" style="width: 400px; max-width: 90%; background: #1a1a1a;">
+                <div class="text-center mb-4">
+                    <i class="fas fa-soap fa-3x text-info mb-3"></i>
+                    <h3 class="fw-bold text-white">مغسلة شباب المعرة</h3>
+                    <p class="text-muted">تسجيل دخول الإدارة</p>
+                </div>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <input type="email" id="email" class="form-control py-2" placeholder="البريد الإلكتروني" required>
+                    </div>
+                    <div class="mb-4">
+                        <input type="password" id="password" class="form-control py-2" placeholder="كلمة المرور" required>
+                    </div>
+                    <button type="submit" class="btn btn-info w-100 fw-bold py-2">دخول</button>
+                    <div id="login-error" class="text-danger mt-3 text-center small fw-bold"></div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -75,195 +115,165 @@
             <div class="row g-0">
                 <!-- Sidebar -->
                 <div class="col-md-2 sidebar p-3 d-none d-md-block">
-                    <h5 class="text-center mb-5 mt-2 text-white pb-3 border-bottom border-secondary">
+                    <h5 class="text-center text-white mb-5 mt-2 border-bottom border-secondary pb-3">
                         لوحة التحكم
                     </h5>
-                    <nav class="nav flex-column">
-                        <a class="nav-link active" onclick="router.navigate('dashboard')"><i class="fas fa-home"></i> الرئيسية</a>
-                        <a class="nav-link" onclick="router.navigate('espresso')"><i class="fas fa-coffee"></i> الأسبريسو</a>
-                        <a class="nav-link" onclick="router.navigate('laundry')"><i class="fas fa-tshirt"></i> المغسلة</a>
-                        <a class="nav-link" onclick="router.navigate('employees')"><i class="fas fa-users"></i> الموظفين (HR)</a>
-                        <a class="nav-link" onclick="router.navigate('finance')"><i class="fas fa-wallet"></i> المالية والتقارير</a>
-                        <a class="nav-link mt-5 text-danger bg-dark bg-opacity-25" onclick="authManager.logout()"><i class="fas fa-sign-out-alt"></i> خروج</a>
+                    <nav class="nav flex-column gap-2">
+                        <a class="nav-link active" onclick="router.navigate('dashboard')"><i class="fas fa-chart-line"></i> نظرة عامة</a>
+                        <a class="nav-link" onclick="router.navigate('laundry')"><i class="fas fa-tshirt"></i> قسم المغسلة</a>
+                        <a class="nav-link" onclick="router.navigate('espresso')"><i class="fas fa-coffee"></i> قسم الأسبريسو</a>
+                        <a class="nav-link" onclick="router.navigate('employees')"><i class="fas fa-users-cog"></i> الموظفين</a>
+                        <a class="nav-link" onclick="router.navigate('finance')"><i class="fas fa-wallet"></i> المالية</a>
+                        <a class="nav-link text-danger mt-5" onclick="authManager.logout()"><i class="fas fa-sign-out-alt"></i> خروج</a>
                     </nav>
                 </div>
 
                 <!-- Content -->
                 <div class="col-md-10" style="height: 100vh; overflow-y: auto;">
-                    <!-- Mobile Header -->
-                    <div class="d-md-none bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">مغسلة شباب المعرة</span>
+                    <!-- Mobile Nav -->
+                    <div class="d-md-none bg-dark p-3 d-flex justify-content-between align-items-center border-bottom border-secondary">
+                        <span class="fw-bold text-white">مغسلة شباب المعرة</span>
                         <button class="btn btn-sm btn-outline-light" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
                     </div>
-                    <div class="collapse d-md-none bg-secondary" id="mobileMenu">
+                    <div class="collapse d-md-none bg-dark" id="mobileMenu">
                         <div class="p-2 d-grid gap-2">
-                            <button class="btn btn-light text-end" onclick="router.navigate('dashboard')">الرئيسية</button>
-                            <button class="btn btn-light text-end" onclick="router.navigate('espresso')">الأسبريسو</button>
-                            <button class="btn btn-light text-end" onclick="router.navigate('laundry')">المغسلة</button>
-                            <button class="btn btn-light text-end" onclick="router.navigate('employees')">الموظفين</button>
-                            <button class="btn btn-light text-end" onclick="router.navigate('finance')">المالية</button>
+                            <button class="btn btn-dark text-end" onclick="router.navigate('dashboard')">الرئيسية</button>
+                            <button class="btn btn-dark text-end" onclick="router.navigate('laundry')">المغسلة</button>
+                            <button class="btn btn-dark text-end" onclick="router.navigate('espresso')">الأسبريسو</button>
+                            <button class="btn btn-dark text-end" onclick="router.navigate('finance')">المالية</button>
                             <button class="btn btn-danger text-end" onclick="authManager.logout()">خروج</button>
                         </div>
                     </div>
 
                     <div class="p-4">
+                        
                         <!-- 1. Dashboard -->
                         <div id="dashboard-section" class="app-section active-section">
-                            <h2 class="fw-bold mb-4">نظرة عامة</h2>
+                            <h3 class="mb-4 text-white">ملخص العمل</h3>
                             <div class="row g-4">
-                                <div class="col-md-4"><div class="card stat-card bg-primary p-4"><h6>ديون العملاء (USD)</h6><h2 id="dash-debt-usd">0 $</h2></div></div>
-                                <div class="col-md-4"><div class="card stat-card bg-info p-4"><h6>ديون العملاء (TRY)</h6><h2 id="dash-debt-try">0 ₺</h2></div></div>
-                                <div class="col-md-4"><div class="card stat-card bg-secondary p-4"><h6>عدد الفواتير النشطة</h6><h2 id="dash-active-count">0</h2></div></div>
+                                <div class="col-md-4">
+                                    <div class="stat-card stat-usd">
+                                        <h6 class="text-muted">الديون المستحقة (USD)</h6>
+                                        <h2 class="fw-bold text-white mt-2" id="dash-usd">0 $</h2>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-card stat-try">
+                                        <h6 class="text-muted">الديون المستحقة (TRY)</h6>
+                                        <h2 class="fw-bold text-white mt-2" id="dash-try">0 ₺</h2>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-card">
+                                        <h6 class="text-muted">عدد الفواتير النشطة</h6>
+                                        <h2 class="fw-bold text-info mt-2" id="dash-count">0</h2>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 2. Espresso -->
+                        <!-- 2. Laundry Section (Core) -->
+                        <div id="laundry-section" class="app-section">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h3 class="text-info"><i class="fas fa-tshirt"></i> إدارة المغسلة</h3>
+                                <button class="btn btn-info fw-bold" onclick="uiManager.openInvoiceModal()"><i class="fas fa-plus"></i> فاتورة غسيل جديدة</button>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="laundry-search" placeholder="بحث عن عميل...">
+                                </div>
+                            </div>
+
+                            <div class="card p-0 overflow-hidden">
+                                <table class="table mb-0 align-middle">
+                                    <thead><tr><th>العميل</th><th>آخر فاتورة</th><th>إجمالي المتبقي</th><th>العملة</th><th>الحالة</th><th>إجراء</th></tr></thead>
+                                    <tbody id="laundry-customers-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 2.1 Customer Profile View (Sub-section) -->
+                        <div id="customer-profile-section" class="app-section">
+                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+                                <div>
+                                    <button class="btn btn-outline-light btn-sm me-2" onclick="router.navigate('laundry')"><i class="fas fa-arrow-right"></i> عودة</button>
+                                    <span class="h4 text-warning" id="profile-name">اسم العميل</span>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-danger fs-6">المتبقي: <span id="profile-total-debt">0</span> <span id="profile-currency"></span></span>
+                                </div>
+                            </div>
+
+                            <h5 class="text-muted mb-3">سجل الفواتير</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead><tr><th>التاريخ</th><th>التفاصيل/المنتجات</th><th>القيمة الكلية</th><th>المدفوع</th><th>المتبقي</th><th>الحالة</th><th>خيارات</th></tr></thead>
+                                    <tbody id="profile-invoices-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 3. Espresso Section -->
                         <div id="espresso-section" class="app-section">
                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h2 class="fw-bold text-brown"><i class="fas fa-coffee"></i> قسم الأسبريسو</h2>
+                                <h3 class="text-warning"><i class="fas fa-coffee"></i> الأسبريسو</h3>
                             </div>
-                            <ul class="nav nav-tabs mb-3">
-                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#esp-debts">الديون</a></li>
+                            <ul class="nav nav-tabs border-secondary mb-3">
+                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#esp-debts">الطلبات والديون</a></li>
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#esp-prods">المنتجات</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="esp-debts">
-                                    <button class="btn btn-primary mb-3" onclick="uiManager.openAddDebtModal('espresso')"><i class="fas fa-plus"></i> دين جديد</button>
-                                    <div class="table-responsive bg-white rounded shadow-sm p-2">
-                                        <table class="table table-hover align-middle mb-0">
-                                            <thead><tr><th>العميل</th><th>الوصف</th><th>صورة</th><th>المتبقي</th><th>العملة</th><th>إجراء</th></tr></thead>
-                                            <tbody id="espresso-table-body"></tbody>
+                                    <button class="btn btn-warning text-dark fw-bold mb-3" onclick="uiManager.openSimpleDebtModal('espresso')"><i class="fas fa-plus"></i> دين جديد</button>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead><tr><th>العميل</th><th>الوصف</th><th>المبلغ</th><th>العملة</th><th>إجراء</th></tr></thead>
+                                            <tbody id="espresso-table"></tbody>
                                         </table>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="esp-prods">
-                                    <button class="btn btn-success mb-3" onclick="uiManager.openAddProductModal('espresso')"><i class="fas fa-box"></i> إضافة منتج</button>
-                                    <div class="row g-3" id="espresso-products-grid"></div>
+                                    <button class="btn btn-success mb-3" onclick="uiManager.openAddProductModal('espresso')">إضافة منتج</button>
+                                    <div class="row g-3" id="espresso-grid"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 3. Laundry (Updated) -->
-                        <div id="laundry-section" class="app-section">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h2 class="fw-bold text-info"><i class="fas fa-tshirt"></i> قسم المغسلة</h2>
-                            </div>
-                            <ul class="nav nav-tabs mb-3">
-                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#lau-debts">فواتير الغسيل</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#lau-prods">مواد التنظيف والمنتجات</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" id="lau-debts">
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <button class="btn btn-info text-white" onclick="uiManager.openAddDebtModal('laundry')"><i class="fas fa-plus"></i> فاتورة جديدة</button>
-                                        <input type="text" class="form-control w-25" placeholder="بحث..." id="laundry-search">
-                                    </div>
-                                    <div class="table-responsive bg-white rounded shadow-sm p-2">
-                                        <table class="table table-hover align-middle mb-0">
-                                            <thead><tr><th>العميل</th><th>التفاصيل</th><th>المتبقي</th><th>العملة</th><th>الحالة</th><th>إجراء</th></tr></thead>
-                                            <tbody id="laundry-table-body"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="lau-prods">
-                                    <button class="btn btn-success mb-3" onclick="uiManager.openAddProductModal('laundry')"><i class="fas fa-box"></i> إضافة منتج/مادة</button>
-                                    <div class="row g-3" id="laundry-products-grid"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 4. Employees (New) -->
+                        <!-- 4. Employees Section -->
                         <div id="employees-section" class="app-section">
                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h2 class="fw-bold text-dark"><i class="fas fa-users"></i> شؤون الموظفين</h2>
-                                <button class="btn btn-dark" onclick="uiManager.openAddEmployeeModal()"><i class="fas fa-user-plus"></i> إضافة موظف</button>
+                                <h3 class="text-white"><i class="fas fa-users"></i> الموظفين</h3>
+                                <button class="btn btn-light" onclick="uiManager.openAddEmployeeModal()">إضافة موظف</button>
                             </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="card shadow-sm border-0">
-                                        <div class="card-header bg-white">قائمة الموظفين</div>
-                                        <div class="card-body p-0">
-                                            <table class="table mb-0">
-                                                <thead><tr><th>الاسم</th><th>الراتب الأساسي</th><th>العملة</th><th>إجراءات</th></tr></thead>
-                                                <tbody id="employees-table"></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card bg-light border-0">
-                                        <div class="card-body">
-                                            <h5>سجل الحركات السريعة</h5>
-                                            <p class="text-muted small">تسجيل الغياب، السلف، الخصومات يتم عبر زر "إدارة" بجانب كل موظف.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="card p-0">
+                                <table class="table mb-0 align-middle">
+                                    <thead><tr><th>الاسم</th><th>الراتب الأساسي</th><th>الصافي المستحق</th><th>العملة</th><th>إجراءات</th></tr></thead>
+                                    <tbody id="employees-table"></tbody>
+                                </table>
                             </div>
                         </div>
 
-                        <!-- 5. Finance (Enhanced) -->
+                        <!-- 5. Finance Section -->
                         <div id="finance-section" class="app-section">
-                            <h2 class="fw-bold mb-4"><i class="fas fa-wallet"></i> المالية والتقارير</h2>
+                            <h3 class="mb-4 text-success">المالية والتقارير</h3>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <button class="btn btn-danger w-100 py-3 mb-2" onclick="uiManager.openTransactionModal('expense')"><i class="fas fa-arrow-down"></i> تسجيل مصروف</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-success w-100 py-3" onclick="uiManager.openTransactionModal('income_manual')"><i class="fas fa-arrow-up"></i> تسجيل دخل خارجي</button>
+                                </div>
+                            </div>
                             
-                            <!-- Controls -->
-                            <div class="card shadow-sm mb-4 border-0">
-                                <div class="card-body">
-                                    <div class="row g-3 align-items-end">
-                                        <div class="col-md-2">
-                                            <button class="btn btn-danger w-100" onclick="uiManager.openExpenseModal()"><i class="fas fa-minus-circle"></i> تسجيل مصروف</button>
-                                        </div>
-                                        <div class="col-md-6 border-start border-end px-4">
-                                            <label class="form-label fw-bold">نطاق التقرير</label>
-                                            <div class="btn-group w-100" role="group">
-                                                <input type="radio" class="btn-check" name="reportRange" id="rep-today" autocomplete="off" checked onclick="reportManager.setRange('today')">
-                                                <label class="btn btn-outline-primary" for="rep-today">اليوم</label>
-                                                
-                                                <input type="radio" class="btn-check" name="reportRange" id="rep-week" autocomplete="off" onclick="reportManager.setRange('week')">
-                                                <label class="btn btn-outline-primary" for="rep-week">أسبوع</label>
-
-                                                <input type="radio" class="btn-check" name="reportRange" id="rep-month" autocomplete="off" onclick="reportManager.setRange('month')">
-                                                <label class="btn btn-outline-primary" for="rep-month">شهر</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label">أو تاريخ مخصص</label>
-                                            <input type="text" id="custom-date-range" class="form-control" placeholder="من - إلى">
-                                        </div>
-                                    </div>
+                            <div class="card">
+                                <div class="card-header bg-dark border-bottom border-secondary d-flex justify-content-between">
+                                    <span>سجل المعاملات (الدخل والمصروف)</span>
                                 </div>
-                            </div>
-
-                            <!-- Results -->
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-4">
-                                    <div class="card bg-success text-white p-3 shadow-sm border-0">
-                                        <h5>صافي الربح (USD)</h5>
-                                        <h2 id="net-profit-usd" class="fw-bold">0 $</h2>
-                                        <small id="income-usd-detail" class="opacity-75">دخل: 0 | صرف: 0</small>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card bg-info text-white p-3 shadow-sm border-0">
-                                        <h5>صافي الربح (TRY)</h5>
-                                        <h2 id="net-profit-try" class="fw-bold">0 ₺</h2>
-                                        <small id="income-try-detail" class="opacity-75">دخل: 0 | صرف: 0</small>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card bg-warning text-dark p-3 shadow-sm border-0">
-                                        <h5>صافي الربح (SYP)</h5>
-                                        <h2 id="net-profit-syp" class="fw-bold">0</h2>
-                                        <small id="income-syp-detail" class="opacity-75">دخل: 0 | صرف: 0</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card shadow-sm border-0">
-                                <div class="card-header bg-white fw-bold">تفاصيل الحركات (للفترة المحددة)</div>
-                                <div class="table-responsive">
+                                <div class="card-body p-0">
                                     <table class="table table-striped mb-0">
-                                        <thead class="table-dark"><tr><th>التاريخ</th><th>النوع</th><th>الوصف / المصدر</th><th>المبلغ</th><th>العملة</th></tr></thead>
-                                        <tbody id="report-table-body"></tbody>
+                                        <thead><tr><th>التاريخ</th><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>العملة</th></tr></thead>
+                                        <tbody id="finance-table"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -277,131 +287,156 @@
 
     <!-- === MODALS === -->
 
-    <!-- Add Debt -->
-    <div class="modal fade" id="addDebtModal" tabindex="-1">
-        <div class="modal-dialog">
+    <!-- 1. Advanced Laundry Invoice Modal -->
+    <div class="modal fade" id="invoiceModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title">فاتورة / دين جديد</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-header bg-dark border-bottom border-secondary">
+                    <h5 class="modal-title text-info">إنشاء فاتورة غسيل مفصلة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
                 <div class="modal-body">
-                    <form id="addDebtForm">
-                        <input type="hidden" id="debt-source">
-                        <div class="mb-3"><input type="text" class="form-control" id="debt-customer" placeholder="اسم العميل" required></div>
-                        <div class="mb-3"><textarea class="form-control" id="debt-desc" placeholder="التفاصيل" required></textarea></div>
+                    <form id="invoiceForm">
                         <div class="row mb-3">
-                            <div class="col"><input type="number" class="form-control" id="debt-amount" placeholder="المبلغ" step="0.5" required></div>
-                            <div class="col">
-                                <select class="form-select" id="debt-currency">
-                                    <option value="USD">دولار ($)</option><option value="TRY">ليرة (₺)</option><option value="SYP">سوري</option>
+                            <div class="col-md-8">
+                                <label class="form-label text-muted">اسم العميل (بحث أو جديد)</label>
+                                <input type="text" class="form-control" id="inv-customer" list="customer-list-datalist" required autocomplete="off">
+                                <datalist id="customer-list-datalist"></datalist>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-muted">العملة</label>
+                                <select class="form-select" id="inv-currency">
+                                    <option value="TRY">ليرة تركي (₺)</option>
+                                    <option value="USD">دولار ($)</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="mb-3" id="debt-image-container">
-                            <label class="form-label">صورة (اختياري)</label>
-                            <input type="file" class="form-control" id="debt-image" accept="image/*">
+
+                        <label class="form-label text-muted">المنتجات والخدمات</label>
+                        <div id="invoice-items-container">
+                            <!-- Items inserted by JS -->
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">حفظ</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm mb-3 w-100" onclick="uiManager.addInvoiceRow()">+ إضافة بند</button>
+
+                        <div class="row border-top border-secondary pt-3">
+                            <div class="col-6"><h5 class="text-white">الإجمالي: <span id="inv-total">0</span></h5></div>
+                            <div class="col-6 text-end">
+                                <button type="submit" class="btn btn-info fw-bold px-4">حفظ الفاتورة</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add Product -->
-    <div class="modal fade" id="addProductModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title">منتج جديد</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
-                <div class="modal-body">
-                    <form id="addProductForm">
-                        <input type="hidden" id="prod-category">
-                        <div class="mb-3"><input type="text" class="form-control" id="prod-name" placeholder="اسم المنتج" required></div>
-                        <div class="row mb-3">
-                            <div class="col"><input type="number" class="form-control" id="prod-price" placeholder="السعر" required></div>
-                            <div class="col"><select class="form-select" id="prod-currency"><option value="USD">USD</option><option value="TRY">TRY</option></select></div>
-                        </div>
-                        <div class="mb-3">
-                            <label>صورة المنتج</label>
-                            <input type="file" class="form-control" id="prod-image" accept="image/*" required>
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">إضافة</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment -->
+    <!-- 2. Payment Modal -->
     <div class="modal fade" id="paymentModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-success text-white"><h5 class="modal-title">تسديد دفعة</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                <div class="modal-header bg-success"><h5 class="modal-title text-white">إجراء دفع</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body text-center">
-                    <h3 class="text-danger fw-bold mb-3"><span id="pay-remain"></span> <small id="pay-curr"></small></h3>
+                    <p class="text-muted">المبلغ المتبقي</p>
+                    <h2 class="fw-bold mb-3"><span id="pay-remain">0</span> <small id="pay-curr"></small></h2>
                     <form id="paymentForm">
-                        <input type="hidden" id="pay-id">
+                        <input type="hidden" id="pay-doc-id">
                         <input type="number" class="form-control fs-4 text-center mb-3" id="pay-amount" placeholder="المبلغ المدفوع" required step="0.1">
-                        <button type="submit" class="btn btn-success w-100 fw-bold">تأكيد السداد</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">تأكيد الدفع</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add Employee -->
-    <div class="modal fade" id="addEmployeeModal" tabindex="-1">
+    <!-- 3. Employee Action Modal -->
+    <div class="modal fade" id="empActionModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title">موظف جديد</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-header"><h5 class="modal-title">إجراء مالي للموظف</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
-                    <form id="addEmployeeForm">
-                        <div class="mb-3"><input type="text" class="form-control" id="emp-name" placeholder="الاسم الكامل" required></div>
-                        <div class="row mb-3">
-                            <div class="col"><input type="number" class="form-control" id="emp-salary" placeholder="الراتب" required></div>
-                            <div class="col"><select class="form-select" id="emp-currency"><option value="USD">USD</option><option value="TRY">TRY</option></select></div>
+                    <form id="empActionForm">
+                        <input type="hidden" id="act-emp-id">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">نوع العملية</label>
+                            <select class="form-select" id="act-type">
+                                <option value="deduction">خصم (عقوبة/غياب)</option>
+                                <option value="advance">سلفة (تخصم من الراتب)</option>
+                                <option value="bonus">مكافأة (تضاف للراتب)</option>
+                            </select>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100">حفظ</button>
+                        <div class="mb-3">
+                            <input type="number" class="form-control" id="act-amount" placeholder="المبلغ" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="act-reason" placeholder="السبب" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">تنفيذ</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add Expense -->
-    <div class="modal fade" id="addExpenseModal" tabindex="-1">
+    <!-- 4. Finance Transaction Modal -->
+    <div class="modal fade" id="financeModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-danger text-white"><h5 class="modal-title">تسجيل مصروف</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                <div class="modal-header"><h5 class="modal-title" id="fin-modal-title">تسجيل حركة</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
-                    <form id="addExpenseForm">
-                        <div class="mb-3"><input type="text" class="form-control" id="exp-desc" placeholder="سبب الصرف (مازوت، كهرباء..)" required></div>
+                    <form id="financeForm">
+                        <input type="hidden" id="fin-type">
+                        <div class="mb-3"><input type="text" class="form-control" id="fin-desc" placeholder="الوصف (مصدر الدخل / سبب الصرف)" required></div>
                         <div class="row mb-3">
-                            <div class="col"><input type="number" class="form-control" id="exp-amount" placeholder="المبلغ" required step="0.5"></div>
+                            <div class="col"><input type="number" class="form-control" id="fin-amount" placeholder="المبلغ" required></div>
                             <div class="col">
-                                <select class="form-select" id="exp-currency">
-                                    <option value="USD">دولار ($)</option><option value="TRY">ليرة (₺)</option><option value="SYP">سوري</option>
+                                <select class="form-select" id="fin-currency">
+                                    <option value="TRY">ليرة (₺)</option>
+                                    <option value="USD">دولار ($)</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="mb-3"><input type="date" class="form-control" id="exp-date" required></div>
-                        <button type="submit" class="btn btn-danger w-100">تسجيل</button>
+                        <button type="submit" class="btn btn-light w-100 fw-bold" id="fin-submit-btn">حفظ</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- 5. Add Product/Simple Debt Modals (Simplified for brevity) -->
+    <div class="modal fade" id="simpleDebtModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="simpleDebtForm">
+        <input type="hidden" id="sim-source">
+        <input class="form-control mb-2" id="sim-cust" placeholder="العميل" required>
+        <input class="form-control mb-2" id="sim-desc" placeholder="الوصف" required>
+        <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="sim-amount" placeholder="المبلغ" required></div><div class="col"><select class="form-select" id="sim-curr"><option value="TRY">TRY</option><option value="USD">USD</option></select></div></div>
+        <button class="btn btn-warning w-100">حفظ</button>
+    </form></div></div></div></div>
+
+    <div class="modal fade" id="addProductModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="addProductForm">
+        <input type="hidden" id="prod-cat">
+        <input class="form-control mb-2" id="prod-name" placeholder="اسم المنتج" required>
+        <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="prod-price" placeholder="السعر" required></div><div class="col"><select class="form-select" id="prod-curr"><option value="TRY">TRY</option><option value="USD">USD</option></select></div></div>
+        <input type="file" class="form-control mb-2" id="prod-img">
+        <button class="btn btn-success w-100">إضافة</button>
+    </form></div></div></div></div>
+
+    <div class="modal fade" id="addEmpModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="addEmpForm">
+        <input class="form-control mb-2" id="emp-name" placeholder="الاسم" required>
+        <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="emp-salary" placeholder="الراتب" required></div><div class="col"><select class="form-select" id="emp-curr"><option value="USD">USD</option><option value="TRY">TRY</option></select></div></div>
+        <button class="btn btn-light w-100">حفظ</button>
+    </form></div></div></div></div>
+
+    <!-- Hidden Print Area -->
+    <div id="print-area"></div>
+
+    <!-- Logic -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, updateDoc, getDoc, onSnapshot, serverTimestamp, query, orderBy, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, getDoc, onSnapshot, serverTimestamp, query, where, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Config
         const firebaseConfig = {  
             apiKey: "AIzaSyDkJMYhBvNCbjBPlidUW4y1YEkJIkUXvck",  
             authDomain: "mghsalt-shabab-maarra.firebaseapp.com",  
@@ -412,380 +447,497 @@
         };
         const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drielwabh/image/upload";
         const CLOUDINARY_PRESET = "mghsala_upload";
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maarra-app';
-
-        // Init
+        
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maarra-v3';
+
         let currentUser = null;
-        
-        // --- Date Reporting Logic ---
-        window.reportManager = {
-            transactions: [],
-            range: 'today',
-            startDate: new Date(),
-            endDate: new Date(),
-            
-            init: () => {
-                flatpickr("#custom-date-range", {
-                    mode: "range",
-                    dateFormat: "Y-m-d",
-                    onChange: (selectedDates) => {
-                        if (selectedDates.length === 2) {
-                            reportManager.range = 'custom';
-                            reportManager.startDate = selectedDates[0];
-                            reportManager.endDate = selectedDates[1];
-                            reportManager.endDate.setHours(23, 59, 59);
-                            reportManager.render();
-                        }
-                    }
-                });
-                reportManager.setRange('today');
-            },
-
-            setRange: (type) => {
-                reportManager.range = type;
-                const now = new Date();
-                reportManager.endDate = new Date(now);
-                reportManager.endDate.setHours(23, 59, 59);
-                
-                if (type === 'today') {
-                    reportManager.startDate = new Date(now.setHours(0,0,0,0));
-                } else if (type === 'week') {
-                    const first = now.getDate() - now.getDay();
-                    reportManager.startDate = new Date(now.setDate(first));
-                    reportManager.startDate.setHours(0,0,0,0);
-                } else if (type === 'month') {
-                    reportManager.startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                }
-                reportManager.render();
-            },
-
-            setTransactions: (data) => {
-                reportManager.transactions = data;
-                reportManager.render();
-            },
-
-            render: () => {
-                const tbody = document.getElementById('report-table-body');
-                tbody.innerHTML = '';
-                
-                let stats = { 
-                    USD: { inc: 0, exp: 0 }, 
-                    TRY: { inc: 0, exp: 0 }, 
-                    SYP: { inc: 0, exp: 0 } 
-                };
-
-                const filtered = reportManager.transactions.filter(t => {
-                    if(!t.date) return false;
-                    const d = new Date(t.date.seconds * 1000);
-                    return d >= reportManager.startDate && d <= reportManager.endDate;
-                });
-
-                filtered.sort((a,b) => b.date.seconds - a.date.seconds).forEach(t => {
-                    const typeHtml = t.type === 'income' ? '<span class="badge bg-success">دخل</span>' : '<span class="badge bg-danger">مصروف</span>';
-                    const row = `<tr>
-                        <td>${new Date(t.date.seconds * 1000).toLocaleDateString('ar-EG')}</td>
-                        <td>${typeHtml}</td>
-                        <td>${t.description || t.source || 'تسديد'}</td>
-                        <td class="${t.type === 'income' ? 'text-success' : 'text-danger'} fw-bold">${t.amount}</td>
-                        <td>${t.currency}</td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-
-                    if(stats[t.currency]) {
-                        if(t.type === 'income') stats[t.currency].inc += Number(t.amount);
-                        else stats[t.currency].exp += Number(t.amount);
-                    }
-                });
-
-                // Update Profit Cards
-                ['USD', 'TRY', 'SYP'].forEach(curr => {
-                    const net = stats[curr].inc - stats[curr].exp;
-                    document.getElementById(`net-profit-${curr.toLowerCase()}`).innerText = `${net.toLocaleString()} ${curr === 'SYP' ? '' : (curr === 'USD' ? '$' : '₺')}`;
-                    document.getElementById(`income-${curr.toLowerCase()}-detail`).innerText = `دخل: ${stats[curr].inc} | صرف: ${stats[curr].exp}`;
-                });
-            }
-        };
+        let productsCache = [];
+        let customersCache = []; // To store unique names for datalist
 
         // --- Data Logic ---
         const dataManager = {
             init: () => {
-                // 1. Debts
+                // Debts & Laundry
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'debts'), snap => {
-                    const debts = [];
-                    snap.forEach(d => debts.push({id: d.id, ...d.data()}));
-                    uiManager.renderDebts(debts);
+                    const list = [];
+                    const names = new Set();
+                    snap.forEach(d => {
+                        const data = d.data();
+                        list.push({id: d.id, ...data});
+                        if(data.source === 'laundry') names.add(data.customer_name);
+                    });
+                    uiManager.renderLaundryCustomers(list, Array.from(names));
+                    uiManager.renderEspresso(list);
+                    uiManager.updateStats(list);
                 });
-                
-                // 2. Transactions (Income & Expenses)
+
+                // Transactions
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), snap => {
-                    const trans = [];
-                    snap.forEach(d => trans.push(d.data()));
-                    reportManager.setTransactions(trans);
+                    const list = [];
+                    snap.forEach(d => list.push(d.data()));
+                    uiManager.renderFinance(list);
                 });
 
-                // 3. Products
-                onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), snap => {
-                    const prods = [];
-                    snap.forEach(d => prods.push(d.data()));
-                    uiManager.renderProducts(prods);
-                });
-
-                // 4. Employees
+                // Employees
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'employees'), snap => {
-                    const emps = [];
-                    snap.forEach(d => emps.push({id: d.id, ...d.data()}));
-                    uiManager.renderEmployees(emps);
+                    const list = [];
+                    snap.forEach(d => list.push({id: d.id, ...d.data()}));
+                    uiManager.renderEmployees(list);
+                });
+
+                // Products
+                onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), snap => {
+                    productsCache = [];
+                    snap.forEach(d => productsCache.push(d.data()));
+                    uiManager.renderProducts(productsCache);
                 });
             },
 
-            addDebt: async (data, file) => {
-                loading(true);
+            addInvoice: async (data) => {
+                showLoading(true);
                 try {
-                    let url = "";
-                    if(file && data.source !== 'laundry') url = await uploadImage(file); // No image for laundry
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'debts'), {
-                        ...data, image_url: url, paid_amount: 0, remaining_amount: Number(data.total_amount), status: 'active', created_at: serverTimestamp()
+                        ...data,
+                        status: 'active',
+                        paid_amount: 0,
+                        remaining_amount: data.total_amount,
+                        created_at: serverTimestamp(),
+                        source: 'laundry'
                     });
-                    toast("تم الحفظ");
-                    bootstrap.Modal.getInstance(document.getElementById('addDebtModal')).hide();
-                } catch(e) { toast(e.message, 'error'); } 
-                finally { loading(false); }
+                    toast("تم حفظ الفاتورة");
+                    bootstrap.Modal.getInstance(document.getElementById('invoiceModal')).hide();
+                } catch(e) { toast("خطأ", 'error'); } 
+                finally { showLoading(false); }
             },
 
-            addProduct: async (data, file) => {
-                loading(true);
+            addTransaction: async (data) => {
+                showLoading(true);
                 try {
-                    const url = await uploadImage(file);
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), { ...data, image_url: url, created_at: serverTimestamp() });
-                    toast("تمت إضافة المنتج");
-                    bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
-                } catch(e) { toast(e.message, 'error'); }
-                finally { loading(false); }
-            },
-
-            addExpense: async (data) => {
-                loading(true);
-                try {
-                    // Convert HTML date to Firestore Timestamp
-                    const dateObj = new Date(data.date);
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
-                        type: 'expense',
-                        amount: Number(data.amount),
-                        currency: data.currency,
-                        description: data.description,
-                        date: dateObj, // Should be Timestamp in real app, but JS Date works for SDK
-                        created_at: serverTimestamp()
+                        ...data, created_at: serverTimestamp()
                     });
-                    toast("تم تسجيل المصروف");
-                    bootstrap.Modal.getInstance(document.getElementById('addExpenseModal')).hide();
-                } catch(e) { toast(e.message, 'error'); }
-                finally { loading(false); }
+                    toast("تم التسجيل");
+                    bootstrap.Modal.getInstance(document.getElementById('financeModal')).hide();
+                } catch(e) { toast("خطأ", 'error'); } 
+                finally { showLoading(false); }
             },
 
-            addEmployee: async (data) => {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'employees'), data);
-                toast("تمت إضافة الموظف");
-                bootstrap.Modal.getInstance(document.getElementById('addEmployeeModal')).hide();
-            },
-
-            payDebt: async (id, amount) => {
+            processPayment: async (id, amount) => {
                 const ref = doc(db, 'artifacts', appId, 'public', 'data', 'debts', id);
-                const snap = await getDoc(ref);
-                const d = snap.data();
+                const d = (await getDoc(ref)).data();
                 const newRem = Number(d.remaining_amount) - Number(amount);
                 
-                if(newRem < 0) return toast("خطأ: المبلغ أكبر من المتبقي", 'error');
-                
-                await updateDoc(ref, { 
+                if(newRem < 0) return toast("المبلغ أكبر من المتبقي", 'error');
+
+                await updateDoc(ref, {
                     paid_amount: Number(d.paid_amount) + Number(amount),
                     remaining_amount: newRem,
-                    status: newRem === 0 ? 'paid' : 'active'
+                    status: newRem === 0 ? 'paid' : 'active',
+                    last_payment: serverTimestamp()
                 });
 
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
-                    type: 'income', amount: Number(amount), currency: d.currency, source: d.source, description: `سداد من ${d.customer_name}`, date: serverTimestamp()
+                await dataManager.addTransaction({
+                    type: 'income',
+                    source: 'payment',
+                    description: `سداد فاتورة: ${d.customer_name}`,
+                    amount: Number(amount),
+                    currency: d.currency
                 });
                 
-                toast("تم السداد");
                 bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+                
+                // Refresh Profile if open
+                if(document.getElementById('customer-profile-section').classList.contains('active-section')) {
+                    uiManager.openCustomerProfile(d.customer_name); // Re-fetch logic implied by listeners, but ensures UI sync
+                }
+            },
+
+            addEmpAction: async (id, type, amount, reason) => {
+                const ref = doc(db, 'artifacts', appId, 'public', 'data', 'employees', id);
+                const emp = (await getDoc(ref)).data();
+                let net = Number(emp.net_salary || emp.salary);
+                
+                if(type === 'bonus') net += Number(amount);
+                else net -= Number(amount); // Deduction or Advance
+
+                await updateDoc(ref, { net_salary: net });
+                
+                // Log as transaction logic could be here, kept simple for now
+                toast("تم تنفيذ الإجراء");
+                bootstrap.Modal.getInstance(document.getElementById('empActionModal')).hide();
             }
         };
 
         // --- UI Logic ---
         const uiManager = {
-            openAddDebtModal: (src) => {
-                document.getElementById('addDebtForm').reset();
-                document.getElementById('debt-source').value = src;
-                // Hide image upload for laundry
-                document.getElementById('debt-image-container').style.display = src === 'laundry' ? 'none' : 'block';
-                new bootstrap.Modal(document.getElementById('addDebtModal')).show();
+            // -- Invoice Builder --
+            openInvoiceModal: () => {
+                document.getElementById('invoiceForm').reset();
+                document.getElementById('invoice-items-container').innerHTML = '';
+                // Populate Datalist
+                const dl = document.getElementById('customer-list-datalist');
+                dl.innerHTML = '';
+                customersCache.forEach(name => dl.innerHTML += `<option value="${name}">`);
+                uiManager.addInvoiceRow(); // Add first empty row
+                new bootstrap.Modal(document.getElementById('invoiceModal')).show();
             },
-            openAddProductModal: (cat) => {
-                document.getElementById('addProductForm').reset();
-                document.getElementById('prod-category').value = cat;
-                new bootstrap.Modal(document.getElementById('addProductModal')).show();
+
+            addInvoiceRow: () => {
+                const div = document.createElement('div');
+                div.className = 'invoice-item-row row g-2';
+                // Build product options
+                let opts = '<option value="">اختر منتج/خدمة...</option>';
+                productsCache.forEach(p => {
+                    opts += `<option value="${p.name}" data-price="${p.selling_price}">${p.name} - ${p.selling_price}</option>`;
+                });
+                
+                div.innerHTML = `
+                    <div class="col-6"><select class="form-select prod-select" onchange="uiManager.calcTotal()">${opts}</select></div>
+                    <div class="col-3"><input type="number" class="form-control prod-qty" placeholder="العدد" value="1" onchange="uiManager.calcTotal()"></div>
+                    <div class="col-3"><input type="number" class="form-control prod-price" placeholder="السعر" step="0.5" onchange="uiManager.calcTotal()"></div>
+                `;
+                
+                // Add listener to auto-fill price
+                div.querySelector('.prod-select').addEventListener('change', function() {
+                    const price = this.options[this.selectedIndex].getAttribute('data-price');
+                    if(price) div.querySelector('.prod-price').value = price;
+                    uiManager.calcTotal();
+                });
+
+                document.getElementById('invoice-items-container').appendChild(div);
             },
-            openExpenseModal: () => {
-                document.getElementById('addExpenseForm').reset();
-                document.getElementById('exp-date').valueAsDate = new Date();
-                new bootstrap.Modal(document.getElementById('addExpenseModal')).show();
+
+            calcTotal: () => {
+                let total = 0;
+                document.querySelectorAll('.invoice-item-row').forEach(row => {
+                    const qty = row.querySelector('.prod-qty').value || 0;
+                    const price = row.querySelector('.prod-price').value || 0;
+                    total += (qty * price);
+                });
+                document.getElementById('inv-total').innerText = total;
+                return total;
             },
-            openAddEmployeeModal: () => new bootstrap.Modal(document.getElementById('addEmployeeModal')).show(),
-            
+
+            // -- Customer Profile --
+            openCustomerProfile: (name) => {
+                const debts = uiManager.allDebts.filter(d => d.customer_name === name && d.source === 'laundry');
+                let total = 0;
+                let currency = debts[0]?.currency || '';
+                
+                document.getElementById('profile-name').innerText = name;
+                document.getElementById('profile-currency').innerText = currency;
+                
+                const tbody = document.getElementById('profile-invoices-list');
+                tbody.innerHTML = '';
+                
+                debts.sort((a,b) => b.created_at?.seconds - a.created_at?.seconds).forEach(d => {
+                    if(d.status === 'active') total += Number(d.remaining_amount);
+                    
+                    // Parse Items if available, else description
+                    let details = d.description || '';
+                    if(d.items && Array.isArray(d.items)) {
+                        details = d.items.map(i => `${i.item} (${i.qty}x${i.price})`).join(', ');
+                    }
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${new Date(d.created_at?.seconds * 1000).toLocaleDateString('ar-EG')}</td>
+                            <td><small>${details}</small></td>
+                            <td>${d.total_amount}</td>
+                            <td class="text-success">${d.paid_amount}</td>
+                            <td class="text-danger fw-bold">${d.remaining_amount}</td>
+                            <td>${d.status === 'paid' ? '<span class="badge bg-success">خالص</span>' : '<span class="badge bg-danger">نشط</span>'}</td>
+                            <td>
+                                ${d.status !== 'paid' ? `<button class="btn btn-sm btn-outline-success me-1" onclick="uiManager.openPayModal('${d.id}')">دفع</button>` : ''}
+                                <button class="btn btn-sm btn-outline-light" onclick="printManager.printInvoice('${d.id}')"><i class="fas fa-print"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('profile-total-debt').innerText = total;
+                
+                router.navigate('customer-profile');
+            },
+
+            // -- Renders --
+            renderLaundryCustomers: (list, uniqueNames) => {
+                uiManager.allDebts = list; // Cache for profile view
+                customersCache = uniqueNames;
+                const tbody = document.getElementById('laundry-customers-list');
+                tbody.innerHTML = '';
+
+                uniqueNames.forEach(name => {
+                    const custDebts = list.filter(d => d.customer_name === name && d.source === 'laundry');
+                    if(custDebts.length === 0) return;
+                    
+                    const activeDebts = custDebts.filter(d => d.status === 'active');
+                    const totalRem = activeDebts.reduce((sum, d) => sum + Number(d.remaining_amount), 0);
+                    const lastDate = new Date(Math.max(...custDebts.map(d => d.created_at?.seconds * 1000))).toLocaleDateString('ar-EG');
+                    const curr = custDebts[0].currency;
+                    
+                    // Filter search
+                    const search = document.getElementById('laundry-search').value.toLowerCase();
+                    if(search && !name.toLowerCase().includes(search)) return;
+
+                    tbody.innerHTML += `
+                        <tr class="customer-row" onclick="uiManager.openCustomerProfile('${name}')">
+                            <td class="fw-bold">${name}</td>
+                            <td>${lastDate}</td>
+                            <td class="text-warning fw-bold fs-5">${totalRem}</td>
+                            <td>${curr}</td>
+                            <td>${activeDebts.length > 0 ? '<span class="badge bg-danger">عليه دين</span>' : '<span class="badge bg-success">بريء الذمة</span>'}</td>
+                            <td><button class="btn btn-sm btn-outline-info">عرض الملف</button></td>
+                        </tr>
+                    `;
+                });
+            },
+
+            renderFinance: (list) => {
+                const tbody = document.getElementById('finance-table');
+                tbody.innerHTML = '';
+                list.sort((a,b) => b.created_at?.seconds - a.created_at?.seconds).slice(0, 50).forEach(t => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${new Date(t.created_at?.seconds * 1000).toLocaleDateString('ar-EG')}</td>
+                            <td>${t.type.includes('income') ? '<span class="text-success">دخل</span>' : '<span class="text-danger">مصروف</span>'}</td>
+                            <td>${t.description}</td>
+                            <td class="fw-bold ${t.type.includes('income') ? 'text-success' : 'text-danger'}">${t.amount}</td>
+                            <td>${t.currency}</td>
+                        </tr>
+                    `;
+                });
+            },
+
+            renderEmployees: (list) => {
+                const tbody = document.getElementById('employees-table');
+                tbody.innerHTML = '';
+                list.forEach(e => {
+                    const net = e.net_salary !== undefined ? e.net_salary : e.salary;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${e.name}</td>
+                            <td>${e.salary}</td>
+                            <td class="fw-bold text-success">${net}</td>
+                            <td>${e.currency}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-warning" onclick="uiManager.openEmpAction('${e.id}')">إدارة</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            },
+
+            // -- Generic Modals --
             openPayModal: async (id) => {
-                const d = (await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', id))).data();
-                document.getElementById('pay-id').value = id;
+                const d = uiManager.allDebts.find(x => x.id === id);
+                document.getElementById('pay-doc-id').value = id;
                 document.getElementById('pay-remain').innerText = d.remaining_amount;
                 document.getElementById('pay-curr').innerText = d.currency;
                 document.getElementById('pay-amount').max = d.remaining_amount;
                 new bootstrap.Modal(document.getElementById('paymentModal')).show();
             },
 
-            renderDebts: (list) => {
-                const espT = document.getElementById('espresso-table-body');
-                const lauT = document.getElementById('laundry-table-body');
-                espT.innerHTML = ''; lauT.innerHTML = '';
-                
-                let stats = { usd: 0, try: 0, count: 0 };
-
-                list.sort((a,b) => (b.created_at?.seconds||0) - (a.created_at?.seconds||0)).forEach(d => {
-                    const isPaid = d.status === 'paid';
-                    if(!isPaid) {
-                        stats.count++;
-                        if(d.currency === 'USD') stats.usd += d.remaining_amount;
-                        if(d.currency === 'TRY') stats.try += d.remaining_amount;
-                    }
-
-                    const btn = `<button class="btn btn-sm ${isPaid?'btn-secondary':'btn-success'}" ${isPaid?'disabled':''} onclick="uiManager.openPayModal('${d.id}')">سداد</button>`;
-                    const img = d.image_url ? `<a href="${d.image_url}" target="_blank"><i class="fas fa-image"></i></a>` : '-';
-
-                    if(d.source === 'espresso') {
-                        espT.innerHTML += `<tr><td>${d.customer_name}</td><td>${d.description}</td><td>${img}</td><td class="text-danger fw-bold">${d.remaining_amount}</td><td>${d.currency}</td><td>${btn}</td></tr>`;
-                    } else {
-                        lauT.innerHTML += `<tr><td>${d.customer_name}</td><td>${d.description}</td><td class="text-danger fw-bold">${d.remaining_amount}</td><td>${d.currency}</td><td>${isPaid?'<span class="badge bg-success">خالص</span>':'<span class="badge bg-warning text-dark">نشط</span>'}</td><td>${btn}</td></tr>`;
-                    }
-                });
-                
-                document.getElementById('dash-debt-usd').innerText = stats.usd + ' $';
-                document.getElementById('dash-debt-try').innerText = stats.try + ' ₺';
-                document.getElementById('dash-active-count').innerText = stats.count;
+            openTransactionModal: (type) => {
+                document.getElementById('financeForm').reset();
+                document.getElementById('fin-type').value = type;
+                document.getElementById('fin-modal-title').innerText = type === 'expense' ? 'تسجيل مصروف' : 'تسجيل دخل خارجي';
+                const btn = document.getElementById('fin-submit-btn');
+                btn.className = type === 'expense' ? 'btn btn-danger w-100' : 'btn btn-success w-100';
+                new bootstrap.Modal(document.getElementById('financeModal')).show();
+            },
+            
+            openEmpAction: (id) => {
+                document.getElementById('act-emp-id').value = id;
+                document.getElementById('empActionForm').reset();
+                new bootstrap.Modal(document.getElementById('empActionModal')).show();
             },
 
+            // Simplified for brevity (Espresso & Products same as before but dark styled)
+            renderEspresso: (list) => {
+                const t = document.getElementById('espresso-table'); t.innerHTML = '';
+                list.filter(d => d.source === 'espresso' && d.status === 'active').forEach(d => {
+                    t.innerHTML += `<tr><td>${d.customer_name}</td><td>${d.description}</td><td>${d.remaining_amount}</td><td>${d.currency}</td><td><button class="btn btn-sm btn-outline-success" onclick="uiManager.openPayModal('${d.id}')">دفع</button></td></tr>`;
+                });
+            },
             renderProducts: (list) => {
-                const espG = document.getElementById('espresso-products-grid');
-                const lauG = document.getElementById('laundry-products-grid');
-                espG.innerHTML = ''; lauG.innerHTML = '';
-
-                list.forEach(p => {
-                    const html = `
-                        <div class="col-md-3 col-6">
-                            <div class="card product-card h-100 shadow-sm">
-                                <img src="${p.image_url}" class="w-100">
-                                <div class="card-body p-2 text-center">
-                                    <h6 class="fw-bold">${p.name}</h6>
-                                    <div class="text-primary fw-bold">${p.selling_price} ${p.currency}</div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    if(p.category === 'espresso') espG.innerHTML += html;
-                    else lauG.innerHTML += html;
+                const g = document.getElementById('espresso-grid'); g.innerHTML = '';
+                list.filter(p => p.category === 'espresso').forEach(p => {
+                    g.innerHTML += `<div class="col-6 col-md-3"><div class="card p-2 text-center"><img src="${p.image_url}" class="img-fluid rounded mb-2" style="height:100px;object-fit:cover;"><h6>${p.name}</h6><span class="text-info">${p.selling_price} ${p.currency}</span></div></div>`;
                 });
             },
-
-            renderEmployees: (list) => {
-                const t = document.getElementById('employees-table');
-                t.innerHTML = '';
-                list.forEach(e => {
-                    t.innerHTML += `<tr>
-                        <td class="fw-bold">${e.name}</td>
-                        <td>${e.salary}</td>
-                        <td>${e.currency}</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-danger" onclick="alert('سيتم إضافة الخصائص لاحقاً')">خصم/سلفة</button>
-                        </td>
-                    </tr>`;
+            openSimpleDebtModal: (src) => { document.getElementById('simpleDebtForm').reset(); document.getElementById('sim-source').value = src; new bootstrap.Modal(document.getElementById('simpleDebtModal')).show(); },
+            openAddProductModal: (cat) => { document.getElementById('addProductForm').reset(); document.getElementById('prod-cat').value = cat; new bootstrap.Modal(document.getElementById('addProductModal')).show(); },
+            openAddEmployeeModal: () => new bootstrap.Modal(document.getElementById('addEmpModal')).show(),
+            
+            updateStats: (list) => {
+                let usd = 0, tryVal = 0, count = 0;
+                list.forEach(d => {
+                    if(d.status === 'active') {
+                        count++;
+                        if(d.currency === 'USD') usd += Number(d.remaining_amount);
+                        else tryVal += Number(d.remaining_amount);
+                    }
                 });
+                document.getElementById('dash-usd').innerText = usd + ' $';
+                document.getElementById('dash-try').innerText = tryVal + ' ₺';
+                document.getElementById('dash-count').innerText = count;
             }
         };
 
-        // --- Helpers ---
-        const uploadImage = async (file) => {
+        // --- Print Logic (Browser Native) ---
+        window.printManager = {
+            printInvoice: (id) => {
+                const d = uiManager.allDebts.find(x => x.id === id);
+                let itemsHtml = '';
+                if(d.items && d.items.length) {
+                    itemsHtml = '<table style="width:100%;border-collapse:collapse;margin-top:20px;border:1px solid #000;"><thead><tr style="background:#eee;"><th>المادة</th><th>العدد</th><th>السعر</th><th>الإجمالي</th></tr></thead><tbody>';
+                    d.items.forEach(i => {
+                        itemsHtml += `<tr><td style="border:1px solid #000;padding:5px;">${i.item}</td><td style="border:1px solid #000;padding:5px;">${i.qty}</td><td style="border:1px solid #000;padding:5px;">${i.price}</td><td style="border:1px solid #000;padding:5px;">${i.qty*i.price}</td></tr>`;
+                    });
+                    itemsHtml += '</tbody></table>';
+                } else {
+                    itemsHtml = `<p style="margin-top:20px;font-size:18px;">${d.description}</p>`;
+                }
+
+                const html = `
+                    <div style="direction:rtl;text-align:center;padding:20px;border:2px solid #000;">
+                        <h1>مغسلة شباب المعرة</h1>
+                        <p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
+                        <h2 style="margin:20px 0;">فاتورة للسيد: ${d.customer_name}</h2>
+                        ${itemsHtml}
+                        <div style="margin-top:30px;text-align:left;">
+                            <h3>المبلغ المطلوب: ${d.remaining_amount} ${d.currency}</h3>
+                            <p>المدفوع: ${d.paid_amount}</p>
+                        </div>
+                        <p style="margin-top:50px;font-size:12px;">شكراً لتعاملكم معنا</p>
+                    </div>
+                `;
+                document.getElementById('print-area').innerHTML = html;
+                window.print();
+            }
+        };
+
+        // --- Events & Upload ---
+        const upload = async (file) => {
             const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', CLOUDINARY_PRESET);
             const res = await fetch(CLOUDINARY_URL, {method:'POST', body:fd});
-            const d = await res.json();
-            return d.secure_url;
+            return (await res.json()).secure_url;
         };
-        const toast = (m,t='s') => Toastify({text:m, style:{background:t=='s'?'#20bf6b':'#eb3b5a'}, duration:3000}).showToast();
-        const loading = (s) => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
+        const toast = (m,t='s') => Toastify({text:m, style:{background:t=='s'?'#00c853':'#ff5252'}, duration:3000}).showToast();
+        const showLoading = (s) => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
 
-        // --- Auth & Events ---
+        // Listeners
+        document.getElementById('loginForm').addEventListener('submit', async(e)=>{
+            e.preventDefault(); showLoading(true);
+            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); }
+            catch(er) { document.getElementById('login-error').innerText="بيانات خاطئة"; showLoading(false); }
+        });
+
+        document.getElementById('invoiceForm').addEventListener('submit', (e)=>{
+            e.preventDefault();
+            const items = [];
+            document.querySelectorAll('.invoice-item-row').forEach(r => {
+                const sel = r.querySelector('.prod-select');
+                items.push({
+                    item: sel.value || 'خدمة مخصصة',
+                    qty: r.querySelector('.prod-qty').value,
+                    price: r.querySelector('.prod-price').value
+                });
+            });
+            dataManager.addInvoice({
+                customer_name: document.getElementById('inv-customer').value,
+                currency: document.getElementById('inv-currency').value,
+                total_amount: Number(document.getElementById('inv-total').innerText),
+                items: items,
+                description: 'فاتورة غسيل مفصلة'
+            });
+        });
+
+        document.getElementById('paymentForm').addEventListener('submit', (e)=>{ e.preventDefault(); dataManager.processPayment(document.getElementById('pay-doc-id').value, document.getElementById('pay-amount').value); });
+        
+        document.getElementById('financeForm').addEventListener('submit', (e)=>{
+            e.preventDefault();
+            dataManager.addTransaction({
+                type: document.getElementById('fin-type').value,
+                description: document.getElementById('fin-desc').value,
+                amount: Number(document.getElementById('fin-amount').value),
+                currency: document.getElementById('fin-currency').value
+            });
+        });
+
+        document.getElementById('empActionForm').addEventListener('submit', (e)=>{
+            e.preventDefault();
+            dataManager.addEmpAction(document.getElementById('act-emp-id').value, document.getElementById('act-type').value, document.getElementById('act-amount').value, document.getElementById('act-reason').value);
+        });
+
+        document.getElementById('addProductForm').addEventListener('submit', async(e)=>{
+            e.preventDefault(); showLoading(true);
+            const url = await upload(document.getElementById('prod-img').files[0]);
+            await addDoc(collection(db,'artifacts',appId,'public','data','products'), {
+                name: document.getElementById('prod-name').value,
+                selling_price: document.getElementById('prod-price').value,
+                currency: document.getElementById('prod-curr').value,
+                image_url: url, category: document.getElementById('prod-cat').value
+            });
+            showLoading(false); toast('تم'); bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
+        });
+        
+        document.getElementById('laundry-search').addEventListener('keyup', (e)=>{
+            uiManager.renderLaundryCustomers(uiManager.allDebts, customersCache);
+        });
+
+        // Simple Debt (Espresso)
+        document.getElementById('simpleDebtForm').addEventListener('submit', async(e)=>{
+            e.preventDefault();
+            await addDoc(collection(db,'artifacts',appId,'public','data','debts'),{
+                customer_name: document.getElementById('sim-cust').value,
+                description: document.getElementById('sim-desc').value,
+                total_amount: Number(document.getElementById('sim-amount').value),
+                currency: document.getElementById('sim-curr').value,
+                source: document.getElementById('sim-source').value,
+                remaining_amount: Number(document.getElementById('sim-amount').value),
+                paid_amount: 0, status: 'active', created_at: serverTimestamp()
+            });
+            bootstrap.Modal.getInstance(document.getElementById('simpleDebtModal')).hide();
+            toast("تم");
+        });
+        
+        document.getElementById('addEmpForm').addEventListener('submit', async(e)=>{
+            e.preventDefault();
+            await addDoc(collection(db,'artifacts',appId,'public','data','employees'),{
+                name: document.getElementById('emp-name').value,
+                salary: document.getElementById('emp-salary').value,
+                net_salary: Number(document.getElementById('emp-salary').value),
+                currency: document.getElementById('emp-curr').value
+            });
+            bootstrap.Modal.getInstance(document.getElementById('addEmpModal')).hide(); toast('تم');
+        });
+
+        // Auth State
         onAuthStateChanged(auth, u => {
+            showLoading(false);
             if(u) {
                 document.getElementById('login-screen').classList.add('d-none');
                 document.getElementById('main-app').classList.remove('d-none');
                 dataManager.init();
-                reportManager.init();
             } else {
                 document.getElementById('login-screen').classList.remove('d-none');
                 document.getElementById('main-app').classList.add('d-none');
             }
         });
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            loading(true);
-            try {
-                await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
-            } catch(er) { 
-                document.getElementById('login-error').innerText = "خطأ في الدخول"; 
-                document.getElementById('login-error').style.display = 'block';
-            } finally { loading(false); }
-        });
-
-        // Forms Submits
-        document.getElementById('addDebtForm').addEventListener('submit', e => { e.preventDefault(); dataManager.addDebt({
-            source: document.getElementById('debt-source').value,
-            customer_name: document.getElementById('debt-customer').value,
-            description: document.getElementById('debt-desc').value,
-            total_amount: document.getElementById('debt-amount').value,
-            currency: document.getElementById('debt-currency').value
-        }, document.getElementById('debt-image').files[0]); });
-
-        document.getElementById('addProductForm').addEventListener('submit', e => { e.preventDefault(); dataManager.addProduct({
-            name: document.getElementById('prod-name').value,
-            category: document.getElementById('prod-category').value,
-            selling_price: document.getElementById('prod-price').value,
-            currency: document.getElementById('prod-currency').value
-        }, document.getElementById('prod-image').files[0]); });
-
-        document.getElementById('addEmployeeForm').addEventListener('submit', e => { e.preventDefault(); dataManager.addEmployee({
-            name: document.getElementById('emp-name').value,
-            salary: document.getElementById('emp-salary').value,
-            currency: document.getElementById('emp-currency').value
-        }); });
-
-        document.getElementById('addExpenseForm').addEventListener('submit', e => { e.preventDefault(); dataManager.addExpense({
-            description: document.getElementById('exp-desc').value,
-            amount: document.getElementById('exp-amount').value,
-            currency: document.getElementById('exp-currency').value,
-            date: document.getElementById('exp-date').value
-        }); });
-
-        document.getElementById('paymentForm').addEventListener('submit', e => { e.preventDefault(); dataManager.payDebt(document.getElementById('pay-id').value, document.getElementById('pay-amount').value); });
-
         // Globals
         window.router = { navigate: (id) => {
             document.querySelectorAll('.app-section').forEach(e=>e.classList.remove('active-section'));
             document.getElementById(id+'-section').classList.add('active-section');
             document.querySelectorAll('.nav-link').forEach(e=>e.classList.remove('active'));
-            event.target.closest('.nav-link')?.classList.add('active');
         }};
-        window.authManager = { logout: () => signOut(auth) };
+        window.authManager = { logout: ()=>signOut(auth) };
         window.uiManager = uiManager;
+        window.printManager = printManager;
     </script>
 </body>
     </html>
