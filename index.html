@@ -3,109 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مغسلة شباب المعرة - النظام الإداري</title>
+    <title>مغسلة شباب المعرة - V4</title>
     
-    <!-- Bootstrap 5 RTL & Icons -->
+    <!-- Bootstrap 5 & Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- Toastify -->
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <!-- Toastify & Flatpickr -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <style>
         :root {
-           --bg-dark: #121212; /* الخلفية الداكنة */
-           --bg-card: #1c1c1c; /* لون الخلفية للبطاقات */
-           --bg-sidebar: #212121; /* خلفية الشريط الجانبي */
-           --text-main: #e0e0e0; /* النص الرئيسي */
-           --text-muted: #b0b0b0; /* النص الخافت */
-           --primary: #607d8b; /* اللون الأساسي (أزرق رمادي) */
-           --accent: #26c6da; /* اللون المميز (أزرق مائل للأخضر) */
-           --success: #4caf50; /* اللون للدلالة على النجاح */
-           --danger: #f44336; /* اللون للدلالة على الخطأ */
+            /* V4 Slate Palette - Comfortable Dark Mode */
+            --bg-body: #0f172a;       /* Slate 900 */
+            --bg-sidebar: #1e293b;    /* Slate 800 */
+            --bg-card: #334155;       /* Slate 700 */
+            --border-color: #475569;  /* Slate 600 */
+            --text-primary: #f8fafc;  /* Slate 50 */
+            --text-secondary: #cbd5e1;/* Slate 300 */
+            
+            --accent-blue: #38bdf8;   /* Sky 400 */
+            --accent-green: #4ade80;  /* Green 400 */
+            --accent-orange: #fbbf24; /* Amber 400 */
+            --accent-red: #f87171;    /* Red 400 */
         }
 
         body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            font-family: 'Almarai', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
             overflow-x: hidden;
         }
 
-        /* Dark Mode Overrides */
-        .card { background-color: var(--bg-card); border: 1px solid #333; color: var(--text-main); }
-        .form-control, .form-select { background-color: #2d2d2d; border: 1px solid #444; color: white; }
-        .form-control:focus, .form-select:focus { background-color: #333; color: white; border-color: var(--primary); box-shadow: none; }
-        .table { color: var(--text-main); }
-        .table thead th { background-color: #252525; border-bottom: 2px solid #444; color: var(--accent); }
-        .table-hover tbody tr:hover { color: white; background-color: #2c2c2c; }
-        .modal-content { background-color: var(--bg-card); border: 1px solid #444; }
+        /* Overrides */
+        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 12px; }
+        .form-control, .form-select {
+            background-color: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-primary);
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bg-sidebar); border-color: var(--accent-blue); color: white; box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25);
+        }
+        .table { color: var(--text-secondary); --bs-table-hover-color: white; --bs-table-hover-bg: #475569; }
+        .table thead th { background-color: var(--bg-sidebar); color: var(--accent-blue); border-bottom: 2px solid var(--border-color); }
+        .table td { border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .modal-content { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); }
         .btn-close { filter: invert(1); }
-        .border-bottom { border-color: #333 !important; }
 
         /* Sidebar */
-        .sidebar { min-height: 100vh; background-color: var(--bg-sidebar); border-left: 1px solid #333; }
-        .nav-link { color: var(--text-muted); padding: 12px 15px; border-radius: 8px; margin-bottom: 5px; transition: 0.2s; }
-        .nav-link:hover, .nav-link.active { background-color: rgba(63, 81, 181, 0.2); color: var(--accent); font-weight: bold; }
+        .sidebar { background-color: var(--bg-sidebar); min-height: 100vh; border-left: 1px solid var(--border-color); }
+        .nav-link { color: var(--text-secondary); padding: 12px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { background-color: rgba(56, 189, 248, 0.1); color: var(--accent-blue); font-weight: bold; transform: translateX(-5px); }
         .nav-link i { width: 25px; text-align: center; }
 
-        /* Custom UI */
-        .app-section { display: none; animation: fadeIn 0.3s; }
-        .app-section.active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        /* Custom Components */
+        .stat-card { padding: 20px; border-radius: 12px; background: linear-gradient(145deg, var(--bg-card), var(--bg-sidebar)); border-top: 4px solid transparent; }
+        .stat-usd { border-color: var(--accent-green); }
+        .stat-try { border-color: var(--accent-blue); }
+        .stat-syp { border-color: var(--accent-orange); }
 
-        .stat-card { background: #252525; border-radius: 12px; padding: 20px; position: relative; overflow: hidden; }
-        .stat-card::after { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; }
-        .stat-usd::after { background-color: var(--success); }
-        .stat-try::after { background-color: var(--accent); }
-        
         .customer-row { cursor: pointer; transition: 0.2s; }
-        .customer-row:hover { background-color: #2a2a2a; }
+        .customer-row:hover { background-color: var(--border-color); }
 
-        /* Invoice Items in Modal */
-        .invoice-item-row { background: #2a2a2a; padding: 10px; border-radius: 5px; margin-bottom: 5px; border: 1px solid #444; }
+        /* Utils */
+        .text-usd { color: var(--accent-green) !important; }
+        .text-try { color: var(--accent-blue) !important; }
+        .text-syp { color: var(--accent-orange) !important; }
+        .bg-dark-overlay { background: rgba(15, 23, 42, 0.9); }
 
-        /* Print Area (Hidden by default) */
-        #print-area { display: none; }
-        @media print {
-            body * { visibility: hidden; }
-            #print-area, #print-area * { visibility: visible; }
-            #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; color: black; background: white; padding: 20px; }
-            .no-print { display: none !important; }
-        }
+        .app-section { display: none; animation: fadeIn 0.4s; }
+        .app-section.active-section { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .loading-overlay { position: fixed; inset: 0; background: rgba(18,18,18,0.9); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        /* Invoice Print Style */
+        #invoice-print-container { background: white; color: black; padding: 20px; width: 80mm; display: none; }
     </style>
 </head>
 <body>
 
     <!-- Loading -->
-    <div id="loading-overlay" class="loading-overlay">
-        <div class="spinner-border text-info mb-3" role="status"></div>
-        <h6 class="text-white">جاري الاتصال بالنظام...</h6>
+    <div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 bg-dark-overlay d-flex flex-column justify-content-center align-items-center" style="z-index: 9999;">
+        <div class="spinner-border text-info mb-3"></div>
+        <h6>جاري التحميل...</h6>
     </div>
 
     <!-- Login -->
-    <div id="login-screen" class="d-none">
-        <div class="container h-100 d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-            <div class="card p-5 shadow-lg border-0" style="width: 400px; max-width: 90%; background: #1a1a1a;">
-                <div class="text-center mb-4">
-                    <i class="fas fa-soap fa-3x text-info mb-3"></i>
-                    <h3 class="fw-bold text-white">مغسلة شباب المعرة</h3>
-                    <p class="text-muted">تسجيل دخول الإدارة</p>
-                </div>
-                <form id="loginForm">
-                    <div class="mb-3">
-                        <input type="email" id="email" class="form-control py-2" placeholder="البريد الإلكتروني" required>
-                    </div>
-                    <div class="mb-4">
-                        <input type="password" id="password" class="form-control py-2" placeholder="كلمة المرور" required>
-                    </div>
-                    <button type="submit" class="btn btn-info w-100 fw-bold py-2">دخول</button>
-                    <div id="login-error" class="text-danger mt-3 text-center small fw-bold"></div>
-                </form>
+    <div id="login-screen" class="vh-100 d-flex justify-content-center align-items-center d-none">
+        <div class="card p-5 shadow-lg" style="width: 400px;">
+            <div class="text-center mb-4">
+                <i class="fas fa-soap fa-3x text-info mb-3"></i>
+                <h3 class="fw-bold">مغسلة شباب المعرة</h3>
             </div>
+            <form id="loginForm">
+                <input type="email" id="email" class="form-control mb-3" placeholder="Email" required>
+                <input type="password" id="password" class="form-control mb-3" placeholder="Password" required>
+                <button class="btn btn-info w-100 fw-bold">دخول</button>
+            </form>
         </div>
     </div>
 
@@ -115,168 +109,180 @@
             <div class="row g-0">
                 <!-- Sidebar -->
                 <div class="col-md-2 sidebar p-3 d-none d-md-block">
-                    <h5 class="text-center text-white mb-5 mt-2 border-bottom border-secondary pb-3">
-                        لوحة التحكم
-                    </h5>
-                    <nav class="nav flex-column gap-2">
-                        <a class="nav-link active" onclick="router.navigate('dashboard')"><i class="fas fa-chart-line"></i> نظرة عامة</a>
-                        <a class="nav-link" onclick="router.navigate('laundry')"><i class="fas fa-tshirt"></i> قسم المغسلة</a>
-                        <a class="nav-link" onclick="router.navigate('espresso')"><i class="fas fa-coffee"></i> قسم الأسبريسو</a>
-                        <a class="nav-link" onclick="router.navigate('employees')"><i class="fas fa-users-cog"></i> الموظفين</a>
-                        <a class="nav-link" onclick="router.navigate('finance')"><i class="fas fa-wallet"></i> المالية</a>
-                        <a class="nav-link text-danger mt-5" onclick="authManager.logout()"><i class="fas fa-sign-out-alt"></i> خروج</a>
+                    <h5 class="text-center text-white mb-4 pb-3 border-bottom border-secondary">لوحة التحكم</h5>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" onclick="router.navigate('dashboard')"><i class="fas fa-home"></i> الرئيسية</a>
+                        <a class="nav-link" onclick="router.navigate('laundry')"><i class="fas fa-tshirt"></i> المغسلة</a>
+                        <a class="nav-link" onclick="router.navigate('espresso')"><i class="fas fa-coffee"></i> الأسبريسو</a>
+                        <a class="nav-link" onclick="router.navigate('finance')"><i class="fas fa-chart-pie"></i> المالية</a>
+                        <a class="nav-link mt-auto text-danger" onclick="auth.signOut()"><i class="fas fa-sign-out-alt"></i> خروج</a>
                     </nav>
                 </div>
 
                 <!-- Content -->
-                <div class="col-md-10" style="height: 100vh; overflow-y: auto;">
-                    <!-- Mobile Nav -->
-                    <div class="d-md-none bg-dark p-3 d-flex justify-content-between align-items-center border-bottom border-secondary">
-                        <span class="fw-bold text-white">مغسلة شباب المعرة</span>
-                        <button class="btn btn-sm btn-outline-light" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
+                <div class="col-md-10 vh-100 overflow-auto">
+                    <!-- Mobile Header -->
+                    <div class="d-md-none bg-secondary p-3 d-flex justify-content-between">
+                        <span class="fw-bold">مغسلة شباب المعرة</span>
+                        <button class="btn btn-sm btn-dark" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
                     </div>
-                    <div class="collapse d-md-none bg-dark" id="mobileMenu">
-                        <div class="p-2 d-grid gap-2">
-                            <button class="btn btn-dark text-end" onclick="router.navigate('dashboard')">الرئيسية</button>
-                            <button class="btn btn-dark text-end" onclick="router.navigate('laundry')">المغسلة</button>
-                            <button class="btn btn-dark text-end" onclick="router.navigate('espresso')">الأسبريسو</button>
-                            <button class="btn btn-dark text-end" onclick="router.navigate('finance')">المالية</button>
-                            <button class="btn btn-danger text-end" onclick="authManager.logout()">خروج</button>
-                        </div>
+                    <!-- Mobile Menu -->
+                    <div class="collapse d-md-none bg-dark p-2" id="mobileMenu">
+                        <button class="btn btn-dark w-100 text-end mb-1" onclick="router.navigate('dashboard')">الرئيسية</button>
+                        <button class="btn btn-dark w-100 text-end mb-1" onclick="router.navigate('laundry')">المغسلة</button>
+                        <button class="btn btn-dark w-100 text-end mb-1" onclick="router.navigate('finance')">المالية</button>
                     </div>
 
                     <div class="p-4">
                         
                         <!-- 1. Dashboard -->
                         <div id="dashboard-section" class="app-section active-section">
-                            <h3 class="mb-4 text-white">ملخص العمل</h3>
+                            <h3 class="mb-4">نظرة عامة</h3>
                             <div class="row g-4">
-                                <div class="col-md-4">
-                                    <div class="stat-card stat-usd">
-                                        <h6 class="text-muted">الديون المستحقة (USD)</h6>
-                                        <h2 class="fw-bold text-white mt-2" id="dash-usd">0 $</h2>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="stat-card stat-try">
-                                        <h6 class="text-muted">الديون المستحقة (TRY)</h6>
-                                        <h2 class="fw-bold text-white mt-2" id="dash-try">0 ₺</h2>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="stat-card">
-                                        <h6 class="text-muted">عدد الفواتير النشطة</h6>
-                                        <h2 class="fw-bold text-info mt-2" id="dash-count">0</h2>
-                                    </div>
-                                </div>
+                                <div class="col-md-4"><div class="stat-card stat-usd"><h6>ديون (USD)</h6><h2 class="text-usd" id="dash-usd">0 $</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card stat-try"><h6>ديون (TRY)</h6><h2 class="text-try" id="dash-try">0 ₺</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card stat-syp"><h6>ديون (SYP)</h6><h2 class="text-syp" id="dash-syp">0</h2></div></div>
                             </div>
                         </div>
 
-                        <!-- 2. Laundry Section (Core) -->
+                        <!-- 2. Laundry Section -->
                         <div id="laundry-section" class="app-section">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h3 class="text-info"><i class="fas fa-tshirt"></i> إدارة المغسلة</h3>
-                                <button class="btn btn-info fw-bold" onclick="uiManager.openInvoiceModal()"><i class="fas fa-plus"></i> فاتورة غسيل جديدة</button>
                             </div>
+                            
+                            <ul class="nav nav-tabs border-secondary mb-3">
+                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#lau-customers">العملاء والديون</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#lau-products">المنتجات (Inventory)</a></li>
+                            </ul>
 
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="laundry-search" placeholder="بحث عن عميل...">
+                            <div class="tab-content">
+                                <!-- Customers Tab -->
+                                <div class="tab-pane fade show active" id="lau-customers">
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <button class="btn btn-info w-100 fw-bold" onclick="ui.openSimpleDebtModal('laundry')"><i class="fas fa-plus"></i> فاتورة غسيل (دين)</button>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" id="laundry-search" placeholder="بحث عن عميل...">
+                                        </div>
+                                    </div>
+                                    <div class="card p-0 overflow-hidden">
+                                        <table class="table mb-0">
+                                            <thead><tr><th>العميل</th><th>المجموع (USD)</th><th>المجموع (TRY)</th><th>المجموع (SYP)</th><th>الحالة</th><th>إجراء</th></tr></thead>
+                                            <tbody id="laundry-customers-list"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="card p-0 overflow-hidden">
-                                <table class="table mb-0 align-middle">
-                                    <thead><tr><th>العميل</th><th>آخر فاتورة</th><th>إجمالي المتبقي</th><th>العملة</th><th>الحالة</th><th>إجراء</th></tr></thead>
-                                    <tbody id="laundry-customers-list"></tbody>
-                                </table>
+                                
+                                <!-- Products Tab (Re-added) -->
+                                <div class="tab-pane fade" id="lau-products">
+                                    <button class="btn btn-success mb-3" onclick="ui.openAddProductModal('laundry')">إضافة منتج</button>
+                                    <div class="row g-3" id="laundry-products-grid"></div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 2.1 Customer Profile View (Sub-section) -->
+                        <!-- 2.1 Customer Profile (Smart View) -->
                         <div id="customer-profile-section" class="app-section">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
                                 <div>
-                                    <button class="btn btn-outline-light btn-sm me-2" onclick="router.navigate('laundry')"><i class="fas fa-arrow-right"></i> عودة</button>
-                                    <span class="h4 text-warning" id="profile-name">اسم العميل</span>
+                                    <button class="btn btn-outline-secondary btn-sm me-2" onclick="router.navigate('laundry')"><i class="fas fa-arrow-right"></i> عودة</button>
+                                    <span class="h3 text-warning" id="prof-name">اسم العميل</span>
                                 </div>
-                                <div class="text-end">
-                                    <span class="badge bg-danger fs-6">المتبقي: <span id="profile-total-debt">0</span> <span id="profile-currency"></span></span>
+                                <div class="d-flex gap-2">
+                                    <span class="badge bg-dark border border-success d-flex align-items-center">USD: <span id="prof-total-usd" class="ms-1">0</span></span>
+                                    <span class="badge bg-dark border border-info d-flex align-items-center">TRY: <span id="prof-total-try" class="ms-1">0</span></span>
+                                    <span class="badge bg-dark border border-warning d-flex align-items-center">SYP: <span id="prof-total-syp" class="ms-1">0</span></span>
                                 </div>
                             </div>
 
-                            <h5 class="text-muted mb-3">سجل الفواتير</h5>
+                            <!-- Smart Actions -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <div class="card p-3 h-100 border-success">
+                                        <h6 class="text-success"><i class="fas fa-check-double"></i> خيار 1: تسديد فواتير محددة</h6>
+                                        <p class="small text-muted">اختر منتجات/خدمات من القائمة بالأسفل ثم اضغط هنا.</p>
+                                        <button class="btn btn-success w-100" onclick="dataManager.paySelectedItems()">دفع المحدد (توليد فاتورة)</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card p-3 h-100 border-info">
+                                        <h6 class="text-info"><i class="fas fa-hand-holding-usd"></i> خيار 2: تسديد دفعة (Lump Sum)</h6>
+                                        <p class="small text-muted">أدخل مبلغاً وسيتم خصمه من أقدم الديون (FIFO).</p>
+                                        <button class="btn btn-info w-100" onclick="ui.openLumpSumModal()">إجراء دفعة</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card p-3 h-100 border-secondary">
+                                        <h6 class="text-white"><i class="fas fa-filter"></i> الفلترة والأرشيف</h6>
+                                        <div class="d-flex gap-2 mb-2">
+                                            <button class="btn btn-sm btn-outline-light flex-fill" onclick="ui.toggleArchive(false)" id="btn-show-active">النشط</button>
+                                            <button class="btn btn-sm btn-outline-secondary flex-fill" onclick="ui.toggleArchive(true)" id="btn-show-all">الأرشيف (الكل)</button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm" id="date-filter" placeholder="من تاريخ - إلى تاريخ">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="table-responsive">
                                 <table class="table table-hover">
-                                    <thead><tr><th>التاريخ</th><th>التفاصيل/المنتجات</th><th>القيمة الكلية</th><th>المدفوع</th><th>المتبقي</th><th>الحالة</th><th>خيارات</th></tr></thead>
-                                    <tbody id="profile-invoices-list"></tbody>
+                                    <thead><tr>
+                                        <th style="width: 40px;"><input type="checkbox" class="form-check-input" id="check-all" onclick="ui.toggleCheckAll()"></th>
+                                        <th>التاريخ</th>
+                                        <th>الوصف / المنتج</th>
+                                        <th>القيمة</th>
+                                        <th>العملة</th>
+                                        <th>الحالة</th>
+                                    </tr></thead>
+                                    <tbody id="profile-debts-list"></tbody>
                                 </table>
                             </div>
                         </div>
 
                         <!-- 3. Espresso Section -->
                         <div id="espresso-section" class="app-section">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h3 class="text-warning"><i class="fas fa-coffee"></i> الأسبريسو</h3>
-                            </div>
+                            <h3 class="text-warning mb-4"><i class="fas fa-coffee"></i> الأسبريسو</h3>
                             <ul class="nav nav-tabs border-secondary mb-3">
-                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#esp-debts">الطلبات والديون</a></li>
+                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#esp-debts">الديون</a></li>
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#esp-prods">المنتجات</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="esp-debts">
-                                    <button class="btn btn-warning text-dark fw-bold mb-3" onclick="uiManager.openSimpleDebtModal('espresso')"><i class="fas fa-plus"></i> دين جديد</button>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover">
-                                            <thead><tr><th>العميل</th><th>الوصف</th><th>المبلغ</th><th>العملة</th><th>إجراء</th></tr></thead>
-                                            <tbody id="espresso-table"></tbody>
-                                        </table>
-                                    </div>
+                                    <button class="btn btn-warning text-dark fw-bold mb-3" onclick="ui.openSimpleDebtModal('espresso')">دين جديد</button>
+                                    <div class="table-responsive"><table class="table"><tbody id="espresso-list"></tbody></table></div>
                                 </div>
                                 <div class="tab-pane fade" id="esp-prods">
-                                    <button class="btn btn-success mb-3" onclick="uiManager.openAddProductModal('espresso')">إضافة منتج</button>
-                                    <div class="row g-3" id="espresso-grid"></div>
+                                    <button class="btn btn-success mb-3" onclick="ui.openAddProductModal('espresso')">إضافة منتج</button>
+                                    <div class="row g-3" id="espresso-products-grid"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 4. Employees Section -->
-                        <div id="employees-section" class="app-section">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h3 class="text-white"><i class="fas fa-users"></i> الموظفين</h3>
-                                <button class="btn btn-light" onclick="uiManager.openAddEmployeeModal()">إضافة موظف</button>
-                            </div>
-                            <div class="card p-0">
-                                <table class="table mb-0 align-middle">
-                                    <thead><tr><th>الاسم</th><th>الراتب الأساسي</th><th>الصافي المستحق</th><th>العملة</th><th>إجراءات</th></tr></thead>
-                                    <tbody id="employees-table"></tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- 5. Finance Section -->
+                        <!-- 4. Finance Section -->
                         <div id="finance-section" class="app-section">
-                            <h3 class="mb-4 text-success">المالية والتقارير</h3>
+                            <h3 class="mb-4">المالية والتقارير</h3>
                             <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <button class="btn btn-danger w-100 py-3 mb-2" onclick="uiManager.openTransactionModal('expense')"><i class="fas fa-arrow-down"></i> تسجيل مصروف</button>
+                                <div class="col-md-3">
+                                    <button class="btn btn-danger w-100" onclick="ui.openTransactionModal('expense')">تسجيل مصروف</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-success w-100" onclick="ui.openTransactionModal('income_manual')">تسجيل دخل خارجي</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success w-100 py-3" onclick="uiManager.openTransactionModal('income_manual')"><i class="fas fa-arrow-up"></i> تسجيل دخل خارجي</button>
+                                    <div class="input-group">
+                                        <select class="form-select" id="report-type">
+                                            <option value="today">يومي</option>
+                                            <option value="week">أسبوعي</option>
+                                            <option value="year">سنوي</option>
+                                            <option value="custom">مخصص (اختر التاريخ)</option>
+                                        </select>
+                                        <input type="text" class="form-control d-none" id="report-date-range" placeholder="التاريخ">
+                                        <button class="btn btn-primary" onclick="reportManager.generatePDF()"><i class="fas fa-file-pdf"></i> تصدير تقرير</button>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <div class="card">
-                                <div class="card-header bg-dark border-bottom border-secondary d-flex justify-content-between">
-                                    <span>سجل المعاملات (الدخل والمصروف)</span>
-                                </div>
-                                <div class="card-body p-0">
-                                    <table class="table table-striped mb-0">
-                                        <thead><tr><th>التاريخ</th><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>العملة</th></tr></thead>
-                                        <tbody id="finance-table"></tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <div class="card p-0"><table class="table mb-0"><thead><tr><th>التاريخ</th><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>العملة</th></tr></thead><tbody id="finance-list"></tbody></table></div>
                         </div>
 
                     </div>
@@ -285,132 +291,27 @@
         </div>
     </div>
 
-    <!-- === MODALS === -->
-
-    <!-- 1. Advanced Laundry Invoice Modal -->
-    <div class="modal fade" id="invoiceModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-dark border-bottom border-secondary">
-                    <h5 class="modal-title text-info">إنشاء فاتورة غسيل مفصلة</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="invoiceForm">
-                        <div class="row mb-3">
-                            <div class="col-md-8">
-                                <label class="form-label text-muted">اسم العميل (بحث أو جديد)</label>
-                                <input type="text" class="form-control" id="inv-customer" list="customer-list-datalist" required autocomplete="off">
-                                <datalist id="customer-list-datalist"></datalist>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label text-muted">العملة</label>
-                                <select class="form-select" id="inv-currency">
-                                    <option value="TRY">ليرة تركي (₺)</option>
-                                    <option value="USD">دولار ($)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <label class="form-label text-muted">المنتجات والخدمات</label>
-                        <div id="invoice-items-container">
-                            <!-- Items inserted by JS -->
-                        </div>
-                        <button type="button" class="btn btn-outline-secondary btn-sm mb-3 w-100" onclick="uiManager.addInvoiceRow()">+ إضافة بند</button>
-
-                        <div class="row border-top border-secondary pt-3">
-                            <div class="col-6"><h5 class="text-white">الإجمالي: <span id="inv-total">0</span></h5></div>
-                            <div class="col-6 text-end">
-                                <button type="submit" class="btn btn-info fw-bold px-4">حفظ الفاتورة</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. Payment Modal -->
-    <div class="modal fade" id="paymentModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-success"><h5 class="modal-title text-white">إجراء دفع</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
-                <div class="modal-body text-center">
-                    <p class="text-muted">المبلغ المتبقي</p>
-                    <h2 class="fw-bold mb-3"><span id="pay-remain">0</span> <small id="pay-curr"></small></h2>
-                    <form id="paymentForm">
-                        <input type="hidden" id="pay-doc-id">
-                        <input type="number" class="form-control fs-4 text-center mb-3" id="pay-amount" placeholder="المبلغ المدفوع" required step="0.1">
-                        <button type="submit" class="btn btn-success w-100 fw-bold">تأكيد الدفع</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. Employee Action Modal -->
-    <div class="modal fade" id="empActionModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title">إجراء مالي للموظف</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
-                <div class="modal-body">
-                    <form id="empActionForm">
-                        <input type="hidden" id="act-emp-id">
-                        <div class="mb-3">
-                            <label class="form-label text-muted">نوع العملية</label>
-                            <select class="form-select" id="act-type">
-                                <option value="deduction">خصم (عقوبة/غياب)</option>
-                                <option value="advance">سلفة (تخصم من الراتب)</option>
-                                <option value="bonus">مكافأة (تضاف للراتب)</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <input type="number" class="form-control" id="act-amount" placeholder="المبلغ" required>
-                        </div>
-                        <div class="mb-3">
-                            <input type="text" class="form-control" id="act-reason" placeholder="السبب" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">تنفيذ</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. Finance Transaction Modal -->
-    <div class="modal fade" id="financeModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title" id="fin-modal-title">تسجيل حركة</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
-                <div class="modal-body">
-                    <form id="financeForm">
-                        <input type="hidden" id="fin-type">
-                        <div class="mb-3"><input type="text" class="form-control" id="fin-desc" placeholder="الوصف (مصدر الدخل / سبب الصرف)" required></div>
-                        <div class="row mb-3">
-                            <div class="col"><input type="number" class="form-control" id="fin-amount" placeholder="المبلغ" required></div>
-                            <div class="col">
-                                <select class="form-select" id="fin-currency">
-                                    <option value="TRY">ليرة (₺)</option>
-                                    <option value="USD">دولار ($)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-light w-100 fw-bold" id="fin-submit-btn">حفظ</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 5. Add Product/Simple Debt Modals (Simplified for brevity) -->
-    <div class="modal fade" id="simpleDebtModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="simpleDebtForm">
+    <!-- Modals -->
+    <!-- 1. Simple Debt Modal (Used for Laundry & Espresso) -->
+    <div class="modal fade" id="simpleDebtModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">إضافة</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="simpleDebtForm">
         <input type="hidden" id="sim-source">
-        <input class="form-control mb-2" id="sim-cust" placeholder="العميل" required>
-        <input class="form-control mb-2" id="sim-desc" placeholder="الوصف" required>
-        <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="sim-amount" placeholder="المبلغ" required></div><div class="col"><select class="form-select" id="sim-curr"><option value="TRY">TRY</option><option value="USD">USD</option></select></div></div>
-        <button class="btn btn-warning w-100">حفظ</button>
+        <div class="mb-2"><label>العميل</label><input class="form-control" id="sim-cust" required list="cust-datalist"><datalist id="cust-datalist"></datalist></div>
+        <div class="mb-2"><label>الوصف (المنتج/الخدمة)</label><input class="form-control" id="sim-desc" required></div>
+        <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="sim-amount" placeholder="المبلغ" step="0.5" required></div><div class="col"><select class="form-select" id="sim-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div></div>
+        <button class="btn btn-primary w-100">حفظ</button>
     </form></div></div></div></div>
 
+    <!-- 2. Lump Sum Modal -->
+    <div class="modal fade" id="lumpSumModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">تسديد دفعة (Lump Sum)</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">
+        <div class="alert alert-info small">سيتم خصم المبلغ من أقدم الفواتير النشطة تلقائياً (FIFO).</div>
+        <form id="lumpSumForm">
+            <div class="mb-3"><label>العملة</label><select class="form-select" id="lump-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div>
+            <div class="mb-3"><label>المبلغ المدفوع</label><input type="number" class="form-control" id="lump-amount" required step="0.5"></div>
+            <button class="btn btn-info w-100">تأكيد الدفع وتوليد الوصل</button>
+        </form>
+    </div></div></div></div>
+
+    <!-- 3. Add Product Modal -->
     <div class="modal fade" id="addProductModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="addProductForm">
         <input type="hidden" id="prod-cat">
         <input class="form-control mb-2" id="prod-name" placeholder="اسم المنتج" required>
@@ -419,18 +320,24 @@
         <button class="btn btn-success w-100">إضافة</button>
     </form></div></div></div></div>
 
-    <div class="modal fade" id="addEmpModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="addEmpForm">
-        <input class="form-control mb-2" id="emp-name" placeholder="الاسم" required>
-        <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="emp-salary" placeholder="الراتب" required></div><div class="col"><select class="form-select" id="emp-curr"><option value="USD">USD</option><option value="TRY">TRY</option></select></div></div>
-        <button class="btn btn-light w-100">حفظ</button>
+    <!-- 4. Finance Modal -->
+    <div class="modal fade" id="financeModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="financeForm">
+        <input type="hidden" id="fin-type">
+        <input class="form-control mb-2" id="fin-desc" placeholder="الوصف" required>
+        <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="fin-amount" placeholder="المبلغ" required></div><div class="col"><select class="form-select" id="fin-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div></div>
+        <button class="btn btn-primary w-100">حفظ</button>
     </form></div></div></div></div>
 
-    <!-- Hidden Print Area -->
-    <div id="print-area"></div>
+    <!-- PDF Logic: Invisible Container for rendering -->
+    <div id="pdf-container" style="position:fixed; top:-9999px; left:-9999px;"></div>
 
-    <!-- Logic -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -447,482 +354,432 @@
         };
         const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/drielwabh/image/upload";
         const CLOUDINARY_PRESET = "mghsala_upload";
-        
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maarra-v3';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maarra-v4';
 
-        let currentUser = null;
-        let productsCache = [];
-        let customersCache = []; // To store unique names for datalist
+        let allDebts = [];
+        let allTrans = [];
+        let currentProfileName = '';
+        let showArchive = false;
 
-        // --- Data Logic ---
+        // --- Data Layer ---
         const dataManager = {
             init: () => {
-                // Debts & Laundry
+                // Debts
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'debts'), snap => {
-                    const list = [];
-                    const names = new Set();
+                    allDebts = [];
+                    const custSet = new Set();
                     snap.forEach(d => {
                         const data = d.data();
-                        list.push({id: d.id, ...data});
-                        if(data.source === 'laundry') names.add(data.customer_name);
+                        allDebts.push({id: d.id, ...data});
+                        if(data.source === 'laundry') custSet.add(data.customer_name);
                     });
-                    uiManager.renderLaundryCustomers(list, Array.from(names));
-                    uiManager.renderEspresso(list);
-                    uiManager.updateStats(list);
+                    ui.renderLaundryCustomers(Array.from(custSet));
+                    ui.renderEspresso();
+                    ui.updateDash();
+                    ui.updateDatalist(Array.from(custSet));
+                    if(currentProfileName) ui.openCustomerProfile(currentProfileName);
                 });
 
                 // Transactions
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), snap => {
-                    const list = [];
-                    snap.forEach(d => list.push(d.data()));
-                    uiManager.renderFinance(list);
-                });
-
-                // Employees
-                onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'employees'), snap => {
-                    const list = [];
-                    snap.forEach(d => list.push({id: d.id, ...d.data()}));
-                    uiManager.renderEmployees(list);
+                    allTrans = [];
+                    snap.forEach(d => allTrans.push({id: d.id, ...d.data()}));
+                    ui.renderFinance();
                 });
 
                 // Products
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), snap => {
-                    productsCache = [];
-                    snap.forEach(d => productsCache.push(d.data()));
-                    uiManager.renderProducts(productsCache);
+                    const prods = [];
+                    snap.forEach(d => prods.push(d.data()));
+                    ui.renderProducts(prods);
                 });
             },
 
-            addInvoice: async (data) => {
+            addDebt: async (data) => {
                 showLoading(true);
                 try {
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'debts'), {
-                        ...data,
-                        status: 'active',
-                        paid_amount: 0,
-                        remaining_amount: data.total_amount,
-                        created_at: serverTimestamp(),
-                        source: 'laundry'
+                        ...data, status: 'active', paid_amount: 0, remaining_amount: data.total_amount, created_at: serverTimestamp()
                     });
-                    toast("تم حفظ الفاتورة");
-                    bootstrap.Modal.getInstance(document.getElementById('invoiceModal')).hide();
-                } catch(e) { toast("خطأ", 'error'); } 
-                finally { showLoading(false); }
+                    toast("تمت الإضافة");
+                    bootstrap.Modal.getInstance(document.getElementById('simpleDebtModal')).hide();
+                } catch(e) { toast("خطأ", 'err'); } finally { showLoading(false); }
             },
 
-            addTransaction: async (data) => {
+            // Option 1: Pay Selected
+            paySelectedItems: async () => {
+                const checked = document.querySelectorAll('.debt-check:checked');
+                if(checked.length === 0) return toast("اختر عنصر واحد على الأقل", 'err');
+
                 showLoading(true);
+                let totalPaid = 0;
+                let itemsDesc = [];
+                let currency = '';
+
                 try {
+                    for(const box of checked) {
+                        const debtId = box.value;
+                        const debt = allDebts.find(d => d.id === debtId);
+                        currency = debt.currency; // Assume same currency for simplicity/validation
+                        
+                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', debtId), {
+                            status: 'paid', remaining_amount: 0, paid_amount: debt.total_amount, paid_at: serverTimestamp()
+                        });
+                        
+                        totalPaid += Number(debt.remaining_amount);
+                        itemsDesc.push(`${debt.description} (${debt.total_amount})`);
+                    }
+
+                    // Transaction
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
-                        ...data, created_at: serverTimestamp()
+                        type: 'income', source: 'laundry_payment', 
+                        description: `تسديد محدد للعميل ${currentProfileName}`, 
+                        amount: totalPaid, currency: currency, created_at: serverTimestamp()
                     });
-                    toast("تم التسجيل");
-                    bootstrap.Modal.getInstance(document.getElementById('financeModal')).hide();
-                } catch(e) { toast("خطأ", 'error'); } 
+
+                    toast("تم السداد والأرشفة");
+                    reportManager.generateInvoicePDF(currentProfileName, itemsDesc, totalPaid, currency);
+
+                } catch(e) { toast("حدث خطأ", 'err'); console.log(e); } 
                 finally { showLoading(false); }
             },
 
-            processPayment: async (id, amount) => {
-                const ref = doc(db, 'artifacts', appId, 'public', 'data', 'debts', id);
-                const d = (await getDoc(ref)).data();
-                const newRem = Number(d.remaining_amount) - Number(amount);
-                
-                if(newRem < 0) return toast("المبلغ أكبر من المتبقي", 'error');
+            // Option 2: Lump Sum (FIFO)
+            payLumpSum: async (amount, currency) => {
+                // Get active debts for this customer & currency, sorted by oldest
+                let debts = allDebts.filter(d => 
+                    d.customer_name === currentProfileName && 
+                    d.source === 'laundry' && 
+                    d.currency === currency && 
+                    d.status === 'active'
+                ).sort((a,b) => (a.created_at?.seconds || 0) - (b.created_at?.seconds || 0));
 
-                await updateDoc(ref, {
-                    paid_amount: Number(d.paid_amount) + Number(amount),
-                    remaining_amount: newRem,
-                    status: newRem === 0 ? 'paid' : 'active',
-                    last_payment: serverTimestamp()
-                });
+                if(debts.length === 0) return toast("لا يوجد ديون نشطة بهذه العملة", 'err');
 
-                await dataManager.addTransaction({
-                    type: 'income',
-                    source: 'payment',
-                    description: `سداد فاتورة: ${d.customer_name}`,
-                    amount: Number(amount),
-                    currency: d.currency
-                });
-                
-                bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
-                
-                // Refresh Profile if open
-                if(document.getElementById('customer-profile-section').classList.contains('active-section')) {
-                    uiManager.openCustomerProfile(d.customer_name); // Re-fetch logic implied by listeners, but ensures UI sync
-                }
-            },
+                showLoading(true);
+                let remainingPayment = Number(amount);
+                let paidItems = [];
 
-            addEmpAction: async (id, type, amount, reason) => {
-                const ref = doc(db, 'artifacts', appId, 'public', 'data', 'employees', id);
-                const emp = (await getDoc(ref)).data();
-                let net = Number(emp.net_salary || emp.salary);
-                
-                if(type === 'bonus') net += Number(amount);
-                else net -= Number(amount); // Deduction or Advance
+                try {
+                    for(const debt of debts) {
+                        if(remainingPayment <= 0) break;
 
-                await updateDoc(ref, { net_salary: net });
-                
-                // Log as transaction logic could be here, kept simple for now
-                toast("تم تنفيذ الإجراء");
-                bootstrap.Modal.getInstance(document.getElementById('empActionModal')).hide();
+                        const debtRem = Number(debt.remaining_amount);
+                        let payVal = 0;
+
+                        if(remainingPayment >= debtRem) {
+                            // Pay Full
+                            payVal = debtRem;
+                            remainingPayment -= debtRem;
+                            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', debt.id), {
+                                status: 'paid', remaining_amount: 0, paid_amount: Number(debt.total_amount), paid_at: serverTimestamp()
+                            });
+                        } else {
+                            // Partial
+                            payVal = remainingPayment;
+                            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', debt.id), {
+                                remaining_amount: debtRem - remainingPayment,
+                                paid_amount: Number(debt.paid_amount) + remainingPayment
+                            });
+                            remainingPayment = 0;
+                        }
+                        paidItems.push(debt);
+                    }
+
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
+                        type: 'income', source: 'lump_sum', 
+                        description: `دفعة مقطوعة من ${currentProfileName}`, 
+                        amount: Number(amount), currency: currency, created_at: serverTimestamp()
+                    });
+
+                    toast("تم تسجيل الدفعة");
+                    bootstrap.Modal.getInstance(document.getElementById('lumpSumModal')).hide();
+                    
+                    // Calc total remaining debt for receipt
+                    const newTotal = allDebts
+                        .filter(d => d.customer_name === currentProfileName && d.currency === currency && d.status === 'active')
+                        .reduce((sum, d) => sum + (d.remaining_amount - (paidItems.find(x=>x.id==d.id)?.remaining_amount || 0)), 0); // Simplified approx for PDF
+                    
+                    reportManager.generateReceiptPDF(currentProfileName, amount, currency);
+
+                } catch(e) { console.log(e); toast("خطأ", 'err'); }
+                finally { showLoading(false); }
             }
         };
 
         // --- UI Logic ---
-        const uiManager = {
-            // -- Invoice Builder --
-            openInvoiceModal: () => {
-                document.getElementById('invoiceForm').reset();
-                document.getElementById('invoice-items-container').innerHTML = '';
-                // Populate Datalist
-                const dl = document.getElementById('customer-list-datalist');
-                dl.innerHTML = '';
-                customersCache.forEach(name => dl.innerHTML += `<option value="${name}">`);
-                uiManager.addInvoiceRow(); // Add first empty row
-                new bootstrap.Modal(document.getElementById('invoiceModal')).show();
-            },
-
-            addInvoiceRow: () => {
-                const div = document.createElement('div');
-                div.className = 'invoice-item-row row g-2';
-                // Build product options
-                let opts = '<option value="">اختر منتج/خدمة...</option>';
-                productsCache.forEach(p => {
-                    opts += `<option value="${p.name}" data-price="${p.selling_price}">${p.name} - ${p.selling_price}</option>`;
-                });
-                
-                div.innerHTML = `
-                    <div class="col-6"><select class="form-select prod-select" onchange="uiManager.calcTotal()">${opts}</select></div>
-                    <div class="col-3"><input type="number" class="form-control prod-qty" placeholder="العدد" value="1" onchange="uiManager.calcTotal()"></div>
-                    <div class="col-3"><input type="number" class="form-control prod-price" placeholder="السعر" step="0.5" onchange="uiManager.calcTotal()"></div>
-                `;
-                
-                // Add listener to auto-fill price
-                div.querySelector('.prod-select').addEventListener('change', function() {
-                    const price = this.options[this.selectedIndex].getAttribute('data-price');
-                    if(price) div.querySelector('.prod-price').value = price;
-                    uiManager.calcTotal();
-                });
-
-                document.getElementById('invoice-items-container').appendChild(div);
-            },
-
-            calcTotal: () => {
-                let total = 0;
-                document.querySelectorAll('.invoice-item-row').forEach(row => {
-                    const qty = row.querySelector('.prod-qty').value || 0;
-                    const price = row.querySelector('.prod-price').value || 0;
-                    total += (qty * price);
-                });
-                document.getElementById('inv-total').innerText = total;
-                return total;
-            },
-
-            // -- Customer Profile --
-            openCustomerProfile: (name) => {
-                const debts = uiManager.allDebts.filter(d => d.customer_name === name && d.source === 'laundry');
-                let total = 0;
-                let currency = debts[0]?.currency || '';
-                
-                document.getElementById('profile-name').innerText = name;
-                document.getElementById('profile-currency').innerText = currency;
-                
-                const tbody = document.getElementById('profile-invoices-list');
+        const ui = {
+            renderLaundryCustomers: (names) => {
+                const tbody = document.getElementById('laundry-customers-list');
+                const search = document.getElementById('laundry-search').value.toLowerCase();
                 tbody.innerHTML = '';
-                
-                debts.sort((a,b) => b.created_at?.seconds - a.created_at?.seconds).forEach(d => {
-                    if(d.status === 'active') total += Number(d.remaining_amount);
+
+                names.forEach(name => {
+                    if(search && !name.toLowerCase().includes(search)) return;
                     
-                    // Parse Items if available, else description
-                    let details = d.description || '';
-                    if(d.items && Array.isArray(d.items)) {
-                        details = d.items.map(i => `${i.item} (${i.qty}x${i.price})`).join(', ');
-                    }
+                    const custDebts = allDebts.filter(d => d.customer_name === name && d.source === 'laundry' && d.status === 'active');
+                    let usd = 0, tryVal = 0, syp = 0;
+                    custDebts.forEach(d => {
+                        if(d.currency === 'USD') usd += d.remaining_amount;
+                        if(d.currency === 'TRY') tryVal += d.remaining_amount;
+                        if(d.currency === 'SYP') syp += d.remaining_amount;
+                    });
 
                     tbody.innerHTML += `
-                        <tr>
-                            <td>${new Date(d.created_at?.seconds * 1000).toLocaleDateString('ar-EG')}</td>
-                            <td><small>${details}</small></td>
-                            <td>${d.total_amount}</td>
-                            <td class="text-success">${d.paid_amount}</td>
-                            <td class="text-danger fw-bold">${d.remaining_amount}</td>
-                            <td>${d.status === 'paid' ? '<span class="badge bg-success">خالص</span>' : '<span class="badge bg-danger">نشط</span>'}</td>
-                            <td>
-                                ${d.status !== 'paid' ? `<button class="btn btn-sm btn-outline-success me-1" onclick="uiManager.openPayModal('${d.id}')">دفع</button>` : ''}
-                                <button class="btn btn-sm btn-outline-light" onclick="printManager.printInvoice('${d.id}')"><i class="fas fa-print"></i></button>
-                            </td>
+                        <tr class="customer-row" onclick="ui.openCustomerProfile('${name}')">
+                            <td class="fw-bold text-white">${name}</td>
+                            <td class="text-usd">${usd}</td>
+                            <td class="text-try">${tryVal}</td>
+                            <td class="text-syp">${syp}</td>
+                            <td>${custDebts.length > 0 ? '<span class="badge bg-danger">عليه دين</span>' : '<span class="badge bg-success">بريء الذمة</span>'}</td>
+                            <td><button class="btn btn-sm btn-outline-info">ملف العميل</button></td>
                         </tr>
                     `;
                 });
-                document.getElementById('profile-total-debt').innerText = total;
+            },
+
+            openCustomerProfile: (name) => {
+                currentProfileName = name;
+                document.getElementById('prof-name').innerText = name;
                 
+                const debts = allDebts.filter(d => d.customer_name === name && d.source === 'laundry');
+                
+                // Calc Totals
+                let tUsd=0, tTry=0, tSyp=0;
+                debts.filter(d => d.status === 'active').forEach(d => {
+                    if(d.currency === 'USD') tUsd += Number(d.remaining_amount);
+                    if(d.currency === 'TRY') tTry += Number(d.remaining_amount);
+                    if(d.currency === 'SYP') tSyp += Number(d.remaining_amount);
+                });
+                document.getElementById('prof-total-usd').innerText = tUsd;
+                document.getElementById('prof-total-try').innerText = tTry;
+                document.getElementById('prof-total-syp').innerText = tSyp;
+
+                // Render List
+                const tbody = document.getElementById('profile-debts-list');
+                tbody.innerHTML = '';
+                
+                // Filter Logic
+                const dateFilter = document.getElementById('date-filter').value;
+                let filtered = debts;
+                if(!showArchive) filtered = filtered.filter(d => d.status === 'active');
+                
+                // Sort
+                filtered.sort((a,b) => (b.created_at?.seconds||0) - (a.created_at?.seconds||0));
+
+                filtered.forEach(d => {
+                    const isPaid = d.status === 'paid';
+                    tbody.innerHTML += `
+                        <tr class="${isPaid ? 'opacity-50' : ''}">
+                            <td>${!isPaid ? `<input type="checkbox" class="form-check-input debt-check" value="${d.id}">` : '<i class="fas fa-check text-success"></i>'}</td>
+                            <td>${new Date(d.created_at?.seconds*1000).toLocaleDateString('ar-EG')}</td>
+                            <td>${d.description}</td>
+                            <td class="fw-bold">${d.remaining_amount} / ${d.total_amount}</td>
+                            <td>${d.currency}</td>
+                            <td>${isPaid ? '<span class="badge bg-success">خالص</span>' : '<span class="badge bg-warning text-dark">نشط</span>'}</td>
+                        </tr>
+                    `;
+                });
+
                 router.navigate('customer-profile');
             },
 
-            // -- Renders --
-            renderLaundryCustomers: (list, uniqueNames) => {
-                uiManager.allDebts = list; // Cache for profile view
-                customersCache = uniqueNames;
-                const tbody = document.getElementById('laundry-customers-list');
-                tbody.innerHTML = '';
-
-                uniqueNames.forEach(name => {
-                    const custDebts = list.filter(d => d.customer_name === name && d.source === 'laundry');
-                    if(custDebts.length === 0) return;
-                    
-                    const activeDebts = custDebts.filter(d => d.status === 'active');
-                    const totalRem = activeDebts.reduce((sum, d) => sum + Number(d.remaining_amount), 0);
-                    const lastDate = new Date(Math.max(...custDebts.map(d => d.created_at?.seconds * 1000))).toLocaleDateString('ar-EG');
-                    const curr = custDebts[0].currency;
-                    
-                    // Filter search
-                    const search = document.getElementById('laundry-search').value.toLowerCase();
-                    if(search && !name.toLowerCase().includes(search)) return;
-
-                    tbody.innerHTML += `
-                        <tr class="customer-row" onclick="uiManager.openCustomerProfile('${name}')">
-                            <td class="fw-bold">${name}</td>
-                            <td>${lastDate}</td>
-                            <td class="text-warning fw-bold fs-5">${totalRem}</td>
-                            <td>${curr}</td>
-                            <td>${activeDebts.length > 0 ? '<span class="badge bg-danger">عليه دين</span>' : '<span class="badge bg-success">بريء الذمة</span>'}</td>
-                            <td><button class="btn btn-sm btn-outline-info">عرض الملف</button></td>
-                        </tr>
-                    `;
-                });
+            // --- Modals ---
+            openSimpleDebtModal: (src) => {
+                document.getElementById('simpleDebtForm').reset();
+                document.getElementById('sim-source').value = src;
+                new bootstrap.Modal(document.getElementById('simpleDebtModal')).show();
             },
-
-            renderFinance: (list) => {
-                const tbody = document.getElementById('finance-table');
-                tbody.innerHTML = '';
-                list.sort((a,b) => b.created_at?.seconds - a.created_at?.seconds).slice(0, 50).forEach(t => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${new Date(t.created_at?.seconds * 1000).toLocaleDateString('ar-EG')}</td>
-                            <td>${t.type.includes('income') ? '<span class="text-success">دخل</span>' : '<span class="text-danger">مصروف</span>'}</td>
-                            <td>${t.description}</td>
-                            <td class="fw-bold ${t.type.includes('income') ? 'text-success' : 'text-danger'}">${t.amount}</td>
-                            <td>${t.currency}</td>
-                        </tr>
-                    `;
-                });
+            openLumpSumModal: () => new bootstrap.Modal(document.getElementById('lumpSumModal')).show(),
+            openAddProductModal: (cat) => {
+                document.getElementById('addProductForm').reset();
+                document.getElementById('prod-cat').value = cat;
+                new bootstrap.Modal(document.getElementById('addProductModal')).show();
             },
-
-            renderEmployees: (list) => {
-                const tbody = document.getElementById('employees-table');
-                tbody.innerHTML = '';
-                list.forEach(e => {
-                    const net = e.net_salary !== undefined ? e.net_salary : e.salary;
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${e.name}</td>
-                            <td>${e.salary}</td>
-                            <td class="fw-bold text-success">${net}</td>
-                            <td>${e.currency}</td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-warning" onclick="uiManager.openEmpAction('${e.id}')">إدارة</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            },
-
-            // -- Generic Modals --
-            openPayModal: async (id) => {
-                const d = uiManager.allDebts.find(x => x.id === id);
-                document.getElementById('pay-doc-id').value = id;
-                document.getElementById('pay-remain').innerText = d.remaining_amount;
-                document.getElementById('pay-curr').innerText = d.currency;
-                document.getElementById('pay-amount').max = d.remaining_amount;
-                new bootstrap.Modal(document.getElementById('paymentModal')).show();
-            },
-
             openTransactionModal: (type) => {
                 document.getElementById('financeForm').reset();
                 document.getElementById('fin-type').value = type;
-                document.getElementById('fin-modal-title').innerText = type === 'expense' ? 'تسجيل مصروف' : 'تسجيل دخل خارجي';
-                const btn = document.getElementById('fin-submit-btn');
-                btn.className = type === 'expense' ? 'btn btn-danger w-100' : 'btn btn-success w-100';
                 new bootstrap.Modal(document.getElementById('financeModal')).show();
             },
-            
-            openEmpAction: (id) => {
-                document.getElementById('act-emp-id').value = id;
-                document.getElementById('empActionForm').reset();
-                new bootstrap.Modal(document.getElementById('empActionModal')).show();
+
+            // --- Helpers ---
+            updateDash: () => {
+                let u=0, t=0, s=0;
+                allDebts.filter(d => d.status === 'active').forEach(d => {
+                    if(d.currency === 'USD') u+=d.remaining_amount;
+                    if(d.currency === 'TRY') t+=d.remaining_amount;
+                    if(d.currency === 'SYP') s+=d.remaining_amount;
+                });
+                document.getElementById('dash-usd').innerText = u + ' $';
+                document.getElementById('dash-try').innerText = t + ' ₺';
+                document.getElementById('dash-syp').innerText = s;
+            },
+            updateDatalist: (names) => {
+                const dl = document.getElementById('cust-datalist');
+                dl.innerHTML = ''; names.forEach(n => dl.innerHTML += `<option value="${n}">`);
+            },
+            toggleArchive: (state) => {
+                showArchive = state;
+                document.getElementById('btn-show-active').classList.toggle('btn-light', !state);
+                document.getElementById('btn-show-active').classList.toggle('btn-outline-light', state);
+                document.getElementById('btn-show-all').classList.toggle('btn-light', state);
+                document.getElementById('btn-show-all').classList.toggle('btn-outline-secondary', !state);
+                ui.openCustomerProfile(currentProfileName);
+            },
+            toggleCheckAll: () => {
+                const master = document.getElementById('check-all').checked;
+                document.querySelectorAll('.debt-check').forEach(c => c.checked = master);
             },
 
-            // Simplified for brevity (Espresso & Products same as before but dark styled)
-            renderEspresso: (list) => {
-                const t = document.getElementById('espresso-table'); t.innerHTML = '';
-                list.filter(d => d.source === 'espresso' && d.status === 'active').forEach(d => {
-                    t.innerHTML += `<tr><td>${d.customer_name}</td><td>${d.description}</td><td>${d.remaining_amount}</td><td>${d.currency}</td><td><button class="btn btn-sm btn-outline-success" onclick="uiManager.openPayModal('${d.id}')">دفع</button></td></tr>`;
+            // --- Render Other Sections ---
+            renderEspresso: () => {
+                const t = document.getElementById('espresso-list'); t.innerHTML='';
+                allDebts.filter(d=>d.source==='espresso' && d.status==='active').forEach(d=>{
+                    t.innerHTML += `<tr><td>${d.customer_name}</td><td>${d.description}</td><td>${d.remaining_amount} ${d.currency}</td></tr>`;
                 });
             },
             renderProducts: (list) => {
-                const g = document.getElementById('espresso-grid'); g.innerHTML = '';
-                list.filter(p => p.category === 'espresso').forEach(p => {
-                    g.innerHTML += `<div class="col-6 col-md-3"><div class="card p-2 text-center"><img src="${p.image_url}" class="img-fluid rounded mb-2" style="height:100px;object-fit:cover;"><h6>${p.name}</h6><span class="text-info">${p.selling_price} ${p.currency}</span></div></div>`;
+                const lg = document.getElementById('laundry-products-grid'); lg.innerHTML='';
+                const eg = document.getElementById('espresso-products-grid'); eg.innerHTML='';
+                
+                list.forEach(p => {
+                    const html = `<div class="col-6 col-md-3"><div class="card p-2 text-center h-100"><img src="${p.image_url}" class="img-fluid rounded mb-2" style="height:100px;object-fit:cover;"><h6>${p.name}</h6><span class="text-info">${p.selling_price} ${p.currency}</span></div></div>`;
+                    if(p.category==='laundry') lg.innerHTML += html; else eg.innerHTML += html;
                 });
             },
-            openSimpleDebtModal: (src) => { document.getElementById('simpleDebtForm').reset(); document.getElementById('sim-source').value = src; new bootstrap.Modal(document.getElementById('simpleDebtModal')).show(); },
-            openAddProductModal: (cat) => { document.getElementById('addProductForm').reset(); document.getElementById('prod-cat').value = cat; new bootstrap.Modal(document.getElementById('addProductModal')).show(); },
-            openAddEmployeeModal: () => new bootstrap.Modal(document.getElementById('addEmpModal')).show(),
-            
-            updateStats: (list) => {
-                let usd = 0, tryVal = 0, count = 0;
-                list.forEach(d => {
-                    if(d.status === 'active') {
-                        count++;
-                        if(d.currency === 'USD') usd += Number(d.remaining_amount);
-                        else tryVal += Number(d.remaining_amount);
-                    }
+            renderFinance: () => {
+                const t = document.getElementById('finance-list'); t.innerHTML='';
+                allTrans.sort((a,b)=>b.created_at?.seconds-a.created_at?.seconds).slice(0,50).forEach(tr => {
+                    t.innerHTML += `<tr><td>${new Date(tr.created_at?.seconds*1000).toLocaleDateString('ar-EG')}</td><td>${tr.type.includes('income')?'<span class="text-success">دخل</span>':'<span class="text-danger">صرف</span>'}</td><td>${tr.description}</td><td class="fw-bold">${tr.amount} ${tr.currency}</td></tr>`;
                 });
-                document.getElementById('dash-usd').innerText = usd + ' $';
-                document.getElementById('dash-try').innerText = tryVal + ' ₺';
-                document.getElementById('dash-count').innerText = count;
             }
         };
 
-        // --- Print Logic (Browser Native) ---
-        window.printManager = {
-            printInvoice: (id) => {
-                const d = uiManager.allDebts.find(x => x.id === id);
-                let itemsHtml = '';
-                if(d.items && d.items.length) {
-                    itemsHtml = '<table style="width:100%;border-collapse:collapse;margin-top:20px;border:1px solid #000;"><thead><tr style="background:#eee;"><th>المادة</th><th>العدد</th><th>السعر</th><th>الإجمالي</th></tr></thead><tbody>';
-                    d.items.forEach(i => {
-                        itemsHtml += `<tr><td style="border:1px solid #000;padding:5px;">${i.item}</td><td style="border:1px solid #000;padding:5px;">${i.qty}</td><td style="border:1px solid #000;padding:5px;">${i.price}</td><td style="border:1px solid #000;padding:5px;">${i.qty*i.price}</td></tr>`;
-                    });
-                    itemsHtml += '</tbody></table>';
-                } else {
-                    itemsHtml = `<p style="margin-top:20px;font-size:18px;">${d.description}</p>`;
+        // --- Report Manager (PDF) ---
+        window.reportManager = {
+            generateInvoicePDF: (name, items, total, curr) => {
+                const doc = new jspdf.jsPDF({ align: 'right' });
+                // Use html2canvas or simple text for now since Arabic fonts are tricky in pure JS
+                // Simplified Receipt
+                doc.setFontSize(22); doc.text("Laundry Receipt", 105, 20, "center");
+                doc.setFontSize(16); doc.text(`Customer: ${name}`, 180, 40, "right");
+                doc.text(`Date: ${new Date().toLocaleDateString()}`, 180, 50, "right");
+                
+                let y = 70;
+                items.forEach(i => { doc.text(`- ${i}`, 180, y, "right"); y+=10; });
+                
+                doc.setLineWidth(0.5); doc.line(20, y+5, 190, y+5);
+                doc.setFontSize(20); doc.text(`Total Paid: ${total} ${curr}`, 180, y+20, "right");
+                doc.save(`Invoice_${name}.pdf`);
+            },
+
+            generateReceiptPDF: (name, amount, curr) => {
+                const doc = new jspdf.jsPDF();
+                doc.text("Payment Receipt", 105, 20, "center");
+                doc.text(`Customer: ${name}`, 20, 40);
+                doc.text(`Amount Paid: ${amount} ${curr}`, 20, 50);
+                doc.text(`Type: Account Payment (Lump Sum)`, 20, 60);
+                doc.text(`Date: ${new Date().toLocaleString()}`, 20, 70);
+                doc.save(`Receipt_${name}.pdf`);
+            },
+
+            generatePDF: () => {
+                const type = document.getElementById('report-type').value;
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                let filtered = allTrans;
+                const now = new Date();
+                
+                if(type === 'today') filtered = allTrans.filter(t => new Date(t.created_at.seconds*1000).setHours(0,0,0,0) === now.setHours(0,0,0,0));
+                else if(type === 'week') {
+                    const lastWeek = new Date(now.setDate(now.getDate() - 7));
+                    filtered = allTrans.filter(t => new Date(t.created_at.seconds*1000) > lastWeek);
                 }
+                
+                const tableData = filtered.map(t => [
+                    t.currency,
+                    t.amount,
+                    t.description, // Arabic text might show reversed in standard jspdf without custom font
+                    t.type,
+                    new Date(t.created_at.seconds*1000).toLocaleDateString()
+                ]);
 
-                const html = `
-                    <div style="direction:rtl;text-align:center;padding:20px;border:2px solid #000;">
-                        <h1>مغسلة شباب المعرة</h1>
-                        <p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
-                        <h2 style="margin:20px 0;">فاتورة للسيد: ${d.customer_name}</h2>
-                        ${itemsHtml}
-                        <div style="margin-top:30px;text-align:left;">
-                            <h3>المبلغ المطلوب: ${d.remaining_amount} ${d.currency}</h3>
-                            <p>المدفوع: ${d.paid_amount}</p>
-                        </div>
-                        <p style="margin-top:50px;font-size:12px;">شكراً لتعاملكم معنا</p>
-                    </div>
-                `;
-                document.getElementById('print-area').innerHTML = html;
-                window.print();
+                doc.autoTable({
+                    head: [['Currency', 'Amount', 'Desc', 'Type', 'Date']],
+                    body: tableData,
+                });
+                doc.save('Finance_Report.pdf');
             }
         };
 
-        // --- Events & Upload ---
-        const upload = async (file) => {
-            const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', CLOUDINARY_PRESET);
-            const res = await fetch(CLOUDINARY_URL, {method:'POST', body:fd});
-            return (await res.json()).secure_url;
-        };
-        const toast = (m,t='s') => Toastify({text:m, style:{background:t=='s'?'#00c853':'#ff5252'}, duration:3000}).showToast();
-        const showLoading = (s) => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
-
-        // Listeners
-        document.getElementById('loginForm').addEventListener('submit', async(e)=>{
-            e.preventDefault(); showLoading(true);
-            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); }
-            catch(er) { document.getElementById('login-error').innerText="بيانات خاطئة"; showLoading(false); }
-        });
-
-        document.getElementById('invoiceForm').addEventListener('submit', (e)=>{
-            e.preventDefault();
-            const items = [];
-            document.querySelectorAll('.invoice-item-row').forEach(r => {
-                const sel = r.querySelector('.prod-select');
-                items.push({
-                    item: sel.value || 'خدمة مخصصة',
-                    qty: r.querySelector('.prod-qty').value,
-                    price: r.querySelector('.prod-price').value
-                });
-            });
-            dataManager.addInvoice({
-                customer_name: document.getElementById('inv-customer').value,
-                currency: document.getElementById('inv-currency').value,
-                total_amount: Number(document.getElementById('inv-total').innerText),
-                items: items,
-                description: 'فاتورة غسيل مفصلة'
-            });
-        });
-
-        document.getElementById('paymentForm').addEventListener('submit', (e)=>{ e.preventDefault(); dataManager.processPayment(document.getElementById('pay-doc-id').value, document.getElementById('pay-amount').value); });
-        
-        document.getElementById('financeForm').addEventListener('submit', (e)=>{
-            e.preventDefault();
-            dataManager.addTransaction({
-                type: document.getElementById('fin-type').value,
-                description: document.getElementById('fin-desc').value,
-                amount: Number(document.getElementById('fin-amount').value),
-                currency: document.getElementById('fin-currency').value
-            });
-        });
-
-        document.getElementById('empActionForm').addEventListener('submit', (e)=>{
-            e.preventDefault();
-            dataManager.addEmpAction(document.getElementById('act-emp-id').value, document.getElementById('act-type').value, document.getElementById('act-amount').value, document.getElementById('act-reason').value);
-        });
-
-        document.getElementById('addProductForm').addEventListener('submit', async(e)=>{
-            e.preventDefault(); showLoading(true);
-            const url = await upload(document.getElementById('prod-img').files[0]);
-            await addDoc(collection(db,'artifacts',appId,'public','data','products'), {
-                name: document.getElementById('prod-name').value,
-                selling_price: document.getElementById('prod-price').value,
-                currency: document.getElementById('prod-curr').value,
-                image_url: url, category: document.getElementById('prod-cat').value
-            });
-            showLoading(false); toast('تم'); bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
+        // --- Event Listeners ---
+        document.getElementById('laundry-search').addEventListener('keyup', () => ui.renderLaundryCustomers(Array.from(new Set(allDebts.filter(d=>d.source==='laundry').map(d=>d.customer_name)))));
+        document.getElementById('report-type').addEventListener('change', (e) => {
+            document.getElementById('report-date-range').classList.toggle('d-none', e.target.value !== 'custom');
         });
         
-        document.getElementById('laundry-search').addEventListener('keyup', (e)=>{
-            uiManager.renderLaundryCustomers(uiManager.allDebts, customersCache);
-        });
-
-        // Simple Debt (Espresso)
-        document.getElementById('simpleDebtForm').addEventListener('submit', async(e)=>{
-            e.preventDefault();
-            await addDoc(collection(db,'artifacts',appId,'public','data','debts'),{
+        // Forms
+        document.getElementById('simpleDebtForm').addEventListener('submit', e => {
+            e.preventDefault(); dataManager.addDebt({
                 customer_name: document.getElementById('sim-cust').value,
                 description: document.getElementById('sim-desc').value,
                 total_amount: Number(document.getElementById('sim-amount').value),
                 currency: document.getElementById('sim-curr').value,
-                source: document.getElementById('sim-source').value,
-                remaining_amount: Number(document.getElementById('sim-amount').value),
-                paid_amount: 0, status: 'active', created_at: serverTimestamp()
+                source: document.getElementById('sim-source').value
             });
-            bootstrap.Modal.getInstance(document.getElementById('simpleDebtModal')).hide();
-            toast("تم");
-        });
-        
-        document.getElementById('addEmpForm').addEventListener('submit', async(e)=>{
-            e.preventDefault();
-            await addDoc(collection(db,'artifacts',appId,'public','data','employees'),{
-                name: document.getElementById('emp-name').value,
-                salary: document.getElementById('emp-salary').value,
-                net_salary: Number(document.getElementById('emp-salary').value),
-                currency: document.getElementById('emp-curr').value
-            });
-            bootstrap.Modal.getInstance(document.getElementById('addEmpModal')).hide(); toast('تم');
         });
 
-        // Auth State
+        document.getElementById('lumpSumForm').addEventListener('submit', e => {
+            e.preventDefault(); dataManager.payLumpSum(document.getElementById('lump-amount').value, document.getElementById('lump-curr').value);
+        });
+
+        document.getElementById('financeForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            await addDoc(collection(db,'artifacts',appId,'public','data','transactions'),{
+                type: document.getElementById('fin-type').value,
+                description: document.getElementById('fin-desc').value,
+                amount: Number(document.getElementById('fin-amount').value),
+                currency: document.getElementById('fin-curr').value,
+                created_at: serverTimestamp()
+            });
+            bootstrap.Modal.getInstance(document.getElementById('financeModal')).hide(); toast("تم");
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async e => {
+            e.preventDefault(); showLoading(true);
+            try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } 
+            catch { toast("فشل الدخول",'err'); showLoading(false); }
+        });
+
+        const upload = async (file) => {
+            const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', CLOUDINARY_PRESET);
+            return (await (await fetch(CLOUDINARY_URL, {method:'POST', body:fd})).json()).secure_url;
+        }
+
+        document.getElementById('addProductForm').addEventListener('submit', async e => {
+            e.preventDefault(); showLoading(true);
+            const url = await upload(document.getElementById('prod-img').files[0]);
+            await addDoc(collection(db,'artifacts',appId,'public','data','products'),{
+                name: document.getElementById('prod-name').value, category: document.getElementById('prod-cat').value,
+                selling_price: document.getElementById('prod-price').value, currency: document.getElementById('prod-curr').value, image_url: url
+            });
+            showLoading(false); toast("تم"); bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
+        });
+
+        // Auth
         onAuthStateChanged(auth, u => {
             showLoading(false);
             if(u) {
                 document.getElementById('login-screen').classList.add('d-none');
                 document.getElementById('main-app').classList.remove('d-none');
                 dataManager.init();
+                flatpickr("#report-date-range", {mode: "range"});
+                flatpickr("#date-filter", {mode: "range", onChange: () => ui.openCustomerProfile(currentProfileName)});
             } else {
                 document.getElementById('login-screen').classList.remove('d-none');
                 document.getElementById('main-app').classList.add('d-none');
@@ -930,14 +787,13 @@
         });
 
         // Globals
-        window.router = { navigate: (id) => {
-            document.querySelectorAll('.app-section').forEach(e=>e.classList.remove('active-section'));
+        window.router = { navigate: id => {
+            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id+'-section').classList.add('active-section');
-            document.querySelectorAll('.nav-link').forEach(e=>e.classList.remove('active'));
         }};
-        window.authManager = { logout: ()=>signOut(auth) };
-        window.uiManager = uiManager;
-        window.printManager = printManager;
+        window.ui = ui; window.dataManager = dataManager; window.reportManager = reportManager; window.auth = auth;
+        const toast = (m,t) => Toastify({text:m, style:{background:t=='err'?'#f87171':'#4ade80'}, duration:2000}).showToast();
+        const showLoading = s => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
     </script>
 </body>
     </html>
