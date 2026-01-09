@@ -43,9 +43,6 @@
             height: 100%;
         }
 
-        .text–muted {
-            color: #8892b0 !important;
-        }
         /* Inputs Fix */
         .form-control, .form-select { 
             background-color: #112240 !important; 
@@ -78,7 +75,6 @@
             width: 100%;
             min-width: 600px;
             color: var(--text-primary) !important;
-            ––bs–table–bg: none !important;
         }
 
         .table th {
@@ -217,9 +213,9 @@
                         <div id="dashboard-section" class="app-section active-section">
                             <h3 class="mb-4 fw-bold">نظرة عامة</h3>
                             <div class="row g-4">
-                                <div class="col-md-4"><div class="stat-card"><h6 class="text-muted">ديون (USD)</h6><h2 class="val-usd" id="dash-usd">0 $</h2></div></div>
-                                <div class="col-md-4"><div class="stat-card"><h6 class="text-muted">ديون (TRY)</h6><h2 class="val-try" id="dash-try">0 ₺</h2></div></div>
-                                <div class="col-md-4"><div class="stat-card"><h6 class="text-muted">ديون (SYP)</h6><h2 class="val-syp" id="dash-syp">0</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6 >ديون (USD)</h6><h2 class="val-usd" id="dash-usd">0 $</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6 >ديون (TRY)</h6><h2 class="val-try" id="dash-try">0 ₺</h2></div></div>
+                                <div class="col-md-4"><div class="stat-card"><h6 >ديون (SYP)</h6><h2 class="val-syp" id="dash-syp">0</h2></div></div>
                             </div>
                         </div>
 
@@ -240,7 +236,7 @@
                                         </div>
                                     </div>
                                     <div class="table-responsive">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover table-dark">
                                             <thead><tr><th class="customer-name-cell">العميل</th><th>USD</th><th>TRY</th><th>SYP</th><th>الحالة</th><th>إجراء</th></tr></thead>
                                             <tbody id="laundry-customers-list"></tbody>
                                         </table>
@@ -304,7 +300,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="cust-tab-debts">
                                     <div class="table-responsive">
-                                        <table class="table table-hover">
+                                        <table class="table table-hover table-dark">
                                             <thead><tr>
                                                 <th style="width: 40px;"><input type="checkbox" class="form-check-input" id="check-all" onclick="ui.toggleCheckAll()"></th>
                                                 <th>التاريخ</th><th>الوصف</th><th>المتبقي</th><th>العملة</th><th>الحالة</th><th>حذف</th>
@@ -368,7 +364,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-hover table-dark">
                                     <thead><tr><th>التاريخ</th><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>العملة</th></tr></thead>
                                     <tbody id="finance-list"></tbody>
                                 </table>
