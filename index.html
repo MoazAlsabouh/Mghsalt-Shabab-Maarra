@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مغسلة شباب المعرة - V7.0 (Reports & Filters)</title>
+    <title>مغسلة شباب المعرة - V8.0 (Multi-Page PDF)</title>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,31 +13,28 @@
 
     <style>
         :root {
-            /* Main Backgrounds - FORCED DARK THEME */
+            /* Main Backgrounds - DARK THEME */
             --bg-body: #020c1b;       
             --bg-sidebar: #0a192f;    
             --bg-card: #112240;       
             --border-color: #233554;  
-            
             --text-primary: #e6f1ff;  
             --text-secondary: #8892b0;
             
-            /* Currency & Accents */
+            /* Accents */
             --accent-blue: #64ffda;   
             --accent-green: #4ade80;  
             --accent-orange: #fbbf24; 
-            --accent-red: #ef4444;    
             
-            /* --- TABLE COLORS --- */
+            /* Table Colors */
             --table-head-bg: #0a192f;
             --table-head-text: #64ffda;
             --table-bg-odd: #112240;
             --table-bg-even: #0f1f3a;
-            --table-hover: #1d3356;
             --table-border: #233554;
         }
 
-        /* FORCE DARK BACKGROUND EVERYWHERE */
+        /* FORCE DARK BACKGROUND */
         body, html {
             background-color: var(--bg-body) !important;
             color: var(--text-primary) !important;
@@ -46,9 +43,8 @@
             height: 100%;
         }
 
-
         .text–muted {
-            color: #8892b0;
+            color: #8892b0 !important;
         }
         /* Inputs Fix */
         .form-control, .form-select { 
@@ -64,15 +60,13 @@
             color: white !important; 
             box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.1); 
         }
-        .form-control::placeholder { color: #8892b0; opacity: 0.7; }
-        .flatpickr-calendar { direction: ltr; } /* Fix calendar popup */
+        .flatpickr-calendar { direction: ltr; }
 
         /* --- TABLE STYLING --- */
         .table-responsive {
             display: block;
             width: 100%;
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
             border-radius: 12px;
             border: 1px solid var(--table-border);
             background-color: var(--bg-card);
@@ -82,39 +76,33 @@
         .table {
             margin-bottom: 0;
             width: 100%;
-            border-collapse: separate; 
-            border-spacing: 0;
             min-width: 600px;
             color: var(--text-primary) !important;
-            ––bs–table–border–color: none;
+            ––bs–table–bg: none !important;
         }
 
-        .table thead th {
+        .table th {
             background-color: var(--table-head-bg) !important;
             color: var(--table-head-text) !important;
-            font-weight: 800;
-            padding: 15px;
             border-bottom: 2px solid var(--accent-blue);
+            padding: 15px;
             white-space: nowrap;
         }
 
-        .table tbody td {
+        .table td {
             padding: 15px;
-            vertical-align: middle;
             border-bottom: 1px solid var(--table-border);
             color: #ccd6f6;
-            white-space: nowrap;
+            vertical-align: middle;
         }
 
-        .table tbody tr { background-color: var(--bg-card) !important; }
         .table tbody tr:nth-of-type(odd) { background-color: var(--table-bg-odd) !important; }
         .table tbody tr:nth-of-type(even) { background-color: var(--table-bg-even) !important; }
         
         .customer-name-cell {
             color: #ffffff !important;
             font-weight: 800;
-            position: sticky; 
-            left: 0;
+            position: sticky; left: 0;
             background-color: inherit;
             z-index: 5;
             border-right: 1px solid var(--table-border);
@@ -128,11 +116,7 @@
         @media (max-width: 768px) {
             body { font-size: 14px; }
             .stat-card { padding: 15px; margin-bottom: 10px; }
-            .val-usd, .val-try, .val-syp { font-size: 1.1rem; }
             .table th, .table td { padding: 10px 8px; font-size: 0.85rem; }
-            .btn { font-size: 0.9rem; padding: 8px; }
-            h3 { font-size: 1.5rem; }
-            
             .mobile-header { background-color: var(--bg-sidebar) !important; border-bottom: 1px solid var(--border-color); }
             .mobile-menu-container { background-color: var(--bg-sidebar) !important; }
         }
@@ -140,26 +124,24 @@
         .card { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 12px; }
         .modal-content { background-color: #112240; border: 1px solid var(--border-color); color: var(--text-primary); }
         .btn-close { filter: invert(1); }
-
         .sidebar { background-color: var(--bg-sidebar); min-height: 100vh; border-left: 1px solid var(--border-color); }
-        .nav-link { color: var(--text-secondary); padding: 12px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; cursor: pointer; }
-        .nav-link:hover, .nav-link.active { background-color: rgba(100, 255, 218, 0.1); color: var(--accent-blue); font-weight: bold; transform: translateX(-5px); }
-        .nav-link i { width: 25px; text-align: center; }
-
+        .nav-link { color: var(--text-secondary); padding: 12px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; }
+        .nav-link:hover, .nav-link.active { background-color: rgba(100, 255, 218, 0.1); color: var(--accent-blue); font-weight: bold; }
+        
         .stat-card { padding: 25px; border-radius: 16px; background: linear-gradient(145deg, #112240, #0a192f); border: 1px solid var(--border-color); }
         .bg-dark-overlay { background: rgba(2, 12, 27, 0.9); }
-
         .app-section { display: none; animation: fadeIn 0.4s; }
         .app-section.active-section { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- INVOICE TEMPLATE (A4 Fixed) --- */
+        /* --- INVOICE TEMPLATE (Print Style) --- */
         #invoice-template-container {
             position: fixed; 
             top: 0; left: 0; 
             z-index: -100;
             width: 794px; /* A4 Width px */
-            min-height: 1123px;
+            min-height: 1123px; /* A4 Height px */
+            height: auto;
             background: white; 
             color: black; 
             padding: 40px; 
@@ -167,20 +149,19 @@
             direction: rtl;
         }
         .inv-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
-        .inv-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; page-break-inside: auto; }
+        .inv-table tr { page-break-inside: avoid; page-break-after: auto; }
         .inv-table th, .inv-table td { border: 1px solid #ddd; padding: 10px; text-align: right; }
         .inv-table th { background-color: #f3f4f6; font-weight: bold; }
-        .inv-total { margin-top: 30px; text-align: left; font-size: 1.2rem; font-weight: bold; }
-        .inv-footer-row { background-color: #e5e7eb; font-weight: bold; }
+        .inv-footer-row { background-color: #e5e7eb; font-weight: bold; font-size: 1.1rem; }
         .receipt-box { border: 2px dashed #333; padding: 20px; margin: 20px 0; background: #f9fafb; text-align: center; }
-        .receipt-balance { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ccc; font-size: 1.2rem; font-weight: bold; text-align: center; color: #dc2626; }
     </style>
 </head>
 <body>
 
     <div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 bg-dark-overlay d-flex flex-column justify-content-center align-items-center" style="z-index: 9999;">
         <div class="spinner-border text-info mb-3"></div>
-        <h6>جاري التحميل...</h6>
+        <h6>جاري المعالجة...</h6>
     </div>
 
     <div id="invoice-template-container">
@@ -194,9 +175,9 @@
                 <h3 class="fw-bold">مغسلة شباب المعرة</h3>
             </div>
             <form id="loginForm">
-                <input type="email" id="email" class="form-control mb-3" placeholder="Email" required>
-                <input type="password" id="password" class="form-control mb-3" placeholder="Password" required>
-                <button class="btn btn-info w-100 fw-bold py-2">دخول</button>
+                <input type="email" id="email" class="form-control mb-3" placeholder="البريد الإلكتروني" required>
+                <input type="password" id="password" class="form-control mb-3" placeholder="كلمة المرور" required>
+                <button class="btn btn-info w-100 fw-bold py-2">تسجيل الدخول</button>
             </form>
         </div>
     </div>
@@ -220,17 +201,15 @@
                     
                     <div class="d-md-none mobile-header p-3 d-flex justify-content-between align-items-center">
                         <span class="fw-bold text-info">مغسلة شباب المعرة</span>
-                        <button class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
-                            <i class="fas fa-bars"></i>
-                        </button>
+                        <button class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
                     </div>
                     
                     <div class="collapse d-md-none mobile-menu-container p-3" id="mobileMenu">
-                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('dashboard')"><i class="fas fa-home ms-2"></i> الرئيسية</button>
-                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('laundry')"><i class="fas fa-tshirt ms-2"></i> المغسلة</button>
-                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('espresso')"><i class="fas fa-coffee ms-2"></i> الأسبريسو</button>
-                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('employees')"><i class="fas fa-users ms-2"></i> الموظفين</button>
-                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('finance')"><i class="fas fa-chart-pie ms-2"></i> المالية</button>
+                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('dashboard')">الرئيسية</button>
+                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('laundry')">المغسلة</button>
+                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('espresso')">الأسبريسو</button>
+                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('employees')">الموظفين</button>
+                        <button class="btn btn-outline-light w-100 text-end mb-2" onclick="router.navigate('finance')">المالية</button>
                     </div>
 
                     <div class="p-4">
@@ -254,7 +233,7 @@
                                 <div class="tab-pane fade show active" id="lau-customers">
                                     <div class="row mb-4">
                                         <div class="col-md-3 mb-2">
-                                            <button class="btn btn-info w-100 fw-bold py-2" onclick="ui.openSimpleDebtModal('laundry')"><i class="fas fa-plus"></i> فاتورة غسيل (دين)</button>
+                                            <button class="btn btn-info w-100 fw-bold py-2" onclick="ui.openSimpleDebtModal('laundry')"><i class="fas fa-plus"></i> دين جديد</button>
                                         </div>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control py-2" id="laundry-search" placeholder="بحث عن عميل...">
@@ -262,7 +241,7 @@
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table table-hover">
-                                            <thead><tr><th class="customer-name-cell">العميل</th><th>المجموع USD</th><th>المجموع TRY</th><th>المجموع SYP</th><th>الحالة</th><th>إجراء</th></tr></thead>
+                                            <thead><tr><th class="customer-name-cell">العميل</th><th>USD</th><th>TRY</th><th>SYP</th><th>الحالة</th><th>إجراء</th></tr></thead>
                                             <tbody id="laundry-customers-list"></tbody>
                                         </table>
                                     </div>
@@ -301,18 +280,18 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="card p-3 h-100 border-warning">
-                                        <h6 class="text-warning fw-bold"><i class="fas fa-file-invoice"></i> تقارير</h6>
-                                        <button class="btn btn-warning w-100 btn-sm mt-2" onclick="reportManager.prepareStatement()">كشف حساب (PDF)</button>
+                                        <h6 class="text-warning fw-bold"><i class="fas fa-file-invoice"></i> كشف حساب</h6>
+                                        <button class="btn btn-warning w-100 btn-sm mt-2" onclick="reportManager.prepareStatement()">طباعة (النشط فقط)</button>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="card p-3 h-100 border-secondary">
-                                        <h6 class="text-white fw-bold"><i class="fas fa-filter"></i> عرض وفلترة</h6>
-                                        <div class="d-flex gap-2 mt-2 mb-2">
+                                        <h6 class="text-white fw-bold"><i class="fas fa-filter"></i> فلترة التاريخ</h6>
+                                        <input type="text" id="date-filter" class="form-control form-control-sm text-center mt-2" placeholder="اختر الفترة">
+                                        <div class="d-flex gap-2 mt-2">
                                             <button class="btn btn-sm btn-outline-light flex-fill" onclick="ui.toggleArchive(false)" id="btn-show-active">النشط</button>
                                             <button class="btn btn-sm btn-outline-secondary flex-fill" onclick="ui.toggleArchive(true)" id="btn-show-all">الكل</button>
                                         </div>
-                                        <input type="text" id="date-filter" class="form-control form-control-sm text-center" placeholder="فلترة حسب التاريخ">
                                     </div>
                                 </div>
                             </div>
@@ -328,12 +307,7 @@
                                         <table class="table table-hover">
                                             <thead><tr>
                                                 <th style="width: 40px;"><input type="checkbox" class="form-check-input" id="check-all" onclick="ui.toggleCheckAll()"></th>
-                                                <th>التاريخ</th>
-                                                <th>الوصف / المنتج</th>
-                                                <th>القيمة</th>
-                                                <th>العملة</th>
-                                                <th>الحالة</th>
-                                                <th>حذف</th>
+                                                <th>التاريخ</th><th>الوصف</th><th>المتبقي</th><th>العملة</th><th>الحالة</th><th>حذف</th>
                                             </tr></thead>
                                             <tbody id="profile-debts-list"></tbody>
                                         </table>
@@ -342,7 +316,7 @@
                                 <div class="tab-pane fade" id="cust-tab-history">
                                     <div class="table-responsive">
                                         <table class="table table-hover">
-                                            <thead><tr><th>التاريخ</th><th>نوع العملية</th><th>الوصف</th><th>المبلغ</th><th>طباعة بدل ضائع</th></tr></thead>
+                                            <thead><tr><th>التاريخ</th><th>النوع</th><th>الوصف</th><th>المبلغ</th><th>إعادة طباعة</th></tr></thead>
                                             <tbody id="profile-history-list"></tbody>
                                         </table>
                                     </div>
@@ -371,7 +345,6 @@
                         <div id="employees-section" class="app-section">
                             <h3 class="text-primary mb-4 fw-bold"><i class="fas fa-users"></i> إدارة الموظفين</h3>
                             <button class="btn btn-primary mb-3 fw-bold" onclick="new bootstrap.Modal(document.getElementById('addEmployeeModal')).show()"><i class="fas fa-plus"></i> إضافة موظف</button>
-                            
                             <div class="row g-3" id="employees-grid"></div>
                         </div>
 
@@ -390,7 +363,7 @@
                                             <option value="custom">مخصص (من - إلى)</option>
                                         </select>
                                         <input type="text" id="report-date-range" class="form-control d-none" placeholder="اختر التاريخ">
-                                        <button class="btn btn-primary fw-bold" onclick="reportManager.generateFinanceReport()"><i class="fas fa-file-pdf"></i> تقرير (PDF)</button>
+                                        <button class="btn btn-primary fw-bold" onclick="reportManager.generateFinanceReport()"><i class="fas fa-file-pdf"></i> PDF</button>
                                     </div>
                                 </div>
                             </div>
@@ -425,7 +398,7 @@
         </form>
     </div></div></div></div>
 
-    <div class="modal fade" id="addProductModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><form id="addProductForm">
+    <div class="modal fade" id="addProductModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">إضافة منتج</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="addProductForm">
         <input type="hidden" id="prod-cat">
         <input class="form-control mb-2" id="prod-name" placeholder="اسم المنتج" required>
         <div class="row mb-2"><div class="col"><input type="number" class="form-control" id="prod-price" placeholder="السعر" required></div><div class="col"><select class="form-select" id="prod-curr"><option value="TRY">TRY</option><option value="USD">USD</option></select></div></div>
@@ -519,7 +492,6 @@
         // --- Data Layer ---
         const dataManager = {
             init: () => {
-                // Debts
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'debts'), snap => {
                     allDebts = [];
                     const custSet = new Set();
@@ -535,7 +507,6 @@
                     if(currentProfileName) ui.openCustomerProfile(currentProfileName);
                 });
 
-                // Transactions
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), snap => {
                     allTrans = [];
                     snap.forEach(d => allTrans.push({id: d.id, ...d.data()}));
@@ -543,14 +514,12 @@
                     if(currentProfileName) ui.renderPaymentHistory(currentProfileName);
                 });
 
-                // Products
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), snap => {
                     const prods = [];
                     snap.forEach(d => prods.push(d.data()));
                     ui.renderProducts(prods);
                 });
 
-                // Employees
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'employees'), snap => {
                     allEmployees = [];
                     snap.forEach(d => allEmployees.push({id: d.id, ...d.data()}));
@@ -658,7 +627,6 @@
                 finally { showLoading(false); }
             },
 
-            // --- Employee Logic ---
             addEmployee: async (data) => {
                 showLoading(true);
                 try {
@@ -679,19 +647,9 @@
                 let isFinance = false;
 
                 try {
-                    if (type === 'accrue') { 
-                        newBalance += Number(amount); 
-                        transDesc = `استحقاق راتب للموظف ${name}`;
-                    } 
-                    else if (type === 'deduct') { 
-                        newBalance -= Number(amount); 
-                        transDesc = `خصم (تأخير/غياب) للموظف ${name}`;
-                    } 
-                    else if (type === 'pay') { 
-                        newBalance -= Number(amount); 
-                        transDesc = `صرف دفعة للموظف ${name}`;
-                        isFinance = true;
-                    }
+                    if (type === 'accrue') { newBalance += Number(amount); transDesc = `استحقاق راتب للموظف ${name}`; } 
+                    else if (type === 'deduct') { newBalance -= Number(amount); transDesc = `خصم (تأخير/غياب) للموظف ${name}`; } 
+                    else if (type === 'pay') { newBalance -= Number(amount); transDesc = `صرف دفعة للموظف ${name}`; isFinance = true; }
 
                     await updateDoc(empRef, { balance: newBalance });
 
@@ -723,11 +681,7 @@
                     if(search && !name.toLowerCase().includes(search)) return;
                     const custDebts = allDebts.filter(d => d.customer_name === name && d.source === 'laundry' && d.status === 'active');
                     let usd = 0, tryVal = 0, syp = 0;
-                    custDebts.forEach(d => {
-                        if(d.currency === 'USD') usd += d.remaining_amount;
-                        if(d.currency === 'TRY') tryVal += d.remaining_amount;
-                        if(d.currency === 'SYP') syp += d.remaining_amount;
-                    });
+                    custDebts.forEach(d => { if(d.currency === 'USD') usd += d.remaining_amount; if(d.currency === 'TRY') tryVal += d.remaining_amount; if(d.currency === 'SYP') syp += d.remaining_amount; });
                     tbody.innerHTML += `
                         <tr class="customer-row" onclick="ui.openCustomerProfile('${name}')">
                             <td class="customer-name-cell">${name}</td><td class="val-usd">${usd}</td><td class="val-try">${tryVal}</td><td class="val-syp">${syp}</td>
@@ -742,31 +696,21 @@
                 document.getElementById('prof-name').innerText = name;
                 const debts = allDebts.filter(d => d.customer_name === name && d.source === 'laundry');
                 let tUsd=0, tTry=0;
-                debts.filter(d => d.status === 'active').forEach(d => {
-                    if(d.currency === 'USD') tUsd += Number(d.remaining_amount);
-                    if(d.currency === 'TRY') tTry += Number(d.remaining_amount);
-                });
-                document.getElementById('prof-total-usd').innerText = tUsd;
-                document.getElementById('prof-total-try').innerText = tTry;
+                debts.filter(d => d.status === 'active').forEach(d => { if(d.currency === 'USD') tUsd += Number(d.remaining_amount); if(d.currency === 'TRY') tTry += Number(d.remaining_amount); });
+                document.getElementById('prof-total-usd').innerText = tUsd; document.getElementById('prof-total-try').innerText = tTry;
 
                 const tbody = document.getElementById('profile-debts-list');
                 tbody.innerHTML = '';
                 
-                // DEBT FILTERING LOGIC
                 let filtered = debts;
                 if(!showArchive) filtered = filtered.filter(d => d.status === 'active');
                 
+                // Date Filter Logic
                 const dateFilter = document.getElementById('date-filter').value;
                 if(dateFilter && dateFilter.includes(' to ')) {
-                    const [dStart, dEnd] = dateFilter.split(' to ');
-                    const startDate = new Date(dStart);
-                    const endDate = new Date(dEnd);
-                    endDate.setHours(23,59,59);
-                    
-                    filtered = filtered.filter(d => {
-                         const dDate = new Date(d.created_at?.seconds*1000);
-                         return dDate >= startDate && dDate <= endDate;
-                    });
+                    const [s, e] = dateFilter.split(' to ');
+                    const start = new Date(s); const end = new Date(e); end.setHours(23,59,59);
+                    filtered = filtered.filter(d => { const dt = new Date(d.created_at?.seconds*1000); return dt >= start && dt <= end; });
                 }
 
                 filtered.sort((a,b) => (b.created_at?.seconds||0) - (a.created_at?.seconds||0));
@@ -802,26 +746,15 @@
                 grid.innerHTML = '';
                 allEmployees.forEach(emp => {
                     grid.innerHTML += `
-                        <div class="col-md-4">
-                            <div class="card h-100 border-primary">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold text-white mb-1">${emp.name}</h5>
-                                    <div class="text-secondary small mb-3">${emp.salary} ${emp.currency} (${emp.salary_type})</div>
-                                    <div class="bg-dark p-2 rounded text-center mb-3 border border-secondary">
-                                        <small class="text-secondary">الرصيد المستحق له</small>
-                                        <h3 class="fw-bold text-info m-0" style="font-family:monospace;">${emp.balance} <span class="small">${emp.currency}</span></h3>
-                                    </div>
-                                    <div class="d-grid gap-2">
-                                        <button class="btn btn-sm btn-outline-light" onclick="ui.openEmpTrans('${emp.id}', 'accrue', '${emp.name}', '${emp.currency}', ${emp.salary})"><i class="fas fa-calendar-check"></i> استحقاق راتب</button>
-                                        <div class="d-flex gap-2">
-                                            <button class="btn btn-sm btn-outline-danger flex-fill" onclick="ui.openEmpTrans('${emp.id}', 'deduct', '${emp.name}', '${emp.currency}')"><i class="fas fa-user-clock"></i> خصم/تأخير</button>
-                                            <button class="btn btn-sm btn-success flex-fill fw-bold" onclick="ui.openEmpTrans('${emp.id}', 'pay', '${emp.name}', '${emp.currency}')"><i class="fas fa-hand-holding-usd"></i> تسليم دفعة</button>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="col-md-4"><div class="card h-100 border-primary"><div class="card-body">
+                            <h5 class="card-title fw-bold text-white mb-1">${emp.name}</h5>
+                            <div class="text-secondary small mb-3">${emp.salary} ${emp.currency} (${emp.salary_type})</div>
+                            <div class="bg-dark p-2 rounded text-center mb-3 border border-secondary"><small class="text-secondary">الرصيد المستحق له</small><h3 class="fw-bold text-info m-0" style="font-family:monospace;">${emp.balance} <span class="small">${emp.currency}</span></h3></div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-sm btn-outline-light" onclick="ui.openEmpTrans('${emp.id}', 'accrue', '${emp.name}', '${emp.currency}', ${emp.salary})"><i class="fas fa-calendar-check"></i> استحقاق راتب</button>
+                                <div class="d-flex gap-2"><button class="btn btn-sm btn-outline-danger flex-fill" onclick="ui.openEmpTrans('${emp.id}', 'deduct', '${emp.name}', '${emp.currency}')"><i class="fas fa-user-clock"></i> خصم</button><button class="btn btn-sm btn-success flex-fill fw-bold" onclick="ui.openEmpTrans('${emp.id}', 'pay', '${emp.name}', '${emp.currency}')"><i class="fas fa-hand-holding-usd"></i> تسليم دفعة</button></div>
                             </div>
-                        </div>
-                    `;
+                        </div></div></div>`;
                 });
             },
 
@@ -832,22 +765,13 @@
                 document.getElementById('et-curr').value = curr;
                 document.getElementById('et-amount').value = defAmount;
                 const msg = document.getElementById('et-msg');
-                
-                if(type === 'accrue') {
-                    msg.innerHTML = `إضافة راتب كامل لرصيد الموظف <b>${name}</b>؟`;
-                    document.getElementById('et-amount-div').classList.remove('d-none');
-                } else if(type === 'deduct') {
-                    msg.innerHTML = `خصم مبلغ من رصيد <b>${name}</b> بسبب (تأخير/غياب)؟ <br><small class="text-muted">* هذا الخصم لا يؤثر على الصندوق المالي.</small>`;
-                    document.getElementById('et-amount-div').classList.remove('d-none');
-                } else {
-                    msg.innerHTML = `تسليم دفعة نقدية (سلفة) للموظف <b>${name}</b>؟ <br><small class="text-info">* سيتم تسجيلها كمصروف في المالية.</small>`;
-                    document.getElementById('et-amount-div').classList.remove('d-none');
-                }
+                if(type === 'accrue') { msg.innerHTML = `إضافة راتب كامل لرصيد الموظف <b>${name}</b>؟`; document.getElementById('et-amount-div').classList.remove('d-none'); } 
+                else if(type === 'deduct') { msg.innerHTML = `خصم مبلغ من رصيد <b>${name}</b> بسبب (تأخير/غياب)؟`; document.getElementById('et-amount-div').classList.remove('d-none'); } 
+                else { msg.innerHTML = `تسليم دفعة نقدية للموظف <b>${name}</b>؟`; document.getElementById('et-amount-div').classList.remove('d-none'); }
                 document.getElementById('emp-trans-title').innerText = type === 'pay' ? 'تسليم دفعة' : (type === 'deduct' ? 'خصم من الرصيد' : 'استحقاق راتب');
                 new bootstrap.Modal(document.getElementById('empTransModal')).show();
             },
 
-            // --- Modals ---
             openSimpleDebtModal: (src) => { document.getElementById('simpleDebtForm').reset(); document.getElementById('sim-source').value = src; new bootstrap.Modal(document.getElementById('simpleDebtModal')).show(); },
             openLumpSumModal: () => new bootstrap.Modal(document.getElementById('lumpSumModal')).show(),
             openAddProductModal: (cat) => { document.getElementById('addProductForm').reset(); document.getElementById('prod-cat').value = cat; new bootstrap.Modal(document.getElementById('addProductModal')).show(); },
@@ -874,20 +798,20 @@
             }
         };
 
-        // --- Report Manager ---
+        // --- Report Manager (Multi-Page & Totals) ---
         let currentPdfBlob = null;
         window.reportManager = {
             prepareInvoice: async (data) => {
                 const container = document.getElementById('invoice-content');
                 let rowsHtml = '';
                 data.items.forEach(item => { rowsHtml += `<tr><td>${item.desc}</td><td>${item.amount} ${data.currency}</td></tr>`; });
-                container.innerHTML = `<div class="inv-header"><h2>مغسلة شباب المعرة</h2><p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p><h3>فاتورة السيد: ${data.name}</h3></div><table class="inv-table"><thead><tr><th>الوصف</th><th>المبلغ</th></tr></thead><tbody>${rowsHtml}</tbody></table><div class="inv-total">الإجمالي المدفوع: ${data.total} ${data.currency}</div>`;
+                container.innerHTML = `<div class="inv-header"><h2>مغسلة شباب المعرة</h2><p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p><h3>فاتورة السيد: ${data.name}</h3></div><table class="inv-table"><thead><tr><th>الوصف</th><th>المبلغ</th></tr></thead><tbody>${rowsHtml}</tbody><tfoot><tr class="inv-footer-row"><td>الإجمالي</td><td>${data.total} ${data.currency}</td></tr></tfoot></table>`;
                 await reportManager.generateAndShowPreview('Invoice');
             },
 
             prepareReceipt: async (data) => {
                 const container = document.getElementById('invoice-content');
-                container.innerHTML = `<div class="inv-header"><h2>مغسلة شباب المعرة</h2><h3>وصل قبض (دفعة حساب)</h3><p>تاريخ: ${new Date().toLocaleString('ar-EG')}</p></div><div class="receipt-box"><p>استلمنا من السيد: <strong>${data.name}</strong></p><p>مبلغ وقدره:</p><h1 style="border-bottom: 2px solid #333; display: inline-block;">${data.amount} ${data.currency}</h1><p style="margin-top: 20px;">وذلك عن سداد دفعة من الحساب</p></div><div class="receipt-balance">المبلغ المتبقي في الذمة: ${data.remaining} ${data.currency}</div>`;
+                container.innerHTML = `<div class="inv-header"><h2>مغسلة شباب المعرة</h2><h3>وصل قبض</h3><p>تاريخ: ${new Date().toLocaleString('ar-EG')}</p></div><div class="receipt-box"><p>استلمنا من السيد: <strong>${data.name}</strong></p><p>مبلغ وقدره:</p><h1 style="border-bottom: 2px solid #333; display: inline-block;">${data.amount} ${data.currency}</h1><p style="margin-top: 20px;">سداد دفعة من الحساب</p></div><div class="receipt-balance">المتبقي: ${data.remaining} ${data.currency}</div>`;
                 await reportManager.generateAndShowPreview('Receipt');
             },
             
@@ -902,20 +826,26 @@
                 if(!currentProfileName) return;
                 showLoading(true);
                 const container = document.getElementById('invoice-content');
-                const debts = allDebts.filter(d => d.customer_name === currentProfileName);
-                const payments = allTrans.filter(t => t.customer_name === currentProfileName);
-                let combined = [
-                    ...debts.map(d => ({date: d.created_at, desc: d.description, amount: d.total_amount, curr: d.currency, type: 'debt'})),
-                    ...payments.map(p => ({date: p.created_at, desc: p.description, amount: -p.amount, curr: p.currency, type: 'pay'}))
-                ].sort((a,b) => (a.date?.seconds||0) - (b.date?.seconds||0));
+                
+                // Fetch Active Debts Only
+                let debts = allDebts.filter(d => d.customer_name === currentProfileName && d.status === 'active');
                 
                 let rows = '';
-                combined.forEach(item => {
-                    const color = item.type === 'debt' ? 'text-dark' : 'text-success fw-bold';
-                    rows += `<tr><td>${new Date(item.date?.seconds*1000).toLocaleDateString('ar-EG')}</td><td>${item.desc}</td><td class="${color}" style="direction:ltr">${item.amount} ${item.curr}</td></tr>`;
+                let totals = { USD: 0, TRY: 0, SYP: 0 };
+
+                debts.forEach(d => {
+                    totals[d.currency] += d.remaining_amount;
+                    rows += `<tr><td>${new Date(d.created_at?.seconds*1000).toLocaleDateString('ar-EG')}</td><td>${d.description}</td><td class="fw-bold">${d.remaining_amount}</td><td>${d.currency}</td><td>نشط</td></tr>`;
                 });
 
-                container.innerHTML = `<div class="inv-header"><h2>مغسلة شباب المعرة</h2><h3>كشف حساب (الذمم)</h3><p>العميل: ${currentProfileName}</p><p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p></div><table class="inv-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>المبلغ (حركة)</th></tr></thead><tbody>${rows}</tbody></table><p class="small text-muted mt-3">* القيم السالبة تمثل دفعات.</p>`;
+                let footer = '';
+                if(totals.USD > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (USD)</td><td colspan="3">${totals.USD}</td></tr>`;
+                if(totals.TRY > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (TRY)</td><td colspan="3">${totals.TRY}</td></tr>`;
+                if(totals.SYP > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (SYP)</td><td colspan="3">${totals.SYP}</td></tr>`;
+
+                container.innerHTML = `
+                    <div class="inv-header"><h2>مغسلة شباب المعرة</h2><h3>كشف حساب (الديون النشطة)</h3><p>العميل: ${currentProfileName}</p><p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p></div>
+                    <table class="inv-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>المبلغ المتبقي</th><th>العملة</th><th>الحالة</th></tr></thead><tbody>${rows}</tbody><tfoot>${footer}</tfoot></table>`;
                 showLoading(false);
                 await reportManager.generateAndShowPreview('Statement');
             },
@@ -962,17 +892,39 @@
                 await reportManager.generateAndShowPreview('Report');
             },
 
+            // --- MULTI-PAGE PDF GENERATOR ---
             generateAndShowPreview: async (filenamePrefix) => {
                 showLoading(true);
                 try {
                     const element = document.getElementById('invoice-template-container');
+                    
+                    // Capture full height
                     const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 794 });
                     const imgData = canvas.toDataURL('image/png');
+                    
+                    // PDF Setup
                     const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
                     const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    
                     const imgProps = pdf.getImageProperties(imgData);
-                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    const totalImgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    
+                    let heightLeft = totalImgHeight;
+                    let position = 0;
+
+                    // Add first page
+                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, totalImgHeight);
+                    heightLeft -= pdfHeight;
+
+                    // Loop for subsequent pages
+                    while (heightLeft > 0) {
+                        position -= pdfHeight; // Move image up
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, totalImgHeight);
+                        heightLeft -= pdfHeight;
+                    }
+
                     currentPdfBlob = pdf.output('blob');
                     const blobUrl = URL.createObjectURL(currentPdfBlob);
                     document.getElementById('pdf-preview-frame').src = blobUrl;
@@ -991,8 +943,6 @@
         document.getElementById('lumpSumForm').addEventListener('submit', e => { e.preventDefault(); dataManager.payLumpSum(document.getElementById('lump-amount').value, document.getElementById('lump-curr').value); });
         document.getElementById('financeForm').addEventListener('submit', async e => { e.preventDefault(); await addDoc(collection(db,'artifacts',appId,'public','data','transactions'),{ type: document.getElementById('fin-type').value, description: document.getElementById('fin-desc').value, amount: Number(document.getElementById('fin-amount').value), currency: document.getElementById('fin-curr').value, created_at: serverTimestamp() }); bootstrap.Modal.getInstance(document.getElementById('financeModal')).hide(); toast("تم"); });
         document.getElementById('loginForm').addEventListener('submit', async e => { e.preventDefault(); showLoading(true); try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } catch { toast("فشل الدخول",'err'); showLoading(false); } });
-        
-        // Employee Forms
         document.getElementById('addEmployeeForm').addEventListener('submit', e => { e.preventDefault(); dataManager.addEmployee({ name: document.getElementById('emp-name').value, salary: document.getElementById('emp-salary').value, currency: document.getElementById('emp-curr').value, salary_type: document.getElementById('emp-type').value }); });
         document.getElementById('empTransForm').addEventListener('submit', e => { e.preventDefault(); dataManager.employeeTransaction(document.getElementById('et-id').value, document.getElementById('et-type').value, document.getElementById('et-amount').value, document.getElementById('et-name').value, document.getElementById('et-curr').value); });
 
@@ -1017,4 +967,4 @@
         const showLoading = s => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
     </script>
 </body>
-    </html>
+                                                                                                                           </html>
