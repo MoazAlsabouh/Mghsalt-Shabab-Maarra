@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مغسلة شباب المعرة - V4.6</title>
+    <title>مغسلة شباب المعرة - V5.0 Pro</title>
     
-    <!-- Bootstrap 5 & Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
-    <!-- Toastify & Flatpickr -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
@@ -31,12 +28,12 @@
             --accent-orange: #fbbf24; /* Amber */
             --accent-red: #ef4444;    
             
-            /* --- TABLE COLORS (Kohl/Navy Theme) --- */
-            --table-head-bg: #0a192f;     /* Header Dark Navy */
-            --table-head-text: #64ffda;   /* Teal Text */
-            --table-bg-odd: #112240;      /* Row Odd (Navy) */
-            --table-bg-even: #0f1f3a;     /* Row Even (Slightly Darker) */
-            --table-hover: #1d3356;       /* Row Hover */
+            /* --- TABLE COLORS --- */
+            --table-head-bg: #0a192f;
+            --table-head-text: #64ffda;
+            --table-bg-odd: #112240;
+            --table-bg-even: #0f1f3a;
+            --table-hover: #1d3356;
             --table-border: #233554;
         }
 
@@ -44,7 +41,7 @@
             font-family: 'Almarai', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-primary);
-            overflow-x: hidden; /* Prevent body scroll, handle in containers */
+            overflow-x: hidden; 
         }
 
         /* Inputs */
@@ -62,12 +59,12 @@
             box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.1); 
         }
 
-        /* --- MOBILE RESPONSIVE TABLE FIX --- */
+        /* --- TABLE STYLING --- */
         .table-responsive {
             display: block;
             width: 100%;
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            -webkit-overflow-scrolling: touch;
             border-radius: 12px;
             border: 1px solid var(--table-border);
             background-color: var(--bg-card);
@@ -79,18 +76,16 @@
             width: 100%;
             border-collapse: separate; 
             border-spacing: 0;
-            min-width: 600px; /* Force minimum width to trigger scroll on mobile */
+            min-width: 600px; /* Forces scroll on mobile */
         }
 
         .table thead th {
             background-color: var(--table-head-bg);
             color: var(--table-head-text);
             font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.9rem;
             padding: 15px;
             border-bottom: 2px solid var(--accent-blue);
-            white-space: nowrap; /* Prevent headers wrapping */
+            white-space: nowrap;
             position: sticky;
             top: 0;
             z-index: 10;
@@ -101,45 +96,44 @@
             vertical-align: middle;
             border-bottom: 1px solid var(--table-border);
             color: #ccd6f6;
-            font-size: 0.95rem;
-            white-space: nowrap; /* Prevent data wrapping for cleaner mobile view */
+            white-space: nowrap;
         }
 
-        /* Zebra Striping */
         .table tbody tr:nth-of-type(odd) { background-color: var(--table-bg-odd); }
         .table tbody tr:nth-of-type(even) { background-color: var(--table-bg-even); }
-
-        /* Hover Effect */
-        .table-hover tbody tr:hover td {
-            background-color: var(--table-hover);
-            color: #ffffff;
-            transition: 0.2s;
-        }
+        .table-hover tbody tr:hover td { background-color: var(--table-hover); color: #ffffff; transition: 0.2s; }
         
-        /* Specific Columns */
+        /* Sticky Column for Names */
         .customer-name-cell {
             color: #ffffff !important;
             font-weight: 800;
-            font-size: 1rem;
-            position: sticky; /* Keep name visible while scrolling if needed */
+            position: sticky; 
             left: 0;
             background-color: inherit; /* Matches row color */
-            z-index: 1;
+            z-index: 5;
+            border-right: 1px solid var(--table-border);
         }
         
-        .val-usd { color: var(--accent-green) !important; font-weight: bold; font-family: monospace; font-size: 1.1em; }
-        .val-try { color: #38bdf8 !important; font-weight: bold; font-family: monospace; font-size: 1.1em; } 
-        .val-syp { color: var(--accent-orange) !important; font-weight: bold; font-family: monospace; font-size: 1.1em; }
+        .val-usd { color: var(--accent-green) !important; font-weight: bold; font-family: monospace; }
+        .val-try { color: #38bdf8 !important; font-weight: bold; font-family: monospace; } 
+        .val-syp { color: var(--accent-orange) !important; font-weight: bold; font-family: monospace; }
 
-        .table tbody tr:last-child td { border-bottom: none; }
-        /* --- END TABLE STYLING --- */
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 768px) {
+            body { font-size: 14px; }
+            .stat-card { padding: 15px; margin-bottom: 10px; }
+            .val-usd, .val-try, .val-syp { font-size: 1.1rem; }
+            .table th, .table td { padding: 10px 8px; font-size: 0.85rem; }
+            .btn { font-size: 0.9rem; padding: 8px; }
+            h3 { font-size: 1.5rem; }
+        }
 
         .card { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 12px; }
         .modal-content { background-color: #112240; border: 1px solid var(--border-color); color: var(--text-primary); }
         .btn-close { filter: invert(1); }
 
         .sidebar { background-color: var(--bg-sidebar); min-height: 100vh; border-left: 1px solid var(--border-color); }
-        .nav-link { color: var(--text-secondary); padding: 12px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; }
+        .nav-link { color: var(--text-secondary); padding: 12px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; cursor: pointer; }
         .nav-link:hover, .nav-link.active { background-color: rgba(100, 255, 218, 0.1); color: var(--accent-blue); font-weight: bold; transform: translateX(-5px); }
         .nav-link i { width: 25px; text-align: center; }
 
@@ -150,14 +144,22 @@
         .app-section.active-section { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Invoice Template */
+        /* --- INVOICE TEMPLATE (Hidden & Fixed Width) --- */
         #invoice-template-container {
-            position: fixed; top: -9999px; left: -9999px; width: 210mm;
-            background: white; color: black; padding: 40px; font-family: 'Almarai', sans-serif; direction: rtl;
+            position: fixed; 
+            top: 0; left: 0; 
+            z-index: -100;
+            width: 794px; /* A4 Width in pixels at 96 DPI */
+            min-height: 1123px;
+            background: white; 
+            color: black; 
+            padding: 40px; 
+            font-family: 'Almarai', sans-serif; 
+            direction: rtl;
         }
         .inv-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
-        .inv-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .inv-table th, .inv-table td { border: 1px solid #ddd; padding: 12px; text-align: right; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        .inv-table th, .inv-table td { border: 1px solid #ddd; padding: 10px; text-align: right; }
         .inv-table th { background-color: #f3f4f6; font-weight: bold; }
         .inv-total { margin-top: 30px; text-align: left; font-size: 1.2rem; font-weight: bold; }
         .receipt-box { border: 2px dashed #333; padding: 20px; margin: 20px 0; background: #f9fafb; text-align: center; }
@@ -166,18 +168,15 @@
 </head>
 <body>
 
-    <!-- Loading -->
     <div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 bg-dark-overlay d-flex flex-column justify-content-center align-items-center" style="z-index: 9999;">
         <div class="spinner-border text-info mb-3"></div>
         <h6>جاري التحميل...</h6>
     </div>
 
-    <!-- Hidden Invoice Template -->
     <div id="invoice-template-container">
         <div id="invoice-content"></div>
     </div>
 
-    <!-- Login -->
     <div id="login-screen" class="vh-100 d-flex justify-content-center align-items-center d-none">
         <div class="card p-5 shadow-lg" style="width: 400px; border-top: 4px solid var(--accent-blue);">
             <div class="text-center mb-4">
@@ -192,11 +191,9 @@
         </div>
     </div>
 
-    <!-- Main App -->
     <div id="main-app" class="d-none">
         <div class="container-fluid p-0">
             <div class="row g-0">
-                <!-- Sidebar -->
                 <div class="col-md-2 sidebar p-3 d-none d-md-block">
                     <h5 class="text-center text-white mb-4 pb-3 border-bottom border-secondary">لوحة التحكم</h5>
                     <nav class="nav flex-column">
@@ -208,14 +205,11 @@
                     </nav>
                 </div>
 
-                <!-- Content -->
                 <div class="col-md-10 vh-100 overflow-auto">
-                    <!-- Mobile Header -->
                     <div class="d-md-none bg-dark p-3 d-flex justify-content-between border-bottom border-secondary">
                         <span class="fw-bold">مغسلة شباب المعرة</span>
                         <button class="btn btn-sm btn-dark" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
                     </div>
-                    <!-- Mobile Menu -->
                     <div class="collapse d-md-none bg-dark p-2" id="mobileMenu">
                         <button class="btn btn-dark w-100 text-end mb-1" onclick="router.navigate('dashboard')">الرئيسية</button>
                         <button class="btn btn-dark w-100 text-end mb-1" onclick="router.navigate('laundry')">المغسلة</button>
@@ -224,7 +218,6 @@
 
                     <div class="p-4">
                         
-                        <!-- 1. Dashboard -->
                         <div id="dashboard-section" class="app-section active-section">
                             <h3 class="mb-4 fw-bold">نظرة عامة</h3>
                             <div class="row g-4">
@@ -234,22 +227,16 @@
                             </div>
                         </div>
 
-                        <!-- 2. Laundry Section -->
                         <div id="laundry-section" class="app-section">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h3 class="text-info fw-bold"><i class="fas fa-tshirt"></i> إدارة المغسلة</h3>
-                            </div>
-                            
+                            <h3 class="text-info fw-bold mb-4"><i class="fas fa-tshirt"></i> إدارة المغسلة</h3>
                             <ul class="nav nav-tabs border-secondary mb-4">
                                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#lau-customers">العملاء والديون</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#lau-products">المنتجات (Inventory)</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#lau-products">المنتجات</a></li>
                             </ul>
-
                             <div class="tab-content">
-                                <!-- Customers Tab -->
                                 <div class="tab-pane fade show active" id="lau-customers">
                                     <div class="row mb-4">
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 mb-2">
                                             <button class="btn btn-info w-100 fw-bold py-2" onclick="ui.openSimpleDebtModal('laundry')"><i class="fas fa-plus"></i> فاتورة غسيل (دين)</button>
                                         </div>
                                         <div class="col-md-9">
@@ -258,13 +245,11 @@
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table table-hover">
-                                            <thead><tr><th>العميل</th><th>المجموع USD</th><th>المجموع TRY</th><th>المجموع SYP</th><th>الحالة</th><th>إجراء</th></tr></thead>
+                                            <thead><tr><th class="customer-name-cell">العميل</th><th>المجموع USD</th><th>المجموع TRY</th><th>المجموع SYP</th><th>الحالة</th><th>إجراء</th></tr></thead>
                                             <tbody id="laundry-customers-list"></tbody>
                                         </table>
                                     </div>
                                 </div>
-                                
-                                <!-- Products Tab -->
                                 <div class="tab-pane fade" id="lau-products">
                                     <button class="btn btn-success mb-3" onclick="ui.openAddProductModal('laundry')">إضافة منتج</button>
                                     <div class="row g-3" id="laundry-products-grid"></div>
@@ -272,64 +257,89 @@
                             </div>
                         </div>
 
-                        <!-- 2.1 Customer Profile -->
                         <div id="customer-profile-section" class="app-section">
-                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3 flex-wrap">
                                 <div>
                                     <button class="btn btn-outline-secondary btn-sm me-2" onclick="router.navigate('laundry')"><i class="fas fa-arrow-right"></i> عودة</button>
                                     <span class="h3 text-warning fw-bold" id="prof-name">اسم العميل</span>
                                 </div>
-                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-2 mt-2 mt-md-0">
                                     <span class="badge bg-dark border border-success d-flex align-items-center p-2">USD: <span id="prof-total-usd" class="ms-1 fw-bold">0</span></span>
                                     <span class="badge bg-dark border border-info d-flex align-items-center p-2">TRY: <span id="prof-total-try" class="ms-1 fw-bold">0</span></span>
-                                    <span class="badge bg-dark border border-warning d-flex align-items-center p-2">SYP: <span id="prof-total-syp" class="ms-1 fw-bold">0</span></span>
                                 </div>
                             </div>
 
-                            <!-- Actions -->
                             <div class="row g-3 mb-4">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="card p-3 h-100 border-success">
-                                        <h6 class="text-success fw-bold"><i class="fas fa-check-double"></i> خيار 1: تسديد فواتير محددة</h6>
-                                        <p class="small text-secondary">حدد الفواتير من الجدول بالأسفل ثم اضغط هنا.</p>
-                                        <button class="btn btn-success w-100 fw-bold" onclick="dataManager.paySelectedItems()">دفع المحدد (PDF)</button>
+                                        <h6 class="text-success fw-bold"><i class="fas fa-check-double"></i> تسديد محدد</h6>
+                                        <button class="btn btn-success w-100 btn-sm mt-2" onclick="dataManager.paySelectedItems()">دفع المحدد</button>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="card p-3 h-100 border-info">
-                                        <h6 class="text-info fw-bold"><i class="fas fa-hand-holding-usd"></i> خيار 2: تسديد دفعة (Lump Sum)</h6>
-                                        <p class="small text-secondary">أدخل مبلغاً وسيتم خصمه من الأقدم (FIFO).</p>
-                                        <button class="btn btn-info w-100 fw-bold" onclick="ui.openLumpSumModal()">إجراء دفعة (PDF)</button>
+                                        <h6 class="text-info fw-bold"><i class="fas fa-hand-holding-usd"></i> دفعة حساب</h6>
+                                        <button class="btn btn-info w-100 btn-sm mt-2" onclick="ui.openLumpSumModal()">دفعة (FIFO)</button>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class="card p-3 h-100 border-warning">
+                                        <h6 class="text-warning fw-bold"><i class="fas fa-file-invoice"></i> تقارير</h6>
+                                        <button class="btn btn-warning w-100 btn-sm mt-2" onclick="reportManager.prepareStatement()">كشف حساب (PDF)</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="card p-3 h-100 border-secondary">
-                                        <h6 class="text-white fw-bold"><i class="fas fa-filter"></i> الفلترة والأرشيف</h6>
-                                        <div class="d-flex gap-2 mb-2">
+                                        <h6 class="text-white fw-bold"><i class="fas fa-filter"></i> عرض</h6>
+                                        <div class="d-flex gap-2 mt-2">
                                             <button class="btn btn-sm btn-outline-light flex-fill" onclick="ui.toggleArchive(false)" id="btn-show-active">النشط</button>
-                                            <button class="btn btn-sm btn-outline-secondary flex-fill" onclick="ui.toggleArchive(true)" id="btn-show-all">الأرشيف (الكل)</button>
+                                            <button class="btn btn-sm btn-outline-secondary flex-fill" onclick="ui.toggleArchive(true)" id="btn-show-all">الكل</button>
                                         </div>
-                                        <input type="text" class="form-control form-control-sm" id="date-filter" placeholder="من تاريخ - إلى تاريخ">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead><tr>
-                                        <th style="width: 40px;"><input type="checkbox" class="form-check-input" id="check-all" onclick="ui.toggleCheckAll()"></th>
-                                        <th>التاريخ</th>
-                                        <th>الوصف / المنتج</th>
-                                        <th>القيمة</th>
-                                        <th>العملة</th>
-                                        <th>الحالة</th>
-                                    </tr></thead>
-                                    <tbody id="profile-debts-list"></tbody>
-                                </table>
+                            <ul class="nav nav-tabs border-secondary mb-3">
+                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#cust-tab-debts">الديون والطلبات</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#cust-tab-history">سجل الدفعات والفواتير</a></li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="cust-tab-debts">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead><tr>
+                                                <th style="width: 40px;"><input type="checkbox" class="form-check-input" id="check-all" onclick="ui.toggleCheckAll()"></th>
+                                                <th>التاريخ</th>
+                                                <th>الوصف / المنتج</th>
+                                                <th>القيمة</th>
+                                                <th>العملة</th>
+                                                <th>الحالة</th>
+                                                <th>حذف</th>
+                                            </tr></thead>
+                                            <tbody id="profile-debts-list"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="cust-tab-history">
+                                    <div class="alert alert-secondary small">هنا تظهر كافة عمليات الدفع والفواتير المحفوظة. يمكنك إعادة طباعتها في أي وقت.</div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead><tr>
+                                                <th>التاريخ</th>
+                                                <th>نوع العملية</th>
+                                                <th>الوصف</th>
+                                                <th>المبلغ</th>
+                                                <th>إجراءات</th>
+                                            </tr></thead>
+                                            <tbody id="profile-history-list"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 3. Espresso Section -->
                         <div id="espresso-section" class="app-section">
                             <h3 class="text-warning mb-4 fw-bold"><i class="fas fa-coffee"></i> الأسبريسو</h3>
                             <ul class="nav nav-tabs border-secondary mb-3">
@@ -348,26 +358,19 @@
                             </div>
                         </div>
 
-                        <!-- 4. Finance Section -->
                         <div id="finance-section" class="app-section">
                             <h3 class="mb-4 fw-bold">المالية والتقارير</h3>
                             <div class="row mb-4">
-                                <div class="col-md-3">
-                                    <button class="btn btn-danger w-100 fw-bold py-2" onclick="ui.openTransactionModal('expense')">تسجيل مصروف</button>
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-success w-100 fw-bold py-2" onclick="ui.openTransactionModal('income_manual')">تسجيل دخل خارجي</button>
-                                </div>
+                                <div class="col-md-3 mb-2"><button class="btn btn-danger w-100 fw-bold" onclick="ui.openTransactionModal('expense')">تسجيل مصروف</button></div>
+                                <div class="col-md-3 mb-2"><button class="btn btn-success w-100 fw-bold" onclick="ui.openTransactionModal('income_manual')">تسجيل دخل خارجي</button></div>
                                 <div class="col-md-6">
                                     <div class="input-group">
                                         <select class="form-select" id="report-type">
                                             <option value="today">يومي</option>
                                             <option value="week">أسبوعي</option>
                                             <option value="year">سنوي</option>
-                                            <option value="custom">مخصص</option>
                                         </select>
-                                        <input type="text" class="form-control d-none" id="report-date-range" placeholder="التاريخ">
-                                        <button class="btn btn-primary fw-bold" onclick="reportManager.generateFinanceReport()"><i class="fas fa-file-pdf"></i> تصدير تقرير (PDF)</button>
+                                        <button class="btn btn-primary fw-bold" onclick="reportManager.generateFinanceReport()"><i class="fas fa-file-pdf"></i> تقرير (PDF)</button>
                                     </div>
                                 </div>
                             </div>
@@ -385,7 +388,6 @@
         </div>
     </div>
 
-    <!-- Modals -->
     <div class="modal fade" id="simpleDebtModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">إضافة</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="simpleDebtForm">
         <input type="hidden" id="sim-source">
         <div class="mb-2"><label>العميل</label><input class="form-control" id="sim-cust" required list="cust-datalist"><datalist id="cust-datalist"></datalist></div>
@@ -399,7 +401,7 @@
         <form id="lumpSumForm">
             <div class="mb-3"><label>العملة</label><select class="form-select" id="lump-curr"><option value="TRY">TRY</option><option value="USD">USD</option><option value="SYP">SYP</option></select></div>
             <div class="mb-3"><label>المبلغ المدفوع</label><input type="number" class="form-control" id="lump-amount" required step="0.5"></div>
-            <button class="btn btn-info w-100 fw-bold">تأكيد وتوليد الوصل</button>
+            <button class="btn btn-info w-100 fw-bold">تأكيد وطباعة الوصل</button>
         </form>
     </div></div></div></div>
 
@@ -418,7 +420,6 @@
         <button class="btn btn-primary w-100 fw-bold">حفظ</button>
     </form></div></div></div></div>
 
-    <!-- PDF Preview Modal -->
     <div class="modal fade" id="pdfPreviewModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -426,7 +427,7 @@
                     <h5 class="modal-title">معاينة الفاتورة / التقرير</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body text-center bg-light">
+                <div class="modal-body text-center bg-light" style="overflow:auto;">
                      <iframe id="pdf-preview-frame" style="width: 100%; height: 500px; border: none;"></iframe>
                 </div>
                 <div class="modal-footer">
@@ -438,7 +439,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -448,7 +448,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, updateDoc, getDoc, onSnapshot, serverTimestamp, query, where, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {  
             apiKey: "AIzaSyDkJMYhBvNCbjBPlidUW4y1YEkJIkUXvck",  
@@ -464,7 +464,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maarra-v4';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'maarra-v5';
 
         let allDebts = [];
         let allTrans = [];
@@ -493,6 +493,7 @@
                     allTrans = [];
                     snap.forEach(d => allTrans.push({id: d.id, ...d.data()}));
                     ui.renderFinance();
+                    if(currentProfileName) ui.renderPaymentHistory(currentProfileName);
                 });
 
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), snap => {
@@ -511,6 +512,16 @@
                     toast("تمت الإضافة");
                     bootstrap.Modal.getInstance(document.getElementById('simpleDebtModal')).hide();
                 } catch(e) { toast("خطأ", 'err'); } finally { showLoading(false); }
+            },
+
+            deleteDebt: async (id) => {
+                if(!confirm("هل أنت متأكد من حذف هذا السجل نهائياً؟")) return;
+                showLoading(true);
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', id));
+                    toast("تم الحذف");
+                } catch(e) { toast("خطأ في الحذف", 'err'); } 
+                finally { showLoading(false); }
             },
 
             paySelectedItems: async () => {
@@ -536,14 +547,22 @@
                         itemsDesc.push({desc: debt.description, amount: debt.total_amount});
                     }
 
+                    // Save transaction with Invoice Snapshot
+                    const invoiceData = {
+                         name: currentProfileName, items: itemsDesc, total: totalPaid, currency: currency, type: 'Invoice'
+                    };
+                    
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
                         type: 'income', source: 'laundry_payment', 
-                        description: `تسديد محدد للعميل ${currentProfileName}`, 
-                        amount: totalPaid, currency: currency, created_at: serverTimestamp()
+                        description: `تسديد محدد للعميل ${currentProfileName}`,
+                        customer_name: currentProfileName,
+                        amount: totalPaid, currency: currency, 
+                        invoice_snapshot: JSON.stringify(invoiceData),
+                        created_at: serverTimestamp()
                     });
 
                     toast("تم السداد");
-                    reportManager.prepareInvoice(currentProfileName, itemsDesc, totalPaid, currency);
+                    reportManager.prepareInvoice(invoiceData);
 
                 } catch(e) { toast("حدث خطأ", 'err'); console.log(e); } 
                 finally { showLoading(false); }
@@ -558,8 +577,8 @@
                 ).sort((a,b) => (a.created_at?.seconds || 0) - (b.created_at?.seconds || 0));
 
                 if(debts.length === 0) return toast("لا يوجد ديون نشطة بهذه العملة", 'err');
-
                 const totalDebtBefore = debts.reduce((sum, d) => sum + Number(d.remaining_amount), 0);
+
                 showLoading(true);
                 let remainingPayment = Number(amount);
                 
@@ -582,17 +601,26 @@
                         }
                     }
 
+                    const finalRemaining = Math.max(0, totalDebtBefore - Number(amount));
+                    
+                    // Save transaction with Receipt Snapshot
+                    const receiptData = {
+                        name: currentProfileName, amount: Number(amount), currency: currency, remaining: finalRemaining, type: 'Receipt'
+                    };
+
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
                         type: 'income', source: 'lump_sum', 
                         description: `دفعة مقطوعة من ${currentProfileName}`, 
-                        amount: Number(amount), currency: currency, created_at: serverTimestamp()
+                        customer_name: currentProfileName,
+                        amount: Number(amount), currency: currency, 
+                        invoice_snapshot: JSON.stringify(receiptData),
+                        created_at: serverTimestamp()
                     });
 
                     toast("تم تسجيل الدفعة");
                     bootstrap.Modal.getInstance(document.getElementById('lumpSumModal')).hide();
                     
-                    const finalRemaining = Math.max(0, totalDebtBefore - Number(amount));
-                    reportManager.prepareReceipt(currentProfileName, amount, currency, finalRemaining);
+                    reportManager.prepareReceipt(receiptData);
 
                 } catch(e) { console.log(e); toast("خطأ", 'err'); }
                 finally { showLoading(false); }
@@ -635,20 +663,17 @@
                 document.getElementById('prof-name').innerText = name;
                 
                 const debts = allDebts.filter(d => d.customer_name === name && d.source === 'laundry');
-                let tUsd=0, tTry=0, tSyp=0;
+                let tUsd=0, tTry=0;
                 debts.filter(d => d.status === 'active').forEach(d => {
                     if(d.currency === 'USD') tUsd += Number(d.remaining_amount);
                     if(d.currency === 'TRY') tTry += Number(d.remaining_amount);
-                    if(d.currency === 'SYP') tSyp += Number(d.remaining_amount);
                 });
                 document.getElementById('prof-total-usd').innerText = tUsd;
                 document.getElementById('prof-total-try').innerText = tTry;
-                document.getElementById('prof-total-syp').innerText = tSyp;
 
                 const tbody = document.getElementById('profile-debts-list');
                 tbody.innerHTML = '';
                 
-                const dateFilter = document.getElementById('date-filter').value;
                 let filtered = debts;
                 if(!showArchive) filtered = filtered.filter(d => d.status === 'active');
                 filtered.sort((a,b) => (b.created_at?.seconds||0) - (a.created_at?.seconds||0));
@@ -663,10 +688,35 @@
                             <td class="fw-bold">${d.remaining_amount} / ${d.total_amount}</td>
                             <td>${d.currency}</td>
                             <td>${isPaid ? '<span class="badge bg-success">خالص</span>' : '<span class="badge bg-warning text-dark">نشط</span>'}</td>
+                            <td><button class="btn btn-sm btn-outline-danger" onclick="dataManager.deleteDebt('${d.id}')"><i class="fas fa-trash"></i></button></td>
                         </tr>
                     `;
                 });
+                
+                ui.renderPaymentHistory(name);
                 router.navigate('customer-profile');
+            },
+            
+            renderPaymentHistory: (name) => {
+                const tbody = document.getElementById('profile-history-list');
+                tbody.innerHTML = '';
+                const history = allTrans.filter(t => t.customer_name === name || (t.description && t.description.includes(name))).sort((a,b)=>b.created_at?.seconds - a.created_at?.seconds);
+                
+                history.forEach(t => {
+                    // Try to detect if we have saved snapshot
+                    const hasSnapshot = t.invoice_snapshot ? true : false;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${new Date(t.created_at?.seconds*1000).toLocaleDateString('ar-EG')}</td>
+                            <td>${t.source === 'lump_sum' ? 'دفعة حساب' : 'سداد فاتورة'}</td>
+                            <td>${t.description}</td>
+                            <td class="fw-bold text-success">${t.amount} ${t.currency}</td>
+                            <td>
+                                ${hasSnapshot ? `<button class="btn btn-sm btn-outline-warning" onclick='reportManager.reprintSaved("${t.id}")'><i class="fas fa-print"></i> طباعة بدل ضائع</button>` : '-'}
+                            </td>
+                        </tr>
+                    `;
+                });
             },
 
             openSimpleDebtModal: (src) => { document.getElementById('simpleDebtForm').reset(); document.getElementById('sim-source').value = src; new bootstrap.Modal(document.getElementById('simpleDebtModal')).show(); },
@@ -727,30 +777,30 @@
         let currentPdfBlob = null;
 
         window.reportManager = {
-            prepareInvoice: async (name, items, total, currency) => {
+            prepareInvoice: async (data) => {
                 const container = document.getElementById('invoice-content');
                 let rowsHtml = '';
-                items.forEach(item => {
-                    rowsHtml += `<tr><td>${item.desc}</td><td>${item.amount} ${currency}</td></tr>`;
+                data.items.forEach(item => {
+                    rowsHtml += `<tr><td>${item.desc}</td><td>${item.amount} ${data.currency}</td></tr>`;
                 });
 
                 container.innerHTML = `
                     <div class="inv-header">
                         <h2>مغسلة شباب المعرة</h2>
                         <p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
-                        <h3>فاتورة السيد: ${name}</h3>
+                        <h3>فاتورة السيد: ${data.name}</h3>
                     </div>
                     <table class="inv-table">
                         <thead><tr><th>الوصف</th><th>المبلغ</th></tr></thead>
                         <tbody>${rowsHtml}</tbody>
                     </table>
-                    <div class="inv-total">الإجمالي المدفوع: ${total} ${currency}</div>
+                    <div class="inv-total">الإجمالي المدفوع: ${data.total} ${data.currency}</div>
                 `;
                 
                 await reportManager.generateAndShowPreview('Invoice');
             },
 
-            prepareReceipt: async (name, amount, currency, remaining) => {
+            prepareReceipt: async (data) => {
                 const container = document.getElementById('invoice-content');
                 container.innerHTML = `
                     <div class="inv-header">
@@ -759,16 +809,70 @@
                         <p>تاريخ: ${new Date().toLocaleString('ar-EG')}</p>
                     </div>
                     <div class="receipt-box">
-                        <p>استلمنا من السيد: <strong>${name}</strong></p>
+                        <p>استلمنا من السيد: <strong>${data.name}</strong></p>
                         <p>مبلغ وقدره:</p>
-                        <h1 style="border-bottom: 2px solid #333; display: inline-block;">${amount} ${currency}</h1>
+                        <h1 style="border-bottom: 2px solid #333; display: inline-block;">${data.amount} ${data.currency}</h1>
                         <p style="margin-top: 20px;">وذلك عن سداد دفعة من الحساب</p>
                     </div>
                     <div class="receipt-balance">
-                        المبلغ المتبقي في الذمة: ${remaining} ${currency}
+                        المبلغ المتبقي في الذمة: ${data.remaining} ${data.currency}
                     </div>
                 `;
                 await reportManager.generateAndShowPreview('Receipt');
+            },
+            
+            reprintSaved: async (transId) => {
+                const trans = allTrans.find(t => t.id === transId);
+                if(!trans || !trans.invoice_snapshot) return toast("لا توجد بيانات محفوظة لهذه الفاتورة", "err");
+                
+                const data = JSON.parse(trans.invoice_snapshot);
+                if(data.type === 'Receipt') await reportManager.prepareReceipt(data);
+                else await reportManager.prepareInvoice(data);
+            },
+            
+            prepareStatement: async () => {
+                if(!currentProfileName) return;
+                showLoading(true);
+                const container = document.getElementById('invoice-content');
+                
+                // Fetch all related activities
+                const debts = allDebts.filter(d => d.customer_name === currentProfileName);
+                const payments = allTrans.filter(t => t.customer_name === currentProfileName);
+                
+                // Combine and sort
+                let combined = [
+                    ...debts.map(d => ({date: d.created_at, desc: d.description, debit: d.total_amount, credit: 0, curr: d.currency})),
+                    ...payments.map(p => ({date: p.created_at, desc: p.description, debit: 0, credit: p.amount, curr: p.currency}))
+                ].sort((a,b) => (a.date?.seconds||0) - (b.date?.seconds||0));
+                
+                let rows = '';
+                // Simple balance calc per currency (Just display list for now to keep it simple and accurate)
+                combined.forEach(item => {
+                    rows += `
+                        <tr>
+                            <td>${new Date(item.date?.seconds*1000).toLocaleDateString('ar-EG')}</td>
+                            <td>${item.desc}</td>
+                            <td class="text-danger">${item.debit > 0 ? item.debit : '-'}</td>
+                            <td class="text-success">${item.credit > 0 ? item.credit : '-'}</td>
+                            <td>${item.curr}</td>
+                        </tr>
+                    `;
+                });
+
+                container.innerHTML = `
+                    <div class="inv-header">
+                        <h2>مغسلة شباب المعرة</h2>
+                        <h3>كشف حساب شامل</h3>
+                        <p>العميل: ${currentProfileName}</p>
+                        <p>تاريخ الطباعة: ${new Date().toLocaleDateString('ar-EG')}</p>
+                    </div>
+                    <table class="inv-table">
+                        <thead><tr><th>التاريخ</th><th>البيان</th><th>مدين (عليه)</th><th>دائن (له)</th><th>العملة</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                `;
+                showLoading(false);
+                await reportManager.generateAndShowPreview('Statement');
             },
 
             generateFinanceReport: async () => {
@@ -805,15 +909,24 @@
                 showLoading(true);
                 try {
                     const element = document.getElementById('invoice-template-container');
-                    const canvas = await html2canvas(element, { scale: 2 });
+                    
+                    // Fixed A4 Size Logic
+                    const canvas = await html2canvas(element, { 
+                        scale: 2, 
+                        useCORS: true,
+                        windowWidth: 794 // Force A4 width in px
+                    });
+                    
                     const imgData = canvas.toDataURL('image/png');
                     const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-                    const imgProps = pdf.getImageProperties(imgData);
                     const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const imgProps = pdf.getImageProperties(imgData);
                     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                    
                     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
                     currentPdfBlob = pdf.output('blob');
                     const blobUrl = URL.createObjectURL(currentPdfBlob);
+                    
                     document.getElementById('pdf-preview-frame').src = blobUrl;
                     reportManager.currentFilename = `${filenamePrefix}_${new Date().getTime()}.pdf`;
                     new bootstrap.Modal(document.getElementById('pdfPreviewModal')).show();
@@ -834,13 +947,12 @@
                     const file = new File([currentPdfBlob], reportManager.currentFilename, { type: 'application/pdf' });
                     try { await navigator.share({ files: [file], title: 'فاتورة / تقرير' }); } 
                     catch (error) { console.log('Share failed', error); }
-                } else { toast("المشاركة غير مدعومة", 'err'); }
+                } else { toast("المشاركة غير مدعومة في هذا المتصفح", 'err'); }
             }
         };
 
         // --- Event Listeners ---
         document.getElementById('laundry-search').addEventListener('keyup', () => ui.renderLaundryCustomers(Array.from(new Set(allDebts.filter(d=>d.source==='laundry').map(d=>d.customer_name)))));
-        document.getElementById('report-type').addEventListener('change', (e) => { document.getElementById('report-date-range').classList.toggle('d-none', e.target.value !== 'custom'); });
         
         document.getElementById('simpleDebtForm').addEventListener('submit', e => {
             e.preventDefault(); dataManager.addDebt({
@@ -893,8 +1005,6 @@
                 document.getElementById('login-screen').classList.add('d-none');
                 document.getElementById('main-app').classList.remove('d-none');
                 dataManager.init();
-                flatpickr("#report-date-range", {mode: "range"});
-                flatpickr("#date-filter", {mode: "range", onChange: () => ui.openCustomerProfile(currentProfileName)});
             } else {
                 document.getElementById('login-screen').classList.remove('d-none');
                 document.getElementById('main-app').classList.add('d-none');
