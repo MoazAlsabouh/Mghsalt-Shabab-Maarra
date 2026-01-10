@@ -896,7 +896,7 @@
                     
                     // Capture full height
                     const canvas = await html2canvas(element, { scale: 2, useCORS: true, windowWidth: 794 });
-                    const imgData = canvas.toDataURL('image/png');
+                    const imgData = canvas.toDataURL('image/jpeg', 0.75);
                     
                     // PDF Setup
                     const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
@@ -910,14 +910,14 @@
                     let position = 0;
 
                     // Add first page
-                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, totalImgHeight);
+                    pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, totalImgHeight);
                     heightLeft -= pdfHeight;
 
                     // Loop for subsequent pages
                     while (heightLeft > 0) {
                         position -= pdfHeight; // Move image up
                         pdf.addPage();
-                        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, totalImgHeight);
+                        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, totalImgHeight);
                         heightLeft -= pdfHeight;
                     }
 
@@ -962,5 +962,5 @@
         const toast = (m,t) => Toastify({text:m, style:{background:t=='err'?'#f87171':'#4ade80'}, duration:2000}).showToast();
         const showLoading = s => document.getElementById('loading-overlay').classList.toggle('d-none', !s);
     </script>
-</body>
-                                                                                                                           </html>
+</body>                                                                                                                           
+</html>
