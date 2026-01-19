@@ -338,8 +338,6 @@
                             المغسلة</a>
                         <a class="nav-link" onclick="router.navigate('espresso')"><i class="fas fa-coffee"></i>
                             الأسبريسو</a>
-                        <a class="nav-link" onclick="router.navigate('employees')"><i class="fas fa-users"></i>
-                            الموظفين</a>
                         <a class="nav-link" onclick="router.navigate('finance')"><i class="fas fa-chart-pie"></i>
                             المالية</a>
                         <a class="nav-link mt-auto text-danger" onclick="auth.signOut()"><i
@@ -362,8 +360,6 @@
                             onclick="router.navigate('laundry')">المغسلة</button>
                         <button class="btn btn-outline-light w-100 text-end mb-2"
                             onclick="router.navigate('espresso')">الأسبريسو</button>
-                        <button class="btn btn-outline-light w-100 text-end mb-2"
-                            onclick="router.navigate('employees')">الموظفين</button>
                         <button class="btn btn-outline-light w-100 text-end mb-2"
                             onclick="router.navigate('finance')">المالية</button>
                     </div>
@@ -570,13 +566,7 @@
                             </div>
                         </div>
 
-                        <div id="employees-section" class="app-section">
-                            <h3 class="text-primary mb-4 fw-bold"><i class="fas fa-users"></i> إدارة الموظفين</h3>
-                            <button class="btn btn-primary mb-3 fw-bold"
-                                onclick="new bootstrap.Modal(document.getElementById('addEmployeeModal')).show()"><i
-                                    class="fas fa-plus"></i> إضافة موظف</button>
-                            <div class="row g-3" id="employees-grid"></div>
-                        </div>
+
 
                         <div id="finance-section" class="app-section">
                             <h3 class="mb-4 fw-bold">المالية والتقارير</h3>
@@ -598,8 +588,8 @@
                                         <input type="text" id="report-date-range" class="form-control d-none"
                                             placeholder="اختر التاريخ">
                                         <button class="btn btn-primary fw-bold"
-                                            onclick="reportManager.generateFinanceReport()"><i
-                                                class="fas fa-file-pdf"></i> PDF</button>
+                                            onclick="reportManager.generateFinanceReport()"><i class="fas fa-print"></i>
+                                            طباعة التقرير</button>
                                     </div>
                                 </div>
                             </div>
@@ -726,55 +716,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="addEmployeeModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">موظف جديد</h5><button class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addEmployeeForm">
-                        <div class="mb-2"><label>الاسم</label><input class="form-control" id="emp-name" required></div>
-                        <div class="row mb-2">
-                            <div class="col"><label>الراتب</label><input type="number" class="form-control"
-                                    id="emp-salary" required></div>
-                            <div class="col"><label>العملة</label><select class="form-select" id="emp-curr">
-                                    <option value="USD">USD</option>
-                                    <option value="TRY">TRY</option>
-                                    <option value="SYP">SYP</option>
-                                </select></div>
-                        </div>
-                        <div class="mb-3"><label>نظام الدفع</label><select class="form-select" id="emp-type">
-                                <option value="شهري">شهري</option>
-                                <option value="أسبوعي">أسبوعي</option>
-                            </select></div>
-                        <button class="btn btn-primary w-100 fw-bold">إضافة</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="modal fade" id="empTransModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="emp-trans-title">إجراء</h5><button class="btn-close"
-                        data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="empTransForm">
-                        <input type="hidden" id="et-id"><input type="hidden" id="et-type"><input type="hidden"
-                            id="et-name"><input type="hidden" id="et-curr">
-                        <p id="et-msg" class="mb-3"></p>
-                        <div id="et-amount-div" class="mb-3"><label>المبلغ</label><input type="number"
-                                class="form-control" id="et-amount" required></div>
-                        <button class="btn btn-success w-100 fw-bold">تأكيد</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="modal fade" id="pdfPreviewModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -788,10 +730,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
-                    <button type="button" class="btn btn-primary fw-bold"
+                    <!-- Buttons hidden as per request -->
+                    <button type="button" class="btn btn-primary fw-bold d-none"
                         onclick="reportManager.downloadCurrentPDF()"><i class="fas fa-download"></i> تحميل</button>
-                    <button type="button" class="btn btn-success fw-bold" onclick="reportManager.shareCurrentPDF()"><i
-                            class="fas fa-share-alt"></i> مشاركة</button>
+                    <button type="button" class="btn btn-success fw-bold d-none"
+                        onclick="reportManager.shareCurrentPDF()"><i class="fas fa-share-alt"></i> مشاركة</button>
                 </div>
             </div>
         </div>
@@ -912,7 +855,9 @@
                         });
 
                         totalPaid += Number(debt.remaining_amount);
-                        itemsDesc.push({ desc: debt.description, amount: debt.total_amount });
+                        // Store the added date
+                        const createdAt = debt.created_at ? new Date(debt.created_at.seconds * 1000).toLocaleDateString('ar-EG') : '-';
+                        itemsDesc.push({ desc: debt.description, amount: debt.total_amount, date: createdAt });
                     }
 
                     const invoiceData = { name: currentProfileName, items: itemsDesc, total: totalPaid, currency: currency, type: 'Invoice' };
@@ -956,7 +901,7 @@
                     }
 
                     const finalRemaining = Math.max(0, totalDebtBefore - Number(amount));
-                    const receiptData = { name: currentProfileName, amount: Number(amount), currency: currency, remaining: finalRemaining, type: 'Receipt' };
+                    const receiptData = { name: currentProfileName, amount: Number(amount), currency: currency, remaining: finalRemaining, totalDebt: totalDebtBefore, type: 'Receipt' };
 
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
                         type: 'income', source: 'lump_sum', description: `دفعة مقطوعة من ${currentProfileName}`,
@@ -971,43 +916,7 @@
                 finally { showLoading(false); }
             },
 
-            addEmployee: async (data) => {
-                showLoading(true);
-                try {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'employees'), {
-                        ...data, balance: 0, created_at: serverTimestamp()
-                    });
-                    toast("تم إضافة الموظف");
-                    bootstrap.Modal.getInstance(document.getElementById('addEmployeeModal')).hide();
-                } catch (e) { toast("خطأ", 'err'); } finally { showLoading(false); }
-            },
 
-            employeeTransaction: async (empId, type, amount, name, currency) => {
-                showLoading(true);
-                const empRef = doc(db, 'artifacts', appId, 'public', 'data', 'employees', empId);
-                const emp = allEmployees.find(e => e.id === empId);
-                let newBalance = Number(emp.balance);
-                let transDesc = "";
-                let isFinance = false;
-
-                try {
-                    if (type === 'accrue') { newBalance += Number(amount); transDesc = `استحقاق راتب للموظف ${name}`; }
-                    else if (type === 'deduct') { newBalance -= Number(amount); transDesc = `خصم (تأخير/غياب) للموظف ${name}`; }
-                    else if (type === 'pay') { newBalance -= Number(amount); transDesc = `صرف دفعة للموظف ${name}`; isFinance = true; }
-
-                    await updateDoc(empRef, { balance: newBalance });
-
-                    if (isFinance) {
-                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), {
-                            type: 'expense', source: 'payroll', description: transDesc, amount: Number(amount), currency: currency, created_at: serverTimestamp()
-                        });
-                    }
-
-                    toast("تمت العملية بنجاح");
-                    bootstrap.Modal.getInstance(document.getElementById('empTransModal')).hide();
-                } catch (e) { toast("خطأ", 'err'); console.error(e); }
-                finally { showLoading(false); }
-            },
 
             deleteTransaction: async (id) => {
                 if (!confirm("هل أنت متأكد من حذف هذا السجل المالي نهائياً؟")) return;
@@ -1159,14 +1068,35 @@
             prepareInvoice: async (data) => {
                 const container = document.getElementById('invoice-content');
                 let rowsHtml = '';
-                data.items.forEach(item => { rowsHtml += `<tr><td>${item.desc}</td><td>${item.amount} ${data.currency}</td></tr>`; });
-                container.innerHTML = `<div class="inv-header"><h2>مغسلة شباب المعرة</h2><p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p><h3>فاتورة السيد: ${data.name}</h3></div><table class="inv-table"><thead><tr><th>الوصف</th><th>المبلغ</th></tr></thead><tbody>${rowsHtml}</tbody><tfoot><tr class="inv-footer-row"><td>الإجمالي</td><td>${data.total} ${data.currency}</td></tr></tfoot></table>`;
+                // Added Date Column and styling
+                data.items.forEach(item => { rowsHtml += `<tr><td>${item.date || '-'}</td><td>${item.desc}</td><td>${item.amount} ${data.currency}</td></tr>`; });
+                container.innerHTML = `<div class="inv-header"><h2>مغسلة شباب المعرة</h2><p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p><h3>فاتورة السيد: ${data.name}</h3></div>
+                <table class="inv-table"><thead><tr><th>تاريخ الإضافة</th><th>الوصف</th><th>المبلغ</th></tr></thead><tbody>${rowsHtml}</tbody>
+                <tfoot><tr class="inv-footer-row"><td>الإجمالي المدفوع</td><td colspan="2" style="color:red; font-size:1.4rem;">${data.total} ${data.currency}</td></tr></tfoot></table>`;
                 await reportManager.generateAndShowPreview('Invoice');
             },
 
             prepareReceipt: async (data) => {
                 const container = document.getElementById('invoice-content');
-                container.innerHTML = `<div class="inv-header"><h2>مغسلة شباب المعرة</h2><h3>وصل قبض</h3><p>تاريخ: ${new Date().toLocaleString('ar-EG')}</p></div><div class="receipt-box"><p>استلمنا من السيد: <strong>${data.name}</strong></p><p>مبلغ وقدره:</p><h1 style="border-bottom: 2px solid #333; display: inline-block;">${data.amount} ${data.currency}</h1><p style="margin-top: 20px;">سداد دفعة من الحساب</p></div><div class="receipt-balance">المتبقي: ${data.remaining} ${data.currency}</div>`;
+                // Updated with Red colors and Clear Total/Payment/Remaining logic
+                container.innerHTML = `
+                    <div class="inv-header"><h2>مغسلة شباب المعرة</h2><h3>وصل قبض (دفعة)</h3><p>تاريخ: ${new Date().toLocaleString('ar-EG')}</p></div>
+                    <div class="receipt-box" style="text-align:right;">
+                        <p>استلمنا من السيد: <strong>${data.name}</strong></p>
+                        <hr>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                            <span>المبلغ الكلي (سابق):</span>
+                            <span style="font-weight:bold;">${data.totalDebt || '?'} ${data.currency}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                            <span>الدفعة الحالية:</span>
+                            <span style="color:blue; font-weight:bold; font-size:1.2rem;">${data.amount} ${data.currency}</span>
+                        </div>
+                         <div style="display:flex; justify-content:space-between; margin-top:15px; border-top:2px solid #333; padding-top:10px;">
+                            <span class="h4">المتبقي:</span>
+                            <span class="h4" style="color:red; font-weight:bold;">${data.remaining} ${data.currency}</span>
+                        </div>
+                    </div>`;
                 await reportManager.generateAndShowPreview('Receipt');
             },
 
@@ -1190,17 +1120,25 @@
 
                 debts.forEach(d => {
                     totals[d.currency] += d.remaining_amount;
-                    rows += `<tr><td>${new Date(d.created_at?.seconds * 1000).toLocaleDateString('ar-EG')}</td><td>${d.description}</td><td class="fw-bold">${d.remaining_amount}</td><td>${d.currency}</td><td>نشط</td></tr>`;
+                    const createdAt = d.created_at ? new Date(d.created_at.seconds * 1000).toLocaleDateString('ar-EG') : '-';
+                    // Check for partial payment
+                    let amountDisplay = `<span class="fw-bold">${d.remaining_amount}</span>`;
+                    let note = '';
+                    if (Number(d.remaining_amount) < Number(d.total_amount)) {
+                        amountDisplay = `<span class="text-decoration-line-through text-muted small">${d.total_amount}</span> <i class="fas fa-arrow-left small"></i> <span class="text-danger fw-bold">${d.remaining_amount}</span>`;
+                        note = `<br><small class="text-danger">(تم خصم دفعة)</small>`;
+                    }
+                    rows += `<tr><td>${createdAt}</td><td>${d.description}${note}</td><td>${amountDisplay}</td><td>${d.currency}</td></tr>`;
                 });
 
                 let footer = '';
-                if (totals.USD > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (USD)</td><td colspan="3">${totals.USD}</td></tr>`;
-                if (totals.TRY > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (TRY)</td><td colspan="3">${totals.TRY}</td></tr>`;
-                if (totals.SYP > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (SYP)</td><td colspan="3">${totals.SYP}</td></tr>`;
+                if (totals.USD > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (USD)</td><td colspan="2" style="color:red;">${totals.USD}</td></tr>`;
+                if (totals.TRY > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (TRY)</td><td colspan="2" style="color:red;">${totals.TRY}</td></tr>`;
+                if (totals.SYP > 0) footer += `<tr class="inv-footer-row"><td colspan="2">المجموع (SYP)</td><td colspan="2" style="color:red;">${totals.SYP}</td></tr>`;
 
                 container.innerHTML = `
                     <div class="inv-header"><h2>مغسلة شباب المعرة</h2><h3>كشف حساب (الديون النشطة)</h3><p>العميل: ${currentProfileName}</p><p>تاريخ: ${new Date().toLocaleDateString('ar-EG')}</p></div>
-                    <table class="inv-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>المبلغ المتبقي</th><th>العملة</th><th>الحالة</th></tr></thead><tbody>${rows}</tbody><tfoot>${footer}</tfoot></table>`;
+                    <table class="inv-table"><thead><tr><th>تاريخ الإضافة</th><th>البيان</th><th>المبلغ المتبقي</th><th>العملة</th></tr></thead><tbody>${rows}</tbody><tfoot>${footer}</tfoot></table>`;
                 showLoading(false);
                 await reportManager.generateAndShowPreview('Statement');
             },
@@ -1230,7 +1168,9 @@
                 filtered.forEach(t => {
                     const val = t.type.includes('income') ? Number(t.amount) : -Number(t.amount);
                     if (totals[t.currency] !== undefined) totals[t.currency] += val;
-                    rows += `<tr><td>${new Date(t.created_at.seconds * 1000).toLocaleDateString()}</td><td>${t.type.includes('income') ? 'دخل' : 'صرف'}</td><td>${t.description}</td><td>${t.amount}</td><td>${t.currency}</td></tr>`;
+                    // Colors: Expense = Red, Income = Blue
+                    const rowColor = t.type.includes('income') ? 'color:blue;' : 'color:red;';
+                    rows += `<tr><td>${new Date(t.created_at.seconds * 1000).toLocaleDateString()}</td><td>${t.type.includes('income') ? 'دخل' : 'صرف'}</td><td>${t.description}</td><td style="${rowColor} font-weight:bold;">${t.amount}</td><td>${t.currency}</td></tr>`;
                 });
 
                 container.innerHTML = `
@@ -1298,8 +1238,7 @@
         document.getElementById('lumpSumForm').addEventListener('submit', e => { e.preventDefault(); dataManager.payLumpSum(document.getElementById('lump-amount').value, document.getElementById('lump-curr').value); });
         document.getElementById('financeForm').addEventListener('submit', async e => { e.preventDefault(); await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), { type: document.getElementById('fin-type').value, description: document.getElementById('fin-desc').value, amount: Number(document.getElementById('fin-amount').value), currency: document.getElementById('fin-curr').value, created_at: serverTimestamp() }); bootstrap.Modal.getInstance(document.getElementById('financeModal')).hide(); toast("تم"); });
         document.getElementById('loginForm').addEventListener('submit', async e => { e.preventDefault(); showLoading(true); try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } catch { toast("فشل الدخول", 'err'); showLoading(false); } });
-        document.getElementById('addEmployeeForm').addEventListener('submit', e => { e.preventDefault(); dataManager.addEmployee({ name: document.getElementById('emp-name').value, salary: document.getElementById('emp-salary').value, currency: document.getElementById('emp-curr').value, salary_type: document.getElementById('emp-type').value }); });
-        document.getElementById('empTransForm').addEventListener('submit', e => { e.preventDefault(); dataManager.employeeTransaction(document.getElementById('et-id').value, document.getElementById('et-type').value, document.getElementById('et-amount').value, document.getElementById('et-name').value, document.getElementById('et-curr').value); });
+
 
         const upload = async (file) => { const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', CLOUDINARY_PRESET); return (await (await fetch(CLOUDINARY_URL, { method: 'POST', body: fd })).json()).secure_url; }
         document.getElementById('addProductForm').addEventListener('submit', async e => { e.preventDefault(); showLoading(true); const url = await upload(document.getElementById('prod-img').files[0]); await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), { name: document.getElementById('prod-name').value, category: document.getElementById('prod-cat').value, selling_price: document.getElementById('prod-price').value, currency: document.getElementById('prod-curr').value, image_url: url }); showLoading(false); toast("تم"); bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide(); });
