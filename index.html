@@ -644,6 +644,33 @@
         </div>
     </div>
 
+    <!-- Edit Debt Modal -->
+    <div class="modal fade" id="editDebtModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning"><i class="fas fa-edit"></i> تعديل عنصر الدين</h5><button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editDebtForm">
+                        <input type="hidden" id="edit-debt-id">
+                        <div class="mb-2"><label>الوصف</label><input class="form-control" id="edit-debt-desc" required></div>
+                        <div class="row mb-2">
+                            <div class="col"><label>إجمالي المبلغ</label><input type="number" class="form-control" id="edit-debt-amount" placeholder="المبلغ" step="0.5" required></div>
+                            <div class="col"><label>العملة</label><select class="form-select" id="edit-debt-curr">
+                                    <option value="TRY">TRY</option>
+                                    <option value="USD">USD</option>
+                                    <option value="SYP">SYP</option>
+                                </select></div>
+                        </div>
+                        <div class="alert alert-warning small mt-2 d-none" id="edit-debt-warning">تنبيه: هذا الدين يحتوي على دفعات مسبقة. التعديل سيأخذ المدفوعات بعين الاعتبار.</div>
+                        <button type="submit" class="btn btn-warning text-dark w-100 fw-bold">حفظ التعديلات</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="lumpSumModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -834,6 +861,44 @@
                 finally { showLoading(false); }
             },
 
+            editDebt: async (id, updatedData) => {
+                // Safeguard against modifying data improperly
+                const debt = allDebts.find(d => d.id === id);
+                if (!debt) return toast("لم يتم العثور على الدين", "err");
+                
+                showLoading(true);
+                try {
+                    const newTotal = Number(updatedData.amount);
+                    const paidAmt = Number(debt.paid_amount) || 0;
+                    
+                    if (newTotal < paidAmt) {
+                        toast("المبلغ الإجمالي لا يمكن أن يكون أقل من المدفوع سابقاً", "err");
+                        showLoading(false);
+                        return;
+                    }
+                    
+                    const newRemaining = newTotal - paidAmt;
+                    const newStatus = (newRemaining <= 0) ? 'paid' : 'active';
+                    
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', id), {
+                        description: updatedData.description,
+                        total_amount: newTotal,
+                        currency: updatedData.currency,
+                        remaining_amount: newRemaining,
+                        status: newStatus,
+                        updated_at: serverTimestamp() // Safe trace update
+                    });
+                    
+                    toast("تم التعديل بنجاح");
+                    bootstrap.Modal.getInstance(document.getElementById('editDebtModal')).hide();
+                } catch (e) { 
+                    toast("حدث خطأ أثناء التعديل", 'err'); 
+                    console.error("Edit error:", e);
+                } finally { 
+                    showLoading(false); 
+                }
+            },
+
             paySelectedItems: async () => {
                 const checked = document.querySelectorAll('.debt-check:checked');
                 if (checked.length === 0) return toast("اختر عنصر واحد على الأقل", 'err');
@@ -985,7 +1050,10 @@
                             <td>${new Date(d.created_at?.seconds * 1000).toLocaleDateString('ar-EG')}</td>
                             <td>${d.description}</td><td class="fw-bold">${d.remaining_amount} / ${d.total_amount}</td><td>${d.currency}</td>
                             <td>${isPaid ? '<span class="badge bg-success">خالص</span>' : '<span class="badge bg-warning text-dark">نشط</span>'}</td>
-                            <td><button class="btn btn-sm btn-outline-danger" onclick="dataManager.deleteDebt('${d.id}')"><i class="fas fa-trash"></i></button></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-warning me-1" onclick="ui.openEditDebtModal('${d.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="dataManager.deleteDebt('${d.id}')" title="حذف"><i class="fas fa-trash"></i></button>
+                            </td>
                         </tr>`;
                 });
                 ui.renderPaymentHistory(name);
@@ -1038,6 +1106,26 @@
             openLumpSumModal: () => new bootstrap.Modal(document.getElementById('lumpSumModal')).show(),
             openAddProductModal: (cat) => { document.getElementById('addProductForm').reset(); document.getElementById('prod-cat').value = cat; new bootstrap.Modal(document.getElementById('addProductModal')).show(); },
             openTransactionModal: (type) => { document.getElementById('financeForm').reset(); document.getElementById('fin-type').value = type; new bootstrap.Modal(document.getElementById('financeModal')).show(); },
+            
+            openEditDebtModal: (id) => {
+                const debt = allDebts.find(d => d.id === id);
+                if (!debt) return toast("الدين غير موجود", 'err');
+                document.getElementById('editDebtForm').reset();
+                document.getElementById('edit-debt-id').value = id;
+                document.getElementById('edit-debt-desc').value = debt.description;
+                document.getElementById('edit-debt-amount').value = debt.total_amount;
+                document.getElementById('edit-debt-curr').value = debt.currency;
+                
+                const warningDiv = document.getElementById('edit-debt-warning');
+                if (Number(debt.paid_amount) > 0) {
+                    warningDiv.classList.remove('d-none');
+                    warningDiv.innerText = `تنبيه: هذا الدين له مدفوعات سابقة بقيمة ${debt.paid_amount}. لا يمكن وضع إجمالي أقل من هذا الرقم.`;
+                } else {
+                    warningDiv.classList.add('d-none');
+                }
+                
+                new bootstrap.Modal(document.getElementById('editDebtModal')).show();
+            },
 
             updateDash: () => {
                 let u = 0, t = 0, s = 0;
@@ -1236,6 +1324,16 @@
         document.getElementById('simpleDebtForm').addEventListener('submit', e => { e.preventDefault(); dataManager.addDebt({ customer_name: document.getElementById('sim-cust').value, description: document.getElementById('sim-desc').value, total_amount: Number(document.getElementById('sim-amount').value), currency: document.getElementById('sim-curr').value, source: document.getElementById('sim-source').value }); });
         document.getElementById('lumpSumForm').addEventListener('submit', e => { e.preventDefault(); dataManager.payLumpSum(document.getElementById('lump-amount').value, document.getElementById('lump-curr').value); });
         document.getElementById('financeForm').addEventListener('submit', async e => { e.preventDefault(); await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), { type: document.getElementById('fin-type').value, description: document.getElementById('fin-desc').value, amount: Number(document.getElementById('fin-amount').value), currency: document.getElementById('fin-curr').value, created_at: serverTimestamp() }); bootstrap.Modal.getInstance(document.getElementById('financeModal')).hide(); toast("تم"); });
+        document.getElementById('editDebtForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const id = document.getElementById('edit-debt-id').value;
+            const updatedData = {
+                description: document.getElementById('edit-debt-desc').value,
+                amount: document.getElementById('edit-debt-amount').value,
+                currency: document.getElementById('edit-debt-curr').value
+            };
+            dataManager.editDebt(id, updatedData);
+        });
         document.getElementById('loginForm').addEventListener('submit', async e => { e.preventDefault(); showLoading(true); try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); } catch { toast("فشل الدخول", 'err'); showLoading(false); } });
 
 
