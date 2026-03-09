@@ -233,6 +233,28 @@
             }
         }
 
+        /* --- CALENDAR ACTIVITY COLORS --- */
+        .bg-activity-low {
+            background-color: rgba(74, 222, 128, 0.3) !important;
+            color: #ffffff !important;
+            border-radius: 50% !important;
+            border: 1px solid #4ade80 !important;
+        }
+
+        .bg-activity-medium {
+            background-color: rgba(251, 191, 36, 0.4) !important;
+            color: #ffffff !important;
+            border-radius: 50% !important;
+            border: 1px solid #fbbf24 !important;
+        }
+
+        .bg-activity-high {
+            background-color: rgba(239, 68, 68, 0.5) !important;
+            color: #ffffff !important;
+            border-radius: 50% !important;
+            border: 1px solid #ef4444 !important;
+        }
+
         /* --- INVOICE TEMPLATE (Print Style) --- */
         #invoice-template-container {
             position: fixed;
@@ -340,6 +362,8 @@
                             الأسبريسو</a>
                         <a class="nav-link" onclick="router.navigate('finance')"><i class="fas fa-chart-pie"></i>
                             المالية</a>
+                        <a class="nav-link" onclick="router.navigate('calendar')"><i class="fas fa-calendar-alt"></i>
+                            التقويم المالي</a>
                         <a class="nav-link mt-auto text-danger" onclick="auth.signOut()"><i
                                 class="fas fa-sign-out-alt"></i> خروج</a>
                     </nav>
@@ -362,6 +386,8 @@
                             onclick="router.navigate('espresso')">الأسبريسو</button>
                         <button class="btn btn-outline-light w-100 text-end mb-2"
                             onclick="router.navigate('finance')">المالية</button>
+                        <button class="btn btn-outline-light w-100 text-end mb-2"
+                            onclick="router.navigate('calendar')">التقويم المالي</button>
                     </div>
 
                     <div class="p-4">
@@ -610,6 +636,64 @@
                             </div>
                         </div>
 
+                        <!-- Calendar Section -->
+                        <div id="calendar-section" class="app-section">
+                            <h3 class="mb-4 fw-bold"><i class="fas fa-calendar-alt"></i> التقويم المالي للعمليات</h3>
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-5 d-flex justify-content-center align-items-start">
+                                    <div class="card p-3 border-secondary w-100">
+                                        <h6 class="text-center text-info mb-3">اختر اليوم لعرض عملياته</h6>
+                                        <input type="text" id="inline-calendar" class="d-none">
+                                        <div class="mt-3 small text-center">
+                                            <span class="badge bg-activity-low text-dark me-2">قليل</span>
+                                            <span class="badge bg-activity-medium text-dark me-2">متوسط</span>
+                                            <span class="badge bg-activity-high text-dark">كثيف</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-4">
+                                            <div class="card p-2 text-center bg-dark border-secondary">
+                                                <h6 class="text-secondary small m-0">إجمالي ديون اليوم</h6><strong
+                                                    id="cal-day-debts" class="text-warning h5">0</strong>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card p-2 text-center bg-dark border-secondary">
+                                                <h6 class="text-secondary small m-0">إجمالي المقبوضات</h6><strong
+                                                    id="cal-day-income" class="text-success h5">0</strong>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card p-2 text-center bg-dark border-secondary">
+                                                <h6 class="text-secondary small m-0">إجمالي المصروفات</h6><strong
+                                                    id="cal-day-expense" class="text-danger h5">0</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-dark" style="font-size: 0.9rem;">
+                                            <thead>
+                                                <tr>
+                                                    <th>الوقت</th>
+                                                    <th>النوع</th>
+                                                    <th>العميل/البيان</th>
+                                                    <th>المبلغ والعملة</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="calendar-day-list">
+                                                <tr>
+                                                    <td colspan="4" class="text-center text-secondary py-4">اختر يوماً
+                                                        من التقويم لعرض العمليات</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -630,7 +714,7 @@
                         <div class="mb-2"><label>الوصف</label><input class="form-control" id="sim-desc" required></div>
                         <div class="row mb-2">
                             <div class="col"><input type="number" class="form-control" id="sim-amount"
-                                    placeholder="المبلغ" step="0.5" required></div>
+                                    placeholder="المبلغ" step="any" required></div>
                             <div class="col"><select class="form-select" id="sim-curr">
                                     <option value="TRY">TRY</option>
                                     <option value="USD">USD</option>
@@ -649,21 +733,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-warning"><i class="fas fa-edit"></i> تعديل عنصر الدين</h5><button class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title text-warning"><i class="fas fa-edit"></i> تعديل عنصر الدين</h5><button
+                        class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editDebtForm">
                         <input type="hidden" id="edit-debt-id">
-                        <div class="mb-2"><label>الوصف</label><input class="form-control" id="edit-debt-desc" required></div>
+                        <div class="mb-2"><label>الوصف</label><input class="form-control" id="edit-debt-desc" required>
+                        </div>
                         <div class="row mb-2">
-                            <div class="col"><label>إجمالي المبلغ</label><input type="number" class="form-control" id="edit-debt-amount" placeholder="المبلغ" step="0.5" required></div>
+                            <div class="col"><label>إجمالي المبلغ</label><input type="number" class="form-control"
+                                    id="edit-debt-amount" placeholder="المبلغ" step="any" required></div>
                             <div class="col"><label>العملة</label><select class="form-select" id="edit-debt-curr">
                                     <option value="TRY">TRY</option>
                                     <option value="USD">USD</option>
                                     <option value="SYP">SYP</option>
                                 </select></div>
                         </div>
-                        <div class="alert alert-warning small mt-2 d-none" id="edit-debt-warning">تنبيه: هذا الدين يحتوي على دفعات مسبقة. التعديل سيأخذ المدفوعات بعين الاعتبار.</div>
+                        <div class="alert alert-warning small mt-2 d-none" id="edit-debt-warning">تنبيه: هذا الدين يحتوي
+                            على دفعات مسبقة. التعديل سيأخذ المدفوعات بعين الاعتبار.</div>
                         <button type="submit" class="btn btn-warning text-dark w-100 fw-bold">حفظ التعديلات</button>
                     </form>
                 </div>
@@ -686,7 +774,7 @@
                                 <option value="SYP">SYP</option>
                             </select></div>
                         <div class="mb-3"><label>المبلغ المدفوع</label><input type="number" class="form-control"
-                                id="lump-amount" required step="0.5"></div>
+                                id="lump-amount" required step="any"></div>
                         <button class="btn btn-info w-100 fw-bold">تأكيد وطباعة الوصل</button>
                     </form>
                 </div>
@@ -706,7 +794,7 @@
                         <input class="form-control mb-2" id="prod-name" placeholder="اسم المنتج" required>
                         <div class="row mb-2">
                             <div class="col"><input type="number" class="form-control" id="prod-price"
-                                    placeholder="السعر" required></div>
+                                    placeholder="السعر" step="any" required></div>
                             <div class="col"><select class="form-select" id="prod-curr">
                                     <option value="TRY">TRY</option>
                                     <option value="USD">USD</option>
@@ -729,7 +817,7 @@
                         <input class="form-control mb-2" id="fin-desc" placeholder="الوصف" required>
                         <div class="row mb-2">
                             <div class="col"><input type="number" class="form-control" id="fin-amount"
-                                    placeholder="المبلغ" required></div>
+                                    placeholder="المبلغ" step="any" required></div>
                             <div class="col"><select class="form-select" id="fin-curr">
                                     <option value="TRY">TRY</option>
                                     <option value="USD">USD</option>
@@ -818,6 +906,7 @@
                     ui.updateDash();
                     ui.updateDatalist(Array.from(custSet));
                     if (currentProfileName) ui.openCustomerProfile(currentProfileName);
+                    if (document.getElementById('calendar-section').classList.contains('active-section')) ui.renderCalendar();
                 });
 
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'transactions'), snap => {
@@ -825,6 +914,7 @@
                     snap.forEach(d => allTrans.push({ id: d.id, ...d.data() }));
                     ui.renderFinance();
                     if (currentProfileName) ui.renderPaymentHistory(currentProfileName);
+                    if (document.getElementById('calendar-section').classList.contains('active-section')) ui.renderCalendar();
                 });
 
                 onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'products'), snap => {
@@ -865,21 +955,21 @@
                 // Safeguard against modifying data improperly
                 const debt = allDebts.find(d => d.id === id);
                 if (!debt) return toast("لم يتم العثور على الدين", "err");
-                
+
                 showLoading(true);
                 try {
                     const newTotal = Number(updatedData.amount);
                     const paidAmt = Number(debt.paid_amount) || 0;
-                    
+
                     if (newTotal < paidAmt) {
                         toast("المبلغ الإجمالي لا يمكن أن يكون أقل من المدفوع سابقاً", "err");
                         showLoading(false);
                         return;
                     }
-                    
+
                     const newRemaining = newTotal - paidAmt;
                     const newStatus = (newRemaining <= 0) ? 'paid' : 'active';
-                    
+
                     await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'debts', id), {
                         description: updatedData.description,
                         total_amount: newTotal,
@@ -888,14 +978,14 @@
                         status: newStatus,
                         updated_at: serverTimestamp() // Safe trace update
                     });
-                    
+
                     toast("تم التعديل بنجاح");
                     bootstrap.Modal.getInstance(document.getElementById('editDebtModal')).hide();
-                } catch (e) { 
-                    toast("حدث خطأ أثناء التعديل", 'err'); 
+                } catch (e) {
+                    toast("حدث خطأ أثناء التعديل", 'err');
                     console.error("Edit error:", e);
-                } finally { 
-                    showLoading(false); 
+                } finally {
+                    showLoading(false);
                 }
             },
 
@@ -1106,7 +1196,7 @@
             openLumpSumModal: () => new bootstrap.Modal(document.getElementById('lumpSumModal')).show(),
             openAddProductModal: (cat) => { document.getElementById('addProductForm').reset(); document.getElementById('prod-cat').value = cat; new bootstrap.Modal(document.getElementById('addProductModal')).show(); },
             openTransactionModal: (type) => { document.getElementById('financeForm').reset(); document.getElementById('fin-type').value = type; new bootstrap.Modal(document.getElementById('financeModal')).show(); },
-            
+
             openEditDebtModal: (id) => {
                 const debt = allDebts.find(d => d.id === id);
                 if (!debt) return toast("الدين غير موجود", 'err');
@@ -1115,7 +1205,7 @@
                 document.getElementById('edit-debt-desc').value = debt.description;
                 document.getElementById('edit-debt-amount').value = debt.total_amount;
                 document.getElementById('edit-debt-curr').value = debt.currency;
-                
+
                 const warningDiv = document.getElementById('edit-debt-warning');
                 if (Number(debt.paid_amount) > 0) {
                     warningDiv.classList.remove('d-none');
@@ -1123,7 +1213,7 @@
                 } else {
                     warningDiv.classList.add('d-none');
                 }
-                
+
                 new bootstrap.Modal(document.getElementById('editDebtModal')).show();
             },
 
@@ -1145,6 +1235,109 @@
                 allTrans.sort((a, b) => b.created_at?.seconds - a.created_at?.seconds).slice(0, 50).forEach(tr => {
                     t.innerHTML += `<tr><td>${new Date(tr.created_at?.seconds * 1000).toLocaleDateString('ar-EG')}</td><td>${tr.type.includes('income') ? '<span class="text-success">دخل</span>' : '<span class="text-danger">صرف</span>'}</td><td>${tr.description}</td><td class="fw-bold">${tr.amount} ${tr.currency}</td>
                     <td><button class="btn btn-sm btn-outline-danger" onclick="dataManager.deleteTransaction('${tr.id}')"><i class="fas fa-trash"></i></button></td></tr>`;
+                });
+            },
+
+            // --- CALENDAR LOGIC ---
+            renderCalendar: () => {
+                // Pre-calculate activity counts per date (YYYY-MM-DD string)
+                const activityMap = {};
+
+                const addActivity = (timestamp) => {
+                    if (!timestamp) return;
+                    const ds = new Date(timestamp.seconds * 1000);
+                    // Standardizing date format to match Flatpickr's default output 'Y-m-d'
+                    const dateStr = ds.getFullYear() + "-" + String(ds.getMonth() + 1).padStart(2, '0') + "-" + String(ds.getDate()).padStart(2, '0');
+                    activityMap[dateStr] = (activityMap[dateStr] || 0) + 1;
+                };
+
+                allTrans.forEach(t => addActivity(t.created_at));
+                allDebts.forEach(d => addActivity(d.created_at));
+
+                flatpickr("#inline-calendar", {
+                    inline: true,
+                    onChange: (selectedDates, dateStr, instance) => {
+                        ui.renderDayOperations(dateStr);
+                    },
+                    onDayCreate: (dObj, dStr, fp, dayElem) => {
+                        // Flatpickr passes the day's date inside `dObj` or we can extract from its aria-label/dateObj
+                        const dateObj = dayElem.dateObj;
+                        if (!dateObj) return;
+
+                        const y = dateObj.getFullYear();
+                        const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+                        const d = String(dateObj.getDate()).padStart(2, '0');
+                        const ds = `${y}-${m}-${d}`;
+
+                        const count = activityMap[ds] || 0;
+                        if (count > 0) {
+                            if (count < 3) dayElem.classList.add('bg-activity-low');
+                            else if (count < 7) dayElem.classList.add('bg-activity-medium');
+                            else dayElem.classList.add('bg-activity-high');
+                        }
+                    }
+                });
+            },
+
+            renderDayOperations: (dateStr) => {
+                // Filter all operations for this exact date
+                // dateStr formats to 'Y-m-d' e.g. '2023-10-05'
+                const targetStart = new Date(dateStr + "T00:00:00").getTime();
+                const targetEnd = new Date(dateStr + "T23:59:59").getTime();
+
+                let dayOps = [];
+                let totDebts = 0, totIncome = 0, totExpense = 0;
+
+                allDebts.forEach(d => {
+                    if (!d.created_at) return;
+                    const ds = d.created_at.seconds * 1000;
+                    if (ds >= targetStart && ds <= targetEnd) {
+                        dayOps.push({ time: ds, type: 'debt', desc: `دين: ${d.customer_name} - ${d.description}`, amount: d.total_amount, cur: d.currency });
+                        totDebts++;
+                    }
+                });
+
+                allTrans.forEach(t => {
+                    if (!t.created_at) return;
+                    const ds = t.created_at.seconds * 1000;
+                    if (ds >= targetStart && ds <= targetEnd) {
+                        const isInc = t.type.includes('income');
+                        if (isInc) totIncome++; else totExpense++;
+                        dayOps.push({ time: ds, type: isInc ? 'income' : 'expense', desc: t.description, amount: t.amount, cur: t.currency });
+                    }
+                });
+
+                document.getElementById('cal-day-debts').innerText = totDebts;
+                document.getElementById('cal-day-income').innerText = totIncome;
+                document.getElementById('cal-day-expense').innerText = totExpense;
+
+                dayOps.sort((a, b) => b.time - a.time); // Newest first
+
+                const tbody = document.getElementById('calendar-day-list');
+                tbody.innerHTML = '';
+
+                if (dayOps.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-secondary py-4">لا توجد عمليات في هذا اليوم</td></tr>';
+                    return;
+                }
+
+                dayOps.forEach(op => {
+                    const timeStr = new Date(op.time).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+                    let typeBadge = '';
+                    if (op.type === 'debt') typeBadge = '<span class="badge bg-warning text-dark"><i class="fas fa-file-invoice"></i> تسجيل دين</span>';
+                    else if (op.type === 'income') typeBadge = '<span class="badge bg-success"><i class="fas fa-arrow-down"></i> مقبوضات</span>';
+                    else typeBadge = '<span class="badge bg-danger"><i class="fas fa-arrow-up"></i> مصروفات</span>';
+
+                    let amountClass = op.type === 'expense' ? 'text-danger' : (op.type === 'debt' ? 'text-warning' : 'text-success');
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${timeStr}</td>
+                            <td>${typeBadge}</td>
+                            <td>${op.desc}</td>
+                            <td class="fw-bold ${amountClass}">${op.amount} ${op.cur}</td>
+                        </tr>
+                    `;
                 });
             }
         };
@@ -1347,6 +1540,7 @@
                 dataManager.init();
                 flatpickr("#date-filter", { mode: "range", onChange: () => ui.openCustomerProfile(currentProfileName) });
                 flatpickr("#report-date-range", { mode: "range" });
+                ui.renderCalendar();
             } else {
                 document.getElementById('login-screen').classList.remove('d-none'); document.getElementById('main-app').classList.add('d-none');
             }
